@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+ </head>
+ <body>
+     <canvas id="canvas" width="1900" height="1080" style="background-color:rgba(250, 0, 0, 0)"></canvas>
+ </body>
+ <script type="application/javascript">
+
+
+var img = new Image();
+img.src = './image0.png';
+img.onload = function() {
+  draw(this);
+};
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var raf;
+
+var ball = {
+  x: 100,
+  y: 100,
+  vx: 2,
+  vy: 2,
+  scale: .5,
+  scalev: .00,
+  alphav: .01,
+  radius: 25,
+  color: 'blue',
+  draw: function() {
+    // ctx.beginPath();
+    // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+    // ctx.globalAlpha = 1
+
+    // ctx.scale(this.scale, this.scale);
+    ctx.drawImage(img, this.x, this.y);
+
+    // ctx.closePath();
+    // ctx.fillStyle = this.color;
+    // ctx.fill();
+  }
+};
+
+function draw() {
+  ctx.globalAlpha += ball.alphav;
+  
+    // ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  // ctx.scale(ctx.globalAlpha, ctx.globalAlpha);
+  // ctx.save();
+  ball.draw();
+  // ctx.restore();
+  // ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+  ball.scale += ball.scalev;
+
+  // if (ball.scale + ball.scalev > 1 || 
+  //     ball.scale + ball.scalev < 0)
+  //     ball.scalev = - ball.scalev;
+
+  if (ctx.globalAlpha + ball.alphav > 1 || 
+    ctx.globalAlpha + ball.alphav < 0 )
+    ball.alphav = -ball.alphav;
+
+
+  if (ball.y + ball.vy > canvas.height ||
+      ball.y + ball.vy < 0) {
+    ball.vy = -ball.vy;
+  }
+  if (ball.x + ball.vx > canvas.width ||
+      ball.x + ball.vx < 0) {
+    ball.vx = -ball.vx;
+  }
+
+  raf = window.requestAnimationFrame(draw);
+}
+
+canvas.addEventListener('mouseover', function(e) {
+  raf = window.requestAnimationFrame(draw);
+});
+
+canvas.addEventListener('mouseout', function(e) {
+  window.cancelAnimationFrame(raf);
+});
+
+ball.draw();
+</script>
+</html>
