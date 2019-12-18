@@ -4,6 +4,14 @@
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100%; background-color: rgba(255, 0, 0, 0); }
+			#info {
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
 		</style>
 	</head>
 	<body>
@@ -22,14 +30,28 @@
 				var cputexture = new THREE.TextureLoader().load('cpu.jpg');
 				var geometry = new THREE.BoxBufferGeometry(200, 200, 200);
 				var sphere = new THREE.SphereBufferGeometry( 125, 32, 32 );
-				var material = new THREE.MeshBasicMaterial({ map: texture });
-				var cpumaterial = new THREE.MeshBasicMaterial({ map: cputexture });
+				var material = new THREE.MeshPhongMaterial({ map: texture });
+				var cpumaterial = new THREE.MeshPhongMaterial({ map: cputexture });
+				//create a blue LineBasicMaterial
+				// var linematerial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+				// var linegeometry = new THREE.Geometry();
+				// linegeometry.vertices.push(new THREE.Vector3( -150, 0, 0) );
+				// linegeometry.vertices.push(new THREE.Vector3( 0, 100, 0) );
+				// linegeometry.vertices.push(new THREE.Vector3( 150, 0, 0) );
 				mesh = new THREE.Mesh(geometry, material);
+				// var line = new THREE.Line( linegeometry, material );
 				spheremesh = new THREE.Mesh(sphere, cpumaterial);
 				spheremesh.translateX(-300)
 				// scene.background = new THREE.Color( 0xff0000 );
+				// add a light
+				const color = 0xFFFFFF;
+				const intensity = 1;
+				const light = new THREE.DirectionalLight(color, intensity);
+				light.position.set(-1, 2, 4);
+				scene.add(light);
 				scene.add(mesh);
 				scene.add(spheremesh);
+				// scene.add( line );
 				renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 				renderer.setPixelRatio(window.devicePixelRatio);
 				renderer.setSize(window.innerWidth, window.innerHeight);
@@ -43,6 +65,7 @@
 				renderer.setSize(window.innerWidth, window.innerHeight);
 			}
 			function animate() {
+
 				requestAnimationFrame(animate);
 				mesh.rotation.x += 0.005;
 				mesh.rotation.y += 0.01;
@@ -84,5 +107,6 @@
 
 			// animate();
 		</script>
+		<div id="info"></div>
 	</body>
 </html>
