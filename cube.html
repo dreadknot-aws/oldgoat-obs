@@ -98,7 +98,7 @@
 					}),
 				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('red') }),
 				new THREE.MeshPhongMaterial({ map: bg_texture_id, bumpMap: bg_texture_id }),
-				new THREE.MeshPhongMaterial({ map: bg_texture, bumpMap: bg_texture }),
+				new THREE.MeshPhongMaterial({ map: bg_texture, bumpMap: bg_texture, bumpScale: .25 }),
 				new THREE.MeshPhongMaterial({ map: bg_texture_id, emissiveMap: bg_texture_id, emissive: new THREE.Color('green'), bumpMap: bg_texture_id }),
 				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('green')}),
 			];
