@@ -306,6 +306,21 @@
         }
 
 
+        {
+            const radius = 7;
+            const widthSegments = 12;
+            const heightSegments = 8;
+            const geometry = new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments);
+            const material = new THREE.PointsMaterial({
+                color: 'red',
+                sizeAttennuation: false,
+                // size: 0.2,     // in world units
+            });
+            const points = new THREE.Points(geometry, material);
+            addObject(0, 0, points);
+            //scene.add(points);
+        }
+
         function resizeRendererToDisplaySize(renderer) {
             const canvas = renderer.domElement;
             const width = canvas.clientWidth;
