@@ -40,15 +40,31 @@
             scene.add(light);
         }
 
-        const width = 1;
-        const height = 1;
-        const depth = 1;
-        const geometry = new THREE.BoxBufferGeometry(width, height, depth);
 
-        const material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
-        renderer.render(scene, camera);
+        function createMaterial() {
+            const material = new THREE.MeshPhongMaterial({
+                side: THREE.DoubleSide,
+            });
+
+            const hue = Math.random();
+            const saturation = 1;
+            const luminance = .5;
+            material.color.setHSL(hue, saturation, luminance);
+
+            return material;
+        }
+
+        function addSolidGeometry(x, y, geometry) {
+            const mesh = new THREE.Mesh(geometry, createMaterial());
+            addObject(x, y, mesh);
+        }
+
+        function addLineGeometry(x, y, geometry) {
+            const material = new THREE.LineBasicMaterial({ color: 0x000000 });
+            const mesh = new THREE.LineSegments(geometry, material);
+            addObject(x, y, mesh);
+        }
+
 
         const objects = [];
         const spread = 15;
@@ -65,7 +81,7 @@
             const width = 8;
             const height = 8;
             const depth = 8;
-            addSolidGeometry(-2, -2, new THREE.BoxBufferGeometry(width, height, depth));
+            addSolidGeometry(-2, 2, new THREE.BoxBufferGeometry(width, height, depth));
         }
 
         {
@@ -92,101 +108,203 @@
         {
             const radius = 7;
             addSolidGeometry(2, 2, new THREE.DodecahedronBufferGeometry(radius));
-        } 
-        
+        }
+
         {
-    const shape = new THREE.Shape();
-    const x = -2.5;
-    const y = -5;
-    shape.moveTo(x + 2.5, y + 2.5);
-    shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y, x, y);
-    shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
-    shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
-    shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
-    shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
-    shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+            const shape = new THREE.Shape();
+            const x = -2.5;
+            const y = -5;
+            shape.moveTo(x + 2.5, y + 2.5);
+            shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y, x, y);
+            shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
+            shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
+            shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
+            shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
+            shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
 
-    const extrudeSettings = {
-      steps: 2,
-      depth: 2,
-      bevelEnabled: true,
-      bevelThickness: 1,
-      bevelSize: 1,
-      bevelSegments: 2,
-    };
+            const extrudeSettings = {
+                steps: 2,
+                depth: 2,
+                bevelEnabled: true,
+                bevelThickness: 1,
+                bevelSize: 1,
+                bevelSegments: 2,
+            };
 
-    addSolidGeometry(-2, 1, new THREE.ExtrudeBufferGeometry(shape, extrudeSettings));
-  }        
-
-  {
-    const radius = 7;
-    addSolidGeometry(-1, 1, new THREE.IcosahedronBufferGeometry(radius));
-  }
-
-  {
-    const points = [];
-    for (let i = 0; i < 10; ++i) {
-      points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * .8));
-    }
-    addSolidGeometry(0, 1, new THREE.LatheBufferGeometry(points));
-  }
-
-  {
-    const radius = 7;
-    addSolidGeometry(1, 1, new THREE.OctahedronBufferGeometry(radius));
-  } 
-
-
-  {
-    const width = 9;
-    const height = 9;
-    const widthSegments = 2;
-    const heightSegments = 2;
-    addSolidGeometry(-2, 0, new THREE.PlaneBufferGeometry(width, height, widthSegments, heightSegments));
-  }
-
-
-  {
-    const verticesOfCube = [
-        -1, -1, -1,    1, -1, -1,    1,  1, -1,    -1,  1, -1,
-        -1, -1,  1,    1, -1,  1,    1,  1,  1,    -1,  1,  1,
-    ];
-    const indicesOfFaces = [
-        2, 1, 0,    0, 3, 2,
-        0, 4, 7,    7, 3, 0,
-        0, 1, 5,    5, 4, 0,
-        1, 2, 6,    6, 5, 1,
-        2, 3, 7,    7, 6, 2,
-        4, 5, 6,    6, 7, 4,
-    ];
-    const radius = 7;
-    const detail = 2;
-    addSolidGeometry(-1, 0, new THREE.PolyhedronBufferGeometry(verticesOfCube, indicesOfFaces, radius, detail));
-  }
-
-  {
-    const innerRadius = 2;
-    const outerRadius = 7;
-    const segments = 18;
-    addSolidGeometry(0, 0, new THREE.RingBufferGeometry(innerRadius, outerRadius, segments));
-  }
-        function createMaterial() {
-            const material = new THREE.MeshPhongMaterial({
-                side: THREE.DoubleSide,
-            });
-
-            const hue = Math.random();
-            const saturation = 1;
-            const luminance = .5;
-            material.color.setHSL(hue, saturation, luminance);
-
-            return material;
+            addSolidGeometry(-2, 1, new THREE.ExtrudeBufferGeometry(shape, extrudeSettings));
         }
 
-        function addSolidGeometry(x, y, geometry) {
-            const mesh = new THREE.Mesh(geometry, createMaterial());
-            addObject(x, y, mesh);
+        {
+            const radius = 7;
+            addSolidGeometry(-1, 1, new THREE.IcosahedronBufferGeometry(radius));
         }
+
+        {
+            const points = [];
+            for (let i = 0; i < 10; ++i) {
+                points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * .8));
+            }
+            addSolidGeometry(0, 1, new THREE.LatheBufferGeometry(points));
+        }
+
+        {
+            const radius = 7;
+            addSolidGeometry(1, 1, new THREE.OctahedronBufferGeometry(radius));
+        }
+
+
+        {
+            const width = 9;
+            const height = 9;
+            const widthSegments = 2;
+            const heightSegments = 2;
+            addSolidGeometry(-2, 0, new THREE.PlaneBufferGeometry(width, height, widthSegments, heightSegments));
+        }
+
+
+        {
+            const verticesOfCube = [
+                -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
+                -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1,
+            ];
+            const indicesOfFaces = [
+                2, 1, 0, 0, 3, 2,
+                0, 4, 7, 7, 3, 0,
+                0, 1, 5, 5, 4, 0,
+                1, 2, 6, 6, 5, 1,
+                2, 3, 7, 7, 6, 2,
+                4, 5, 6, 6, 7, 4,
+            ];
+            const radius = 7;
+            const detail = 2;
+            addSolidGeometry(-1, 0, new THREE.PolyhedronBufferGeometry(verticesOfCube, indicesOfFaces, radius, detail));
+        }
+
+        {
+            const innerRadius = 2;
+            const outerRadius = 7;
+            const segments = 18;
+            addSolidGeometry(0, 0, new THREE.RingBufferGeometry(innerRadius, outerRadius, segments));
+        }
+
+        {
+            const shape = new THREE.Shape();
+            const x = -2.5;
+            const y = -5;
+            shape.moveTo(x + 2.5, y + 2.5);
+            shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y, x, y);
+            shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
+            shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
+            shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
+            shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
+            shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+            addSolidGeometry(1, 0, new THREE.ShapeBufferGeometry(shape));
+        }
+
+
+        {
+            const radius = 7;
+            const widthSegments = 12;
+            const heightSegments = 8;
+            addSolidGeometry(2, 0, new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments));
+        }
+
+        {
+            const radius = 7;
+            addSolidGeometry(-2, -1, new THREE.TetrahedronBufferGeometry(radius));
+        }
+
+        {
+            const loader = new THREE.FontLoader();
+            // promisify font loading
+            function loadFont(url) {
+                return new Promise((resolve, reject) => {
+                    loader.load(url, resolve, undefined, reject);
+                });
+            }
+
+            async function doit() {
+                const font = await loadFont('https://threejsfundamentals.org/threejs/resources/threejs/fonts/helvetiker_regular.typeface.json');
+                const geometry = new THREE.TextBufferGeometry('three.js', {
+                    font: font,
+                    size: 3.0,
+                    height: .2,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.15,
+                    bevelSize: .3,
+                    bevelSegments: 5,
+                });
+                const mesh = new THREE.Mesh(geometry, createMaterial());
+                geometry.computeBoundingBox();
+                geometry.boundingBox.getCenter(mesh.position).multiplyScalar(-1);
+
+                const parent = new THREE.Object3D();
+                parent.add(mesh);
+
+                addObject(-1, -1, parent);
+            }
+            doit();
+        }
+
+        {
+            const radius = 5;
+            const tubeRadius = 2;
+            const radialSegments = 8;
+            const tubularSegments = 24;
+            addSolidGeometry(0, -1, new THREE.TorusBufferGeometry(radius, tubeRadius, radialSegments, tubularSegments));
+        }
+
+
+        {
+            const radius = 3.5;
+            const tube = 1.5;
+            const radialSegments = 8;
+            const tubularSegments = 64;
+            const p = 2;
+            const q = 3;
+            addSolidGeometry(1, -1, new THREE.TorusKnotBufferGeometry(radius, tube, tubularSegments, radialSegments, p, q));
+        }
+
+        {
+            class CustomSinCurve extends THREE.Curve {
+                constructor(scale) {
+                    super();
+                    this.scale = scale;
+                }
+                getPoint(t) {
+                    const tx = t * 3 - 1.5;
+                    const ty = Math.sin(2 * Math.PI * t);
+                    const tz = 0;
+                    return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale);
+                }
+            }
+
+            const path = new CustomSinCurve(4);
+            const tubularSegments = 20;
+            const radius = 1;
+            const radialSegments = 8;
+            const closed = false;
+            addSolidGeometry(2, -1, new THREE.TubeBufferGeometry(path, tubularSegments, radius, radialSegments, closed));
+        }
+
+        {
+            const width = 8;
+            const height = 8;
+            const depth = 8;
+            const thresholdAngle = 15;
+            addLineGeometry(-1, -2, new THREE.EdgesGeometry(
+                new THREE.BoxBufferGeometry(width, height, depth),
+                thresholdAngle));
+        }
+
+        {
+            const width = 8;
+            const height = 8;
+            const depth = 8;
+            addLineGeometry(1, -2, new THREE.WireframeGeometry(new THREE.BoxBufferGeometry(width, height, depth)));
+        }
+
 
         function resizeRendererToDisplaySize(renderer) {
             const canvas = renderer.domElement;
