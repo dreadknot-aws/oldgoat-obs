@@ -58,6 +58,8 @@
 
 		var camera, scene, renderer, solarSystem;
 		var mesh;
+		rotx = Math.random() / 100
+		roty = Math.random() / 100
 		init();
 		animate();
 		function init() {
@@ -146,10 +148,12 @@
 			bg_texture.needsUpdate = true;
 			bg_texture_id.needsUpdate = true;
 			requestAnimationFrame(animate);
-			mesh.rotation.x += 0.005;
-			mesh.rotation.y += 0.01;
-			cmesh.rotation.x += 0.005;
-			cmesh.rotation.y += 0.01;
+
+			mesh.rotation.x += rotx;
+			mesh.rotation.y += roty;
+			cmesh.rotation.x += rotx;
+			cmesh.rotation.y += roty;
+
 			renderer.render(scene, camera);
 		}
 
