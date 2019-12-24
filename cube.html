@@ -27,6 +27,34 @@
 <body>
 	<script src="js/three.js"></script>
 	<script>
+			const ctx = document.createElement('canvas').getContext('2d');
+			// document.body.appendChild(ctx.canvas);
+			ctx.canvas.width = 512;
+			ctx.canvas.height = 512;
+			ctx.fillStyle = '#000000';
+			ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+			var img = new Image();   // Create new img element
+			img.addEventListener('load', function () {
+				ctx.drawImage(img, 0, 0, 512, 512);
+			}, false);
+			img.src = 'cpu.png'; // Set source path
+			
+			const bg_texture = new THREE.CanvasTexture(ctx.canvas);
+
+			const ctx_id = document.createElement('canvas').getContext('2d');
+			// document.body.appendChild(ctx.canvas);
+			ctx_id.canvas.width = 512;
+			ctx_id.canvas.height = 512;
+			ctx_id.fillStyle = '#000000';
+			ctx_id.fillRect(0, 0, ctx_id.canvas.width, ctx_id.canvas.height);
+			var img_id = new Image();   // Create new img element
+			img_id.addEventListener('load', function () {
+				ctx_id.drawImage(img_id, 0, 0, 512, 512);
+			}, false);
+			img_id.src = 'stationid.png'; // Set source path
+
+			const bg_texture_id = new THREE.CanvasTexture(ctx_id.canvas);
+
 
 		var camera, scene, renderer, solarSystem;
 		var mesh;
@@ -60,18 +88,17 @@
 			const loader = new THREE.TextureLoader();
 
 			const materials = [
-				new THREE.MeshStandardMaterial({
-					map:
-						loader.load('stationid.png'),
-						// alphaMap: loader.load('stationid.png'),
-						color: 'green',
-						side: THREE.DoubleSide,
-				}),
-				new THREE.MeshPhongMaterial({ map: loader.load('cpu.png'), color: 'blue'}),
-				new THREE.MeshPhongMaterial({ map: loader.load('stationid.png'), bumpMap: loader.load('stationid.png') }),
-				new THREE.MeshPhongMaterial({ map: loader.load('cpu.png'), bumpMap: loader.load('cpu.png') }),
-				new THREE.MeshPhongMaterial({ map: loader.load('stationid.png') }),
-				new THREE.MeshPhongMaterial({ map: loader.load('cpu.png'), color: 'red'}),
+				new THREE.MeshPhongMaterial({
+						// map: loader.load('stationid.png'),
+						// alphaMap: bg_texture,
+						map: bg_texture_id,
+						color: 'green'
+					}),
+				new THREE.MeshPhongMaterial({ map: bg_texture, color: 'red',}),
+				new THREE.MeshPhongMaterial({ map: bg_texture_id, bumpMap: bg_texture_id }),
+				new THREE.MeshPhongMaterial({ map: bg_texture, bumpMap: bg_texture }),
+				new THREE.MeshPhongMaterial({ map: bg_texture_id }),
+				new THREE.MeshPhongMaterial({ map: bg_texture, color: 'green'}),
 			];
 			var material = new THREE.MeshPhongMaterial({ color: 0x000000 });
 			var cpumaterial = new THREE.MeshPhongMaterial({ map: cputexture });
@@ -116,7 +143,8 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
 		function animate() {
-
+			bg_texture.needsUpdate = true;
+			bg_texture_id.needsUpdate = true;
 			requestAnimationFrame(animate);
 			mesh.rotation.x += 0.005;
 			mesh.rotation.y += 0.01;
