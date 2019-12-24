@@ -64,8 +64,8 @@
 			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
 			camera.position.z = 400;
 			scene = new THREE.Scene();
-			var texture = new THREE.TextureLoader().load('stationid.png');
-			var cputexture = new THREE.TextureLoader().load('cpu.jpg');
+			// var texture = new THREE.TextureLoader().load('stationid.png');
+			// var cputexture = new THREE.TextureLoader().load('cpu.jpg');
 			var geometry = new THREE.BoxBufferGeometry(200, 200, 200);
 			var sphere = new THREE.SphereBufferGeometry(125, 32, 32);
 
@@ -90,18 +90,18 @@
 			const materials = [
 				new THREE.MeshPhongMaterial({
 						// map: loader.load('stationid.png'),
-						// alphaMap: bg_texture,
 						map: bg_texture_id,
-						color: 'green'
+						emissiveMap: bg_texture_id, emissive: new THREE.Color('red'),
+						bumpMap: bg_texture_id
 					}),
-				new THREE.MeshPhongMaterial({ map: bg_texture, color: 'red',}),
+				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('red') }),
 				new THREE.MeshPhongMaterial({ map: bg_texture_id, bumpMap: bg_texture_id }),
 				new THREE.MeshPhongMaterial({ map: bg_texture, bumpMap: bg_texture }),
-				new THREE.MeshPhongMaterial({ map: bg_texture_id }),
-				new THREE.MeshPhongMaterial({ map: bg_texture, color: 'green'}),
+				new THREE.MeshPhongMaterial({ map: bg_texture_id, emissiveMap: bg_texture_id, emissive: new THREE.Color('green'), bumpMap: bg_texture_id }),
+				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('green')}),
 			];
 			var material = new THREE.MeshPhongMaterial({ color: 0x000000 });
-			var cpumaterial = new THREE.MeshPhongMaterial({ map: cputexture });
+			// var cpumaterial = new THREE.MeshPhongMaterial({ map: cputexture });
 
 			mesh = new THREE.Mesh(geometry, materials);
 			solarSystem.add(mesh);
@@ -113,14 +113,14 @@
 
 			cmesh = new THREE.LineSegments(new THREE.EdgesGeometry(
 				new THREE.BoxBufferGeometry(200, 200, 200),
-				15), new THREE.LineBasicMaterial({ color: 0x000000 }));
+				15), new THREE.LineBasicMaterial({ color: 0xffffff }));
 				
 			earthOrbit.add(cmesh);
 				// earthOrbit.add(earthMesh);
 
 
-			spheremesh = new THREE.Mesh(sphere, cpumaterial);
-			spheremesh.translateX(-300)
+			// spheremesh = new THREE.Mesh(sphere, cpumaterial);
+			// spheremesh.translateX(-300)
 
 			// add a light
 			const color = 0xFFFFFF;
