@@ -25,47 +25,62 @@
 </head>
 
 <body>
-	<script src="js/three.js"></script>
-	<script>
-			const ctx = document.createElement('canvas').getContext('2d');
-			// document.body.appendChild(ctx.canvas);
-			ctx.canvas.width = 512;
-			ctx.canvas.height = 512;
-			ctx.fillStyle = '#000000';
-			ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-			var img = new Image();   // Create new img element
-			img.addEventListener('load', function () {
-				ctx.drawImage(img, 0, 0, 512, 512);
-			}, false);
-			img.src = 'cpu.png'; // Set source path
-			
-			const bg_texture = new THREE.CanvasTexture(ctx.canvas);
+	<script type="module">
+		import * as THREE from './js/three.module.js';
+		import { GUI } from './js/dat.gui.module.js';
+		const ctx = document.createElement('canvas').getContext('2d');
+		// document.body.appendChild(ctx.canvas);
+		ctx.canvas.width = 512;
+		ctx.canvas.height = 512;
+		ctx.fillStyle = '#000000';
+		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		var img = new Image();   // Create new img element
+		img.addEventListener('load', function () {
+			ctx.drawImage(img, 0, 0, 512, 512);
+		}, false);
+		img.src = 'cpu.png'; // Set source path
 
-			const ctx_id = document.createElement('canvas').getContext('2d');
-			// document.body.appendChild(ctx.canvas);
-			ctx_id.canvas.width = 512;
-			ctx_id.canvas.height = 512;
-			ctx_id.fillStyle = '#000000';
-			ctx_id.fillRect(0, 0, ctx_id.canvas.width, ctx_id.canvas.height);
-			var img_id = new Image();   // Create new img element
-			img_id.addEventListener('load', function () {
-				ctx_id.drawImage(img_id, 0, 0, 512, 512);
-			}, false);
-			img_id.src = 'stationid.png'; // Set source path
+		const bg_texture = new THREE.CanvasTexture(ctx.canvas);
 
-			const bg_texture_id = new THREE.CanvasTexture(ctx_id.canvas);
+		const ctx_id = document.createElement('canvas').getContext('2d');
+		// document.body.appendChild(ctx.canvas);
+		ctx_id.canvas.width = 512;
+		ctx_id.canvas.height = 512;
+		ctx_id.fillStyle = '#000000';
+		ctx_id.fillRect(0, 0, ctx_id.canvas.width, ctx_id.canvas.height);
+		var img_id = new Image();   // Create new img element
+		img_id.addEventListener('load', function () {
+			ctx_id.drawImage(img_id, 0, 0, 512, 512);
+		}, false);
+		img_id.src = 'stationid.png'; // Set source path
 
+		const bg_texture_id = new THREE.CanvasTexture(ctx_id.canvas);
 
 		var camera, scene, renderer, solarSystem;
-		var mesh;
-		rotx = Math.random() / 100
-		roty = Math.random() / 100
+		var mesh, cmesh;
+
+		var SpinSpeed = function () {
+			this.roty = Math.random() / 100;
+			this.rotx = Math.random() / 100;
+
+			this.displayOutline = false;
+		};
+
+		let rotx = Math.random() / 100
+		let roty = Math.random() / 100
+				const gui = new GUI();
+				var spin = new SpinSpeed();
+				gui.add(spin, 'roty', -.100, .100);
+				gui.add(spin, 'rotx', -.100, .100);
+
 		init();
 		animate();
 		function init() {
 			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
 			camera.position.z = 400;
 			scene = new THREE.Scene();
+
+
 			// var texture = new THREE.TextureLoader().load('stationid.png');
 			// var cputexture = new THREE.TextureLoader().load('cpu.jpg');
 			var geometry = new THREE.BoxBufferGeometry(200, 200, 200);
@@ -91,16 +106,16 @@
 
 			const materials = [
 				new THREE.MeshPhongMaterial({
-						// map: loader.load('stationid.png'),
-						map: bg_texture_id,
-						emissiveMap: bg_texture_id, emissive: new THREE.Color('red'),
-						bumpMap: bg_texture_id
-					}),
+					// map: loader.load('stationid.png'),
+					map: bg_texture_id,
+					emissiveMap: bg_texture_id, emissive: new THREE.Color('red'),
+					bumpMap: bg_texture_id
+				}),
 				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('red') }),
 				new THREE.MeshPhongMaterial({ map: bg_texture_id, bumpMap: bg_texture_id }),
 				new THREE.MeshPhongMaterial({ map: bg_texture, bumpMap: bg_texture, bumpScale: .25 }),
 				new THREE.MeshPhongMaterial({ map: bg_texture_id, emissiveMap: bg_texture_id, emissive: new THREE.Color('green'), bumpMap: bg_texture_id }),
-				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('green')}),
+				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('green') }),
 			];
 			var material = new THREE.MeshPhongMaterial({ color: 0x000000 });
 			// var cpumaterial = new THREE.MeshPhongMaterial({ map: cputexture });
@@ -116,9 +131,9 @@
 			cmesh = new THREE.LineSegments(new THREE.EdgesGeometry(
 				new THREE.BoxBufferGeometry(200, 200, 200),
 				15), new THREE.LineBasicMaterial({ color: 'gray' }));
-				
+
 			earthOrbit.add(cmesh);
-				// earthOrbit.add(earthMesh);
+			// earthOrbit.add(earthMesh);
 
 
 			// spheremesh = new THREE.Mesh(sphere, cpumaterial);
@@ -130,7 +145,7 @@
 			const light = new THREE.DirectionalLight(color, intensity);
 			light.position.set(-1, 2, 4);
 			earthOrbit.add(light);
-			
+
 
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
@@ -149,11 +164,12 @@
 			bg_texture_id.needsUpdate = true;
 			requestAnimationFrame(animate);
 
-			mesh.rotation.x += rotx;
-			mesh.rotation.y += roty;
-			cmesh.rotation.x += rotx;
-			cmesh.rotation.y += roty;
+			mesh.rotation.x += spin.rotx;
+			mesh.rotation.y += spin.roty;
+			cmesh.rotation.x += spin.rotx;
+			cmesh.rotation.y += spin.roty;
 
+			// console.log(spin.rotx)
 			renderer.render(scene, camera);
 		}
 
@@ -189,7 +205,7 @@
 			// };
 
 			// animate();
-	</script>
+	</script type="module">
 	<div id="info"></div>
 </body>
 
