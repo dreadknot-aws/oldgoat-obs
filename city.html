@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <canvas id="canvas" width="1280" height="720"></canvas>
+</body>
+<script type="application/javascript">
+
+    //2000 x 1333
+    var city = new Image();
+    var cityy = 0;
+    var cityv = .1;
+
+    function init() {
+        city.src = './city.jpg';
+        window.requestAnimationFrame(draw);
+    }
+
+    function draw() {
+        var ctx = document.getElementById('canvas').getContext('2d');
+
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.clearRect(0, 0, 1280, 720); // clear canvas
+        // ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        // ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
+        ctx.save();
+        // ctx.translate(150, 150);
+
+        // Earth
+        var time = new Date();
+        cityy += cityv
+        if (cityy >= 720)
+            cityv = -cityv
+        if (cityy <= 0)
+            cityv = - cityv
+        // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+        // ctx.translate(105, 0);
+        // ctx.fillRect(0, -12, 40, 24); // Shadow
+        // ctx.drawImage(city, 0, 500, 1280, 720, 0, 0, 1280, 720);
+        ctx.drawImage(city, cityy, 600, 1280, 720, 0, 360, 1280, 720);
+
+        window.requestAnimationFrame(draw);
+    }
+
+    init();
+
+</script>
+
+</html>
