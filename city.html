@@ -15,6 +15,21 @@
     var city = new Image();
     var cityy = 0;
     var cityv = .1;
+    var img = new Array(4);
+    var blur = new Array(4);
+    var hue = new Array(4);
+    var saturate = new Array(4)
+    var brightness = new Array(4)
+    // var brightness = new Array('100', '100', )
+
+    for (var i = 0; i <= 4; i++) {
+        img[i] = new Image();
+        img[i].src = paths[i] + '.png';
+        blur[i] = Math.floor(Math.random() * 4)
+        hue[i] = Math.floor(Math.random() * 180)
+        brightness[i] = Math.floor(Math.random() * 200)
+        saturate[i] = Math.floor(Math.random() * 100)
+    }
 
     function init() {
         city.src = './city.jpg';
@@ -42,11 +57,27 @@
             cityv = -cityv
         if (cityy <= 0)
             cityv = - cityv
+            
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         // ctx.translate(105, 0);
         // ctx.fillRect(0, -12, 40, 24); // Shadow
         // ctx.drawImage(city, 0, 500, 1280, 720, 0, 0, 1280, 720);
-        ctx.drawImage(city, cityy, 600, 1280, 720, 0, 360, 1280, 720);
+        // ctx.drawImage(city, cityy, 600, 1280, 720, 0, 360, 1280, 720);
+
+        for (var i = 4; i > 0; i--) {
+            
+            // ctx.filter = 'hue-rotate(' + 56 + 'deg)';
+            // ctx.filter = 'blur(' + Math.floor(Math.random() * 4) + 'px)';
+            // ctx.filter = 'blur(' + blur[i] + 'px)' + hue-rotate(' + hue[i] + 'deg);
+            // ctx.filter = 'blur(4px)';
+            // ctx.filter = 'hue-rotate(' + hue[i] + 'deg)';
+            // ctx.filter = 'brightness(' + brightness[i] + ')';
+            // ctx.filter = 'saturate[i];
+            // ctx.filter = '`blur(${blur[i]}px)`'
+            console.log(`blur(${blur[i]}px) hue-rotate(${hue[i]})deg`);
+            ctx.filter = `blur(${blur[i]}px) hue-rotate(${hue[i]}deg) brightness(${brightness[i]}%)`
+            ctx.drawImage(img[i], 0, 0)
+        }
 
         window.requestAnimationFrame(draw);
     }
