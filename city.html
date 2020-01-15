@@ -8,13 +8,55 @@
 <body>
     <canvas id="canvas" width="1280" height="720"></canvas>
 </body>
-<script type="application/javascript">
+<script type="module">
+    import { GUI } from './js/dat.gui.module.js';
 
     var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
     var cityv = .1;
+    var img = new Array(4);
+    var blur = new Array(4);
+    var hue = new Array(4);
+    var saturate = new Array(4)
+    var brightness = new Array(4)
+    // var brightness = new Array('100', '100', )
+
+
+
+    var SpinSpeed = function () {
+        this.roty = Math.random() / 100;
+        this.rotx = Math.random() / 100;
+        this.color0 = "#ffae23";
+        this.color1 = "#021984";
+        this.color2 = "#179d7d";
+        this.color3 = "#97cd34";
+        this.color4 = "#b0c54f";
+        this.color5 = "#e64659";
+        for (var i = 0; i <= 4; i++) {
+            img[i] = new Image();
+            img[i].src = paths[i] + '.png';
+            blur[i] = Math.floor(Math.random() * 4)
+            hue[i] = Math.floor(Math.random() * 180)
+            brightness[i] = Math.floor(Math.random() * 200)
+            saturate[i] = Math.floor(Math.random() * 100)
+        }
+        this.blur1 = blur[1]
+        this.CompositeOperation = 'destination-over'
+
+        this.displayOutline = false;
+    };
+
+    const gui = new GUI();
+    var spin = new SpinSpeed();
+    gui.add(spin, 'blur1', 0, 4)
+    gui.add(spin, 'CompositeOperation', [ 'destination-over', 'source-over', 'source-in',
+                'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
+                'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+                'hue', 'saturation', 'color', 'luminosity' ] );
+
 
     function init() {
         city.src = './city.jpg';
@@ -24,7 +66,8 @@
     function draw() {
         var ctx = document.getElementById('canvas').getContext('2d');
 
-        ctx.globalCompositeOperation = 'destination-over';
+        // ctx.globalCompositeOperation = 'destination-over';
+        ctx.globalCompositeOperation = spin.CompositeOperation
         ctx.clearRect(0, 0, 1280, 720); // clear canvas
         // ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
         // ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
@@ -42,11 +85,27 @@
             cityv = -cityv
         if (cityy <= 0)
             cityv = - cityv
+
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         // ctx.translate(105, 0);
         // ctx.fillRect(0, -12, 40, 24); // Shadow
         // ctx.drawImage(city, 0, 500, 1280, 720, 0, 0, 1280, 720);
-        ctx.drawImage(city, cityy, 600, 1280, 720, 0, 360, 1280, 720);
+        // ctx.drawImage(city, cityy, 600, 1280, 720, 0, 360, 1280, 720);
+
+        for (var i = 4; i > 0; i--) {
+
+            // ctx.filter = 'hue-rotate(' + 56 + 'deg)';
+            // ctx.filter = 'blur(' + Math.floor(Math.random() * 4) + 'px)';
+            // ctx.filter = 'blur(' + blur[i] + 'px)' + hue-rotate(' + hue[i] + 'deg);
+            // ctx.filter = 'blur(4px)';
+            // ctx.filter = 'hue-rotate(' + hue[i] + 'deg)';
+            // ctx.filter = 'brightness(' + brightness[i] + ')';
+            // ctx.filter = 'saturate[i];
+            // ctx.filter = '`blur(${blur[i]}px)`'
+            console.log(`blur(${blur[i]}px) hue-rotate(${hue[i]})deg`);
+            ctx.filter = `blur(${blur[i]}px) hue-rotate(${hue[i]}deg) brightness(${brightness[i]}%)`
+            ctx.drawImage(img[i], 0, 0)
+        }
 
         window.requestAnimationFrame(draw);
     }
