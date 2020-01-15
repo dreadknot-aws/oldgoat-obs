@@ -28,11 +28,32 @@
 	<script type="module">
 		import * as THREE from './js/three.module.js';
 		import { GUI } from './js/dat.gui.module.js';
+
+		var camera, scene, renderer, solarSystem;
+		var mesh, cmesh;
+
+		var SpinSpeed = function () {
+			this.roty = Math.random() / 100;
+			this.rotx = Math.random() / 100;
+			this.color0 = "#ffae23";
+			this.displayOutline = false;
+		};
+
+		let rotx = Math.random() / 100
+		let roty = Math.random() / 100
+		const gui = new GUI();
+		var spin = new SpinSpeed();
+		gui.add(spin, 'roty', -.100, .100);
+		gui.add(spin, 'rotx', -.100, .100);
+		gui.addColor(spin, 'color0');
+
 		const ctx = document.createElement('canvas').getContext('2d');
 		// document.body.appendChild(ctx.canvas);
 		ctx.canvas.width = 512;
 		ctx.canvas.height = 512;
-		ctx.fillStyle = '#000000';
+		// ctx.fillStyle = '#ffffff';
+		//ffae23
+		ctx.fillStyle = spin.color0;
 		ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 		var img = new Image();   // Create new img element
 		img.addEventListener('load', function () {
@@ -55,23 +76,6 @@
 		img_id.src = 'stationid.png'; // Set source path
 
 		const bg_texture_id = new THREE.CanvasTexture(ctx_id.canvas);
-
-		var camera, scene, renderer, solarSystem;
-		var mesh, cmesh;
-
-		var SpinSpeed = function () {
-			this.roty = Math.random() / 100;
-			this.rotx = Math.random() / 100;
-
-			this.displayOutline = false;
-		};
-
-		let rotx = Math.random() / 100
-		let roty = Math.random() / 100
-				const gui = new GUI();
-				var spin = new SpinSpeed();
-				gui.add(spin, 'roty', -.100, .100);
-				gui.add(spin, 'rotx', -.100, .100);
 
 		init();
 		animate();
