@@ -37,6 +37,7 @@
 		
 		let params = (new URL(document.location)).searchParams;
 		let bg_color = params.get('color'); // is the string "Jonathan Smith".
+		let og_bg_color = params.get('ogcolor')
 
 		var SpinSpeed = function () {
 			this.roty = Math.random() / 100;
@@ -85,7 +86,7 @@
 		// document.body.appendChild(ctx.canvas);
 		ctx_id.canvas.width = 512;
 		ctx_id.canvas.height = 512;
-		ctx_id.fillStyle = '#000000';
+		ctx_id.fillStyle = '#' + og_bg_color //'#000000';
 		ctx_id.fillRect(0, 0, ctx_id.canvas.width, ctx_id.canvas.height);
 		var img_id = new Image();   // Create new img element
 		img_id.addEventListener('load', function () {
@@ -240,6 +241,7 @@
 
 			// animate();
 	</script type="module">
+	<div id="info"></div>
 	<div id="info"></div>
 </body>
 
