@@ -12,6 +12,11 @@
     import { GUI } from './js/dat.gui.module.js';
 
     var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
+    var comps = [ 'destination-over', 'source-over', 'source-in',
+                'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
+                'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+                'hue', 'saturation', 'color', 'luminosity' ]
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
@@ -28,12 +33,7 @@
     var SpinSpeed = function () {
         this.roty = Math.random() / 100;
         this.rotx = Math.random() / 100;
-        this.color0 = "#ffae23";
-        this.color1 = "#021984";
-        this.color2 = "#179d7d";
-        this.color3 = "#97cd34";
-        this.color4 = "#b0c54f";
-        this.color5 = "#e64659";
+        this.color2 = [ 250, 132, 8, 0 ]; // RGB with alpha
         for (var i = 0; i <= 4; i++) {
             img[i] = new Image();
             img[i].src = paths[i] + '.png';
@@ -43,14 +43,15 @@
             saturate[i] = Math.floor(Math.random() * 100)
         }
         this.blur1 = blur[1]
-        this.CompositeOperation = 'destination-over'
+        this.CompositeOperation = 'hard-light'
 
         this.displayOutline = false;
     };
 
     const gui = new GUI();
     var spin = new SpinSpeed();
-    gui.add(spin, 'blur1', 0, 4)
+    // gui.add(spin, 'blur1', 0, 4)
+    gui.addColor(spin, 'color2');
     gui.add(spin, 'CompositeOperation', [ 'destination-over', 'source-over', 'source-in',
                 'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
                 'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
@@ -65,19 +66,21 @@
 
     function draw() {
         var ctx = document.getElementById('canvas').getContext('2d');
-
-        // ctx.globalCompositeOperation = 'destination-over';
         ctx.globalCompositeOperation = spin.CompositeOperation
+        ctx.save();
+        // ctx.globalCompositeOperation = 'destination-over';
         ctx.clearRect(0, 0, 1280, 720); // clear canvas
-        // ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-        // ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
+        // ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+        ctx.fillStyle = `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`;
+        // ctx.fillStyle = 'rgba(42, 100, 65, 255 )';
+        // ctx.fillStyle = 'green'
         // ctx.filter = 'blur(4px)';
         // ctx.filter = 'hue-rotate(180deg)';
         // ctx.filter = 'contrast(50%)'
         // ctx.filter = 'saturate(50%)'
-        ctx.save();
+        ctx.fillRect(0, 0, 1200, 798);
         // ctx.translate(150, 150);
-
+        ctx.restore();
         // Earth
         var time = new Date();
         cityy += cityv
@@ -91,7 +94,7 @@
         // ctx.fillRect(0, -12, 40, 24); // Shadow
         // ctx.drawImage(city, 0, 500, 1280, 720, 0, 0, 1280, 720);
         // ctx.drawImage(city, cityy, 600, 1280, 720, 0, 360, 1280, 720);
-
+        ctx.save();
         for (var i = 4; i > 0; i--) {
 
             // ctx.filter = 'hue-rotate(' + 56 + 'deg)';
@@ -102,10 +105,11 @@
             // ctx.filter = 'brightness(' + brightness[i] + ')';
             // ctx.filter = 'saturate[i];
             // ctx.filter = '`blur(${blur[i]}px)`'
-            console.log(`blur(${blur[i]}px) hue-rotate(${hue[i]})deg`);
+            // console.log(`blur(${blur[i]}px) hue-rotate(${hue[i]})deg`);
             ctx.filter = `blur(${blur[i]}px) hue-rotate(${hue[i]}deg) brightness(${brightness[i]}%)`
-            ctx.drawImage(img[i], 0, 0)
+            ctx.drawImage(img[i], 0, 0, 1200, 798)
         }
+        ctx.restore();
 
         window.requestAnimationFrame(draw);
     }
