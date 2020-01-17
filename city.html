@@ -12,35 +12,49 @@
     import { GUI } from './js/dat.gui.module.js';
 
     var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
-    var comps = [ 'destination-over', 'source-over', 'source-in',
-                'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
-                'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
-                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
-                'hue', 'saturation', 'color', 'luminosity' ]
+    var comps = ['destination-over', 'source-over', 'source-in',
+        'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
+        'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+        'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+        'hue', 'saturation', 'color', 'luminosity']
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
     var cityv = .1;
     var img = new Array(4);
-    var blur = new Array(4);
+    // var blur = new Array(4);
     var hue = new Array(4);
     var saturate = new Array(4)
     var brightness = new Array(4)
+    var opacity = new Array(4)
+    var invert = new Array(4)
+    var angle1 = Math.random() * Math.PI * 2;
+    var angle2 = Math.random() * Math.PI * 2;
+    var radius = 1000;
+    var x0 = Math.floor(Math.random() * 1280)
+    var y0 = Math.floor(Math.random() * 720)
+    var x1 = Math.floor(Math.random() * 1280)
+    var y1 = Math.floor(Math.random() * 720)
+    var r0 = Math.floor(Math.random() * 1000)
+    var r1 = Math.floor(Math.random() * 1000)
     // var brightness = new Array('100', '100', )
-
-
 
     var SpinSpeed = function () {
         this.roty = Math.random() / 100;
         this.rotx = Math.random() / 100;
-        this.color2 = [ 250, 132, 8, 0 ]; // RGB with alpha
+        this.color2 = [250, 132, 8, 0]; // RGB with alpha
+        this.color3 = [173, 153, 93, 0];
+
+        this.blur = new Array(4);
         for (var i = 0; i <= 4; i++) {
             img[i] = new Image();
             img[i].src = paths[i] + '.png';
-            blur[i] = Math.floor(Math.random() * 4)
+            this.blur[i] = Math.floor(Math.random() * 4)
             hue[i] = Math.floor(Math.random() * 180)
-            brightness[i] = Math.floor(Math.random() * 200)
-            saturate[i] = Math.floor(Math.random() * 100)
+            brightness[i] = Math.floor(Math.random() * 100)
+            saturate[i] = Math.floor(Math.random() * 200)
+            opacity[i] = Math.floor(Math.random() * 100)
+            invert[i] = Math.floor(Math.random() * 100)
         }
         this.blur1 = blur[1]
         this.CompositeOperation = 'hard-light'
@@ -52,12 +66,14 @@
     var spin = new SpinSpeed();
     // gui.add(spin, 'blur1', 0, 4)
     gui.addColor(spin, 'color2');
-    gui.add(spin, 'CompositeOperation', [ 'destination-over', 'source-over', 'source-in',
-                'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
-                'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
-                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
-                'hue', 'saturation', 'color', 'luminosity' ] );
+    gui.addColor(spin, 'color3');
+    gui.add(spin, 'CompositeOperation', ['destination-over', 'source-over', 'source-in',
+        'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
+        'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+        'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+        'hue', 'saturation', 'color', 'luminosity']);
 
+    gui.remember(spin);
 
     function init() {
         city.src = './city.jpg';
@@ -72,22 +88,40 @@
         ctx.clearRect(0, 0, 1280, 720); // clear canvas
         // ctx.fillStyle = 'rgba(0, 0, 0, 0)';
         ctx.fillStyle = `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`;
+        // var x1 = Math.cos(angle1) * radius;
+        // var y1 = Math.sin(angle1) * radius;
+        // var x2 = Math.cos(angle2) * radius;
+        // var y2 = Math.sin(angle2) * radius;
+        // var gradient = ctx.createLinearGradient(0, 0, 720, 1280);
+        var gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+        // var gradient = ctx.createLinearGradient(x1 + 1000, y1 + 1000, x2 + 1000, y2 + 1000);
+        // var gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+
+        // gradient.addColorStop(0, 'black');
+        gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+        gradient.addColorStop(.5, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
+        gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+        ctx.fillStyle = gradient;
         // ctx.fillStyle = 'rgba(42, 100, 65, 255 )';
         // ctx.fillStyle = 'green'
         // ctx.filter = 'blur(4px)';
         // ctx.filter = 'hue-rotate(180deg)';
         // ctx.filter = 'contrast(50%)'
         // ctx.filter = 'saturate(50%)'
+        var time = new Date();
+        // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         ctx.fillRect(0, 0, 1200, 798);
         // ctx.translate(150, 150);
         ctx.restore();
         // Earth
-        var time = new Date();
+
         cityy += cityv
         if (cityy >= 720)
             cityv = -cityv
         if (cityy <= 0)
             cityv = - cityv
+
+
 
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         // ctx.translate(105, 0);
@@ -106,11 +140,10 @@
             // ctx.filter = 'saturate[i];
             // ctx.filter = '`blur(${blur[i]}px)`'
             // console.log(`blur(${blur[i]}px) hue-rotate(${hue[i]})deg`);
-            ctx.filter = `blur(${blur[i]}px) hue-rotate(${hue[i]}deg) brightness(${brightness[i]}%)`
+            ctx.filter = `blur(${blur[i]}px) hue-rotate(${hue[i]}deg) brightness(${brightness[i]}%) saturate(${saturate[i]}%) opacity(${opacity[i]}%) invert(${invert[i]}%)`
             ctx.drawImage(img[i], 0, 0, 1200, 798)
         }
         ctx.restore();
-
         window.requestAnimationFrame(draw);
     }
 

@@ -32,13 +32,42 @@
 		var camera, scene, renderer, solarSystem;
 		var mesh, cmesh;
 		var bg_texture;
+		var bg_city_texture;
 		var materials;
+		var city_img = new Array(4);
+		var comps = ['destination-over', 'source-over', 
+			'source-out', 'destination-over',
+			'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+			'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+			'hue', 'saturation', 'color', 'luminosity']
+		//2000 x 1333
 
-		
+
+		var city = new Image();
+		var cityy = 0;
+		var cityv = .1;
+		var img = new Array(4);
+		// var blur = new Array(4);
+		var hue = new Array(4);
+		var saturate = new Array(4)
+		var brightness = new Array(4)
+		var opacity = new Array(4)
+		var invert = new Array(4)
+		var angle1 = Math.random() * Math.PI * 2;
+		var angle2 = Math.random() * Math.PI * 2;
+		var radius = 1000;
+		var x0 = Math.floor(Math.random() * 256)
+		var y0 = Math.floor(Math.random() * 128)
+		var x1 = Math.floor(Math.random() * 256)
+		var y1 = Math.floor(Math.random() * 128)
+		var r0 = Math.floor(Math.random() * 1000)
+		var r1 = Math.floor(Math.random() * 1000)
+
+
 		let params = (new URL(document.location)).searchParams;
 		let bg_color = params.get('color'); // is the string "Jonathan Smith".
 		let og_bg_color = params.get('ogcolor')
-
+		var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
 		var SpinSpeed = function () {
 			this.roty = Math.random() / 100;
 			this.rotx = Math.random() / 100;
@@ -48,6 +77,12 @@
 			this.color3 = "#97cd34";
 			this.color4 = "#b0c54f";
 			this.color5 = "#e64659";
+
+			this.blur = new Array(4);
+
+			this.blur1 = blur[1]
+			this.CompositeOperation = 'hard-light'
+
 			this.displayOutline = false;
 		};
 
@@ -82,6 +117,72 @@
 			bg_texture = new THREE.CanvasTexture(ctx.canvas);
 		}
 
+		function city_texture() {
+			const ctx = document.createElement('canvas').getContext('2d');
+
+
+			for (var i = 0; i <= 4; i++) {
+				city_img[i] = new Image();
+				city_img[i].src = paths[i] + '.png';
+
+				hue[i] = Math.floor(Math.random() * 180)
+				brightness[i] = Math.floor(Math.random() * 100)
+				saturate[i] = Math.floor(Math.random() * 200)
+				opacity[i] = Math.floor(Math.random() * 100)
+				invert[i] = Math.floor(Math.random() * 100)
+			}
+
+			// ctx.globalCompositeOperation = spin.CompositeOperation
+			// ctx.globalCompositeOperation = comps[Math.floor(Math.random() * comps.length)]
+			console.log(comps[Math.floor(Math.random() * comps.length)])
+			// ctx.globalCompositeOperation = spin.CompositeOperation
+
+			ctx.globalCompositeOperation = comps[Math.floor(Math.random() * comps.length)]
+			ctx.canvas.width = 256;
+			ctx.canvas.height = 128;
+			ctx.fillStyle = '#' + bg_color;
+
+			ctx.clearRect(0, 0, 256, 128); // clear canvas
+
+
+			// Use same x for horiz same y for vert
+			var gradient = ctx.createLinearGradient(x0, y0, x0, y1);
+
+
+			gradient.addColorStop(0, `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 255)`);
+			gradient.addColorStop(Math.random(), 'rgba(200, 170, 118, 255)');
+			gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');			
+			ctx.fillStyle = gradient;
+
+			ctx.fillRect(0, 0, 256, 128);
+
+			ctx.restore();
+
+			cityy += cityv
+			if (cityy >= 720)
+				cityv = -cityv
+			if (cityy <= 0)
+				cityv = - cityv
+
+			ctx.save();
+
+			var layer = Math.floor(Math.random() * 4)
+			var layer2 = Math.floor(Math.random() * 4)
+
+			city_img[layer].addEventListener('load', function () {
+				ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
+				ctx.drawImage(city_img[layer], 0, 0, 256, 128)
+			}, false);
+
+			city_img[layer2].addEventListener('load', function () {
+				ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
+				ctx.drawImage(city_img[layer2], 0, 0, 256, 128)
+			}, false);
+
+			bg_city_texture = new THREE.CanvasTexture(ctx.canvas);
+
+		}
+
 		const ctx_id = document.createElement('canvas').getContext('2d');
 		// document.body.appendChild(ctx.canvas);
 		ctx_id.canvas.width = 512;
@@ -105,7 +206,7 @@
 			const loader = new THREE.TextureLoader();
 			// var bg_texture;
 
-
+			city.src = './city.jpg';
 			// var texture = new THREE.TextureLoader().load('stationid.png');
 			// var cputexture = new THREE.TextureLoader().load('cpu.jpg');
 			var geometry = new THREE.BoxBufferGeometry(200, 200, 200);
@@ -125,6 +226,7 @@
 			// var material = new THREE.MeshBasicMaterial({ color: 0xffffff, envMap: textureCube });
 
 			cpu_texture();
+			city_texture();
 			materials = [
 				new THREE.MeshPhongMaterial({
 					// map: loader.load('stationid.png'),
@@ -133,10 +235,10 @@
 					bumpMap: bg_texture_id
 				}),
 				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('red') }),
-				new THREE.MeshPhongMaterial({ map: bg_texture_id, emissiveMap: bg_texture_id, bumpMap: bg_texture_id }),
-				new THREE.MeshPhongMaterial({ map: bg_texture,  emissiveMap: bg_texture, bumpMap: bg_texture, bumpScale: .25 }),
+				new THREE.MeshPhongMaterial({ map: bg_city_texture }),
+				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, bumpMap: bg_texture, bumpScale: .25 }),
 				new THREE.MeshPhongMaterial({ map: bg_texture_id, emissiveMap: bg_texture_id, emissive: new THREE.Color('gold'), bumpMap: bg_texture_id }),
-				new THREE.MeshPhongMaterial({ map: bg_texture, emissiveMap: bg_texture, emissive: new THREE.Color('silver') }),
+				new THREE.MeshPhongMaterial({ map: bg_city_texture }),
 			];
 			var material = new THREE.MeshPhongMaterial({ color: 0x000000 });
 			// var cpumaterial = new THREE.MeshPhongMaterial({ map: cputexture });
@@ -183,15 +285,17 @@
 		function animate() {
 			bg_texture.needsUpdate = true;
 			bg_texture_id.needsUpdate = true;
-	
+			bg_city_texture.needsUpdate = true;
+
+
 
 			mesh.material[1].emissive = new THREE.Color(spin.color0);
 			mesh.material[3].emissive = new THREE.Color(spin.color1);
-			mesh.material[5].emissive = new THREE.Color(spin.color2);
+			// mesh.material[5].emissive = new THREE.Color(spin.color2);
 			mesh.material[0].emissive = new THREE.Color(spin.color3);
-			mesh.material[2].emissive = new THREE.Color(spin.color4);
+			// mesh.material[2].emissive = new THREE.Color(spin.color4);
 			mesh.material[4].emissive = new THREE.Color(spin.color5);
-			
+
 			// materials[1].map.needsUpdate = true;
 			// materials[1].needsUpdate = true;
 			mesh.material[1].needsUpdate = true;
@@ -208,38 +312,6 @@
 			renderer.render(scene, camera);
 		}
 
-			// var scene = new THREE.Scene();
-			// var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 1000 );
-			// camera.position.z = 400;
-
-			// var renderer = new THREE.WebGLRenderer();
-			// renderer.setSize( window.innerWidth, window.innerHeight );
-			// document.body.appendChild( renderer.domElement );
-
-			// // load a texture, set wrap mode to repeat
-			// var texture = new THREE.TextureLoader().load("./stationid.png");
-			// // texture.wrapS = THREE.RepeatWrapping;
-			// // texture.wrapT = THREE.RepeatWrapping;
-			// // texture.repeat.set(512, 512);
-
-
-			// var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
-			// var material = new THREE.MeshBasicMaterial( { map: texture } );
-			// var cube = new THREE.Mesh( geometry, material );
-			// scene.add( cube );
-
-			// camera.position.z = 5;
-
-			// var animate = function () {
-			// 	requestAnimationFrame( animate );
-
-			// 	cube.rotation.x += 0.01;
-			// 	cube.rotation.y += 0.01;
-
-			// 	renderer.render( scene, camera );
-			// };
-
-			// animate();
 	</script type="module">
 	<div id="info"></div>
 	<div id="info"></div>
