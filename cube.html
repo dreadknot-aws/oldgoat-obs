@@ -35,12 +35,14 @@
 		var bg_city_texture;
 		var materials;
 		var city_img = new Array(4);
-		var comps = ['destination-over', 'source-over', 'source-in',
-			'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
+		var comps = ['destination-over', 'source-over', 
+			'source-out', 'destination-over',
 			'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
 			'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
 			'hue', 'saturation', 'color', 'luminosity']
 		//2000 x 1333
+
+
 		var city = new Image();
 		var cityy = 0;
 		var cityv = .1;
@@ -130,44 +132,31 @@
 				invert[i] = Math.floor(Math.random() * 100)
 			}
 
-			ctx.globalCompositeOperation = spin.CompositeOperation
+			// ctx.globalCompositeOperation = spin.CompositeOperation
+			// ctx.globalCompositeOperation = comps[Math.floor(Math.random() * comps.length)]
+			console.log(comps[Math.floor(Math.random() * comps.length)])
+			// ctx.globalCompositeOperation = spin.CompositeOperation
 
+			ctx.globalCompositeOperation = comps[Math.floor(Math.random() * comps.length)]
 			ctx.canvas.width = 256;
 			ctx.canvas.height = 128;
 			ctx.fillStyle = '#' + bg_color;
-			// ctx.globalCompositeOperation = 'destination-over';
+
 			ctx.clearRect(0, 0, 256, 128); // clear canvas
-			// ctx.fillStyle = 'rgba(0, 0, 0, 255)';
-			// ctx.fillStyle = `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`;
-			// var x1 = Math.cos(angle1) * radius;
-			// var y1 = Math.sin(angle1) * radius;
-			// var x2 = Math.cos(angle2) * radius;
-			// var y2 = Math.sin(angle2) * radius;
-			var gradient = ctx.createLinearGradient(0, 0, 256, 128);
-			// var gradient = ctx.createLinearGradient(x0, y0, x1, y1);
-			// var gradient = ctx.createLinearGradient(x1 + 1000, y1 + 1000, x2 + 1000, y2 + 1000);
-			// var gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+
+
+			// Use same x for horiz same y for vert
+			var gradient = ctx.createLinearGradient(x0, y0, x0, y1);
+
 
 			gradient.addColorStop(0, `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 255)`);
-			gradient.addColorStop(.50, 'rgba(200, 170, 118, 255)');
+			gradient.addColorStop(Math.random(), 'rgba(200, 170, 118, 255)');
 			gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');			
-			// gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
-			// gradient.addColorStop(.5, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
-			// gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
 			ctx.fillStyle = gradient;
 
-			// ctx.fillStyle = 'rgba(42, 100, 65, 255 )';
-			// ctx.fillStyle = 'blue'
-			// ctx.filter = 'blur(4px)';
-			// ctx.filter = 'hue-rotate(180deg)';
-			// ctx.filter = 'contrast(50%)'
-			// ctx.filter = 'saturate(50%)'
-			var time = new Date();
-			// ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
 			ctx.fillRect(0, 0, 256, 128);
-			// ctx.translate(150, 150);
+
 			ctx.restore();
-			// Earth
 
 			cityy += cityv
 			if (cityy >= 720)
@@ -175,44 +164,21 @@
 			if (cityy <= 0)
 				cityv = - cityv
 
-
-
-			// ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
-			// ctx.translate(105, 0);
-			// ctx.fillRect(0, -12, 40, 24); // Shadow
-			// ctx.drawImage(city, 0, 500, 1280, 720, 0, 0, 1280, 720);
-			// ctx.drawImage(city, cityy, 600, 1280, 720, 0, 360, 1280, 720);
 			ctx.save();
-			for (var i = 4; i > 0; i--) {
 
-				// ctx.filter = 'hue-rotate(' + 56 + 'deg)';
-				// ctx.filter = 'blur(' + Math.floor(Math.random() * 4) + 'px)';
-				// ctx.filter = 'blur(' + blur[i] + 'px)' + hue-rotate(' + hue[i] + 'deg);
-				// ctx.filter = 'blur(4px)';
-				// ctx.filter = 'hue-rotate(' + hue[i] + 'deg)';
-				// ctx.filter = 'brightness(' + brightness[i] + ')';
-				// ctx.filter = 'saturate[i];
-				// ctx.filter = '`blur(${blur[i]}px)`'
-				// console.log(`blur(${blur[i]}px) hue-rotate(${hue[i]})deg`);
-				// ctx.filter = `blur(${blur[i]}px) hue-rotate(${hue[i]}deg) brightness(${brightness[i]}%) saturate(${saturate[i]}%) opacity(${opacity[i]}%) invert(${invert[i]}%)`
-				// ctx.drawImage(city_img[i], 0, 0, 256, 128)
-				// city_img[i].addEventListener('load', function () {
-				// 	ctx.drawImage(city_img[i], 0, 0, 256, 128)
-				// }, false);
-								// ctx.filter = 'invert(100%)';
-			}
-			// ctx.restore();
-			//  ctx.filter = 'invert(100%)
-			// ctx.drawImage(city_img[1], 0, 0, 256, 128)
-			 
-			city_img[2].addEventListener('load', function () {
-				ctx.filter = 'brightness(10%)'
-				ctx.drawImage(city_img[2], 0, 0, 256, 128)
+			var layer = Math.floor(Math.random() * 4)
+			var layer2 = Math.floor(Math.random() * 4)
+
+			city_img[layer].addEventListener('load', function () {
+				ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
+				ctx.drawImage(city_img[layer], 0, 0, 256, 128)
 			}, false);
-			// city_img[2].addEventListener('load', function () {
-			// 	ctx.drawImage(city_img[2], 0, 0, 256, 128)
-			// }, false);
-			// var brightness = new Array('100', '100', )
+
+			city_img[layer2].addEventListener('load', function () {
+				ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
+				ctx.drawImage(city_img[layer2], 0, 0, 256, 128)
+			}, false);
+
 			bg_city_texture = new THREE.CanvasTexture(ctx.canvas);
 
 		}
@@ -346,38 +312,6 @@
 			renderer.render(scene, camera);
 		}
 
-			// var scene = new THREE.Scene();
-			// var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 1000 );
-			// camera.position.z = 400;
-
-			// var renderer = new THREE.WebGLRenderer();
-			// renderer.setSize( window.innerWidth, window.innerHeight );
-			// document.body.appendChild( renderer.domElement );
-
-			// // load a texture, set wrap mode to repeat
-			// var texture = new THREE.TextureLoader().load("./stationid.png");
-			// // texture.wrapS = THREE.RepeatWrapping;
-			// // texture.wrapT = THREE.RepeatWrapping;
-			// // texture.repeat.set(512, 512);
-
-
-			// var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
-			// var material = new THREE.MeshBasicMaterial( { map: texture } );
-			// var cube = new THREE.Mesh( geometry, material );
-			// scene.add( cube );
-
-			// camera.position.z = 5;
-
-			// var animate = function () {
-			// 	requestAnimationFrame( animate );
-
-			// 	cube.rotation.x += 0.01;
-			// 	cube.rotation.y += 0.01;
-
-			// 	renderer.render( scene, camera );
-			// };
-
-			// animate();
 	</script type="module">
 	<div id="info"></div>
 	<div id="info"></div>
