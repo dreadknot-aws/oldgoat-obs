@@ -31,10 +31,7 @@
     var angle1 = Math.random() * Math.PI * 2;
     var angle2 = Math.random() * Math.PI * 2;
     var radius = 1000;
-    var x0 = Math.floor(Math.random() * 1280)
-    var y0 = Math.floor(Math.random() * 720)
-    var x1 = Math.floor(Math.random() * 1280)
-    var y1 = Math.floor(Math.random() * 720)
+
     var r0 = Math.floor(Math.random() * 1000)
     var r1 = Math.floor(Math.random() * 1000)
     // var brightness = new Array('100', '100', )
@@ -44,7 +41,10 @@
         this.rotx = Math.random() / 100;
         this.color2 = [250, 132, 8, 0]; // RGB with alpha
         this.color3 = [173, 153, 93, 0];
-
+        this.x0 = Math.floor(Math.random() * 1280)
+        this.y0 = Math.floor(Math.random() * 720)
+        this.x1 = Math.floor(Math.random() * 1280)
+        this.y1 = Math.floor(Math.random() * 720)
         this.blur = new Array(4);
         for (var i = 0; i <= 4; i++) {
             img[i] = new Image();
@@ -72,7 +72,10 @@
         'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
         'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
         'hue', 'saturation', 'color', 'luminosity']);
-
+    gui.add(spin, 'x0');
+    gui.add(spin, 'y0');
+    gui.add(spin, 'x1');
+    gui.add(spin, 'y1');
     gui.remember(spin);
 
     function init() {
@@ -93,7 +96,7 @@
         // var x2 = Math.cos(angle2) * radius;
         // var y2 = Math.sin(angle2) * radius;
         // var gradient = ctx.createLinearGradient(0, 0, 720, 1280);
-        var gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+        var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x1, spin.y1);
         // var gradient = ctx.createLinearGradient(x1 + 1000, y1 + 1000, x2 + 1000, y2 + 1000);
         // var gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
 
