@@ -36,7 +36,7 @@
     // var brightness = new Array('100', '100', )
 
     var layers = [Math.floor(Math.random() * 4),Math.floor(Math.random() * 4)]
-    console.log(layers)
+    // console.log(layers)
 
     var SpinSpeed = function () {
         this.roty = Math.random() / 100;
@@ -92,7 +92,7 @@
     function draw() {
         var ctx = document.getElementById('canvas').getContext('2d');
         ctx.globalCompositeOperation = comps[spin.Composite]
-        console.log(ctx.globalCompositeOperation)
+        // console.log(ctx.globalCompositeOperation)
         // ctx.globalCompositeOperation = spin.CompositeOperation
         ctx.save();
         // ctx.globalCompositeOperation = 'destination-over';
