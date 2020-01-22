@@ -13,7 +13,6 @@
 
     var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
     var comps = ['source-over', 
-			'source-out',
 			'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
 			'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
 			'hue', 'saturation', 'color', 'luminosity']
@@ -47,10 +46,10 @@
         this.color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)]
         this.color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)]
 
-        this.x0 = Math.floor(Math.random() * 1280)
-        this.y0 = Math.floor(Math.random() * 720)
-        this.x1 = Math.floor(Math.random() * 1280)
-        this.y1 = Math.floor(Math.random() * 720)
+        this.x0 = Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1);
+        this.y0 = Math.floor(Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
+        this.x1 = Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1);
+        this.y1 = Math.floor(Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
         this.blur = new Array(4);
         for (var i = 0; i <= 4; i++) {
             img[i] = new Image();
@@ -155,6 +154,7 @@
             ctx.filter = `hue-rotate(${hue[i]}deg) brightness(${brightness[i]}%) saturate(${saturate[i]}%) opacity(${opacity[i]}%) invert(${invert[i]}%)`
             // ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
             // console.log(ctx.filter)
+            ctx.filter = `brightness(${brightness[i]}%)`
             ctx.drawImage(img[layers[i]], 0, 0, 1200, 798)
 
         }
