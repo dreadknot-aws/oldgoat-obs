@@ -7,6 +7,7 @@
 	<style>
 		body {
 			margin: 0;
+            background-color: rgba(0, 0, 0, 0);
 		}
 
 		canvas {
@@ -43,6 +44,7 @@
     var angle1 = Math.random() * Math.PI * 2;
     var angle2 = Math.random() * Math.PI * 2;
     var radius = 1000;
+    var cstop = Math.random()
 
     var r0 = Math.floor(Math.random() * 1000)
     var r1 = Math.floor(Math.random() * 1000)
@@ -112,19 +114,26 @@
         // ctx.globalCompositeOperation = 'destination-over';
         ctx.clearRect(0, 0, 1280, 720); // clear canvas
         // ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-        ctx.fillStyle = `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`;
+        // ctx.fillStyle = `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`;
 
-        var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x1, spin.y1);
-
+        // var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x1, spin.y1);
+        var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x0, spin.y1);
         // Use for fun colors! Try with destination-top
         // gradient.addColorStop(0, `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 255)`);
         // gradient.addColorStop(Math.random(), 'rgba(200, 170, 118, 255)');
         // gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');	
 
 
+        // gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+        // gradient.addColorStop(.5, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
+        // gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+
         gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
-        gradient.addColorStop(.5, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
-        gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+        gradient.addColorStop(cstop, 'rgba(200, 170, 118, 255)');
+        gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');
+
+
+
         ctx.fillStyle = gradient;
         // ctx.fillStyle = 'rgba(42, 100, 65, 255 )';
         // ctx.fillStyle = 'green'
