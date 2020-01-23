@@ -81,7 +81,8 @@
         this.displayOutline = false;
     };
 
-    const gui = new GUI();
+    const gui = new GUI({closed: true});
+    gui.hide()
     var spin = new SpinSpeed();
     // gui.add(spin, 'blur1', 0, 4)
     gui.addColor(spin, 'color2');

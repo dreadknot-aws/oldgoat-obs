@@ -89,7 +89,8 @@
 
 		let rotx = Math.random() / 100
 		let roty = Math.random() / 100
-		const gui = new GUI();
+		const gui = new GUI({closed: true});
+		gui.hide()
 		var spin = new SpinSpeed();
 		gui.add(spin, 'roty', -.100, .100);
 		gui.add(spin, 'rotx', -.100, .100);
