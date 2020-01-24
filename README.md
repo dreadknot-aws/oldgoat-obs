@@ -1,6 +1,8 @@
 # oldgoat-obs
 html included as browser source in OBS
 
+add  --enable-gpu to obs target
+
 HTML canvas and javascript
 
 https://threejs.org/docs/index.html#manual/en/introduction/Useful-links
