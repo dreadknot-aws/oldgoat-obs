@@ -117,6 +117,7 @@
 			img.src = 'cpu.png'; // Set source path
 			// var bg_texture = 
 			bg_texture = new THREE.CanvasTexture(ctx.canvas);
+			bg_texture.center = new THREE.Vector2( 0.5, 0.5 )	
 		}
 
 		function city_texture() {
@@ -288,6 +289,8 @@
 			bg_texture.needsUpdate = true;
 			bg_texture_id.needsUpdate = true;
 			bg_city_texture.needsUpdate = true;
+			
+			bg_texture.rotation += .01;
 
 
 
