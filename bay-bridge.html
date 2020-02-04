@@ -4,33 +4,33 @@
 <head>
     <meta charset="utf-8" />
     <title>City</title>
-	<style>
-		body {
-			margin: 0;
+    <style>
+        body {
+            margin: 0;
             background-color: rgba(0, 0, 0, 0);
-		}
+        }
 
-		canvas {
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0);
-			margin: 0;
-		}
+        canvas {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
     </style>
 </head>
 
 <body>
     <canvas id="canvas" width="1280" height="720"></canvas>
-    <input type="button" value="reroll" onclick="reroll()">
+    <input type="button" value="save" onclick="save()">
 </body>
 <script type="module">
     import { GUI } from './js/dat.gui.module.js';
 
     var paths = ['path886', 'path890', 'path892', 'path894', 'path898']
-    var comps = ['source-over', 
-			'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
-			'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
-			'hue', 'saturation', 'color', 'luminosity']
+    var comps = ['source-over',
+        'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+        'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+        'hue', 'saturation', 'color', 'luminosity']
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
@@ -50,13 +50,13 @@
     var r0 = Math.floor(Math.random() * 1000)
     var r1 = Math.floor(Math.random() * 1000)
 
-        var dx1 = Math.floor(Math.random() * 1656)
-        var dy1 = Math.floor(Math.random() * 20)
+    var dx1 = Math.floor(Math.random() * 1656)
+    var dy1 = Math.floor(Math.random() * 20)
 
 
     // var brightness = new Array('100', '100', )
 
-    var layers = [Math.floor(Math.random() * 4),Math.floor(Math.random() * 4)]
+    var layers = [Math.floor(Math.random() * 4), Math.floor(Math.random() * 4)]
     // console.log(layers)
 
     var SpinSpeed = function () {
@@ -64,9 +64,9 @@
         this.rotx = Math.random() / 100;
         // this.color2 = [250, 132, 8, 0]; // RGB with alpha
         // this.color3 = [173, 153, 93, 0];
-        this.color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)]
-        this.color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)]
-
+        this.color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+        this.color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+        this.color4 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
         this.x0 = Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1);
         this.y0 = Math.floor(Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
         this.x1 = Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1);
@@ -89,12 +89,14 @@
         this.displayOutline = false;
     };
 
-    const gui = new GUI({closed: true});
+    const gui = new GUI({ closed: true });
     gui.hide()
     var spin = new SpinSpeed();
     // gui.add(spin, 'blur1', 0, 4)
+
     gui.addColor(spin, 'color2');
     gui.addColor(spin, 'color3');
+    gui.addColor(spin, 'color4');
     // gui.add(spin, 'CompositeOperation', ['destination-over', 'source-over', 'source-in',
     //     'source-out', 'source-atop', 'destination-over', 'destination-in', 'destination-out',
     //     'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
@@ -110,6 +112,26 @@
         city.src = './city.jpg';
         window.requestAnimationFrame(draw);
     }
+
+
+
+    function save() {
+        var canvas = document.getElementById('canvas');
+
+        canvas.toBlob(function (blob) {
+            var newImg = document.createElement('img'),
+                url = URL.createObjectURL(blob);
+
+            newImg.onload = function () {
+                // no longer need to read the blob so it's revoked
+                URL.revokeObjectURL(url);
+            };
+
+            newImg.src = url;
+            document.body.appendChild(newImg);
+        });
+    }
+
 
     function draw() {
         var ctx = document.getElementById('canvas').getContext('2d');
@@ -135,8 +157,8 @@
         // gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
 
         gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
-        gradient.addColorStop(cstop, 'rgba(200, 170, 118, 255)');
-        gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');
+        gradient.addColorStop(cstop, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
+        gradient.addColorStop(1, `rgba(${spin.color4[0]}, ${spin.color4[1]}, ${spin.color4[2]}, 255 )`);
 
 
 
