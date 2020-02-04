@@ -37,7 +37,8 @@
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
-    var cityv = .1;
+    var cityv = .08 * (Math.random() < 0.5 ? -1 : 1);
+    // var cityv = (Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1)
     var img = new Array(4);
     // var blur = new Array(4);
     var hue = new Array(4);
@@ -160,7 +161,18 @@
         if (cityy <= 0)
             cityv = - cityv
 
+        spin.y0 += cityv
+        if (spin.y0 >= 1500)
+            cityv = -cityv
+        if (spin.y0 <= -1500)
+            cityv = - cityv
 
+//cstop
+        // cstop += cityv / 100
+        // if (cstop >= 1)
+        //     cityv = -cityv
+        // if (cstop <= 0)
+        //     cityv = - cityv
 
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         // ctx.translate(105, 0);
@@ -178,11 +190,11 @@
         //     ctx.drawImage(img[layers[i]], 0, 0, 1200, 798)
 
         // }
-            ctx.filter = `brightness(${brightness[0]}%)`
-            ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(${opacity[0]}%) invert(${invert[0]}%)`
+            // ctx.filter = `brightness(${brightness[0]}%)`
+            ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
             ctx.drawImage(img[0], 0, 0, 1200, 798)
             ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
-            ctx.filter = `brightness(${brightness[1]}%)`
+            // ctx.filter = `brightness(${brightness[1]}%)`
             ctx.drawImage(img[randomlayer], 0, 0, 1200, 798)
 
 
