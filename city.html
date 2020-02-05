@@ -150,7 +150,7 @@
         // ctx.filter = 'saturate(50%)'
         var time = new Date();
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
-        ctx.fillRect(0, 0, 1200, 798);
+        ctx.fillRect(0, 0, 1280, 720);
         // ctx.translate(150, 150);
         ctx.restore();
         // Earth
@@ -192,10 +192,10 @@
         // }
             // ctx.filter = `brightness(${brightness[0]}%)`
             ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
-            ctx.drawImage(img[0], 0, 0, 1200, 798)
+            ctx.drawImage(img[0], 0, 0, 1280, 720)
             ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
             // ctx.filter = `brightness(${brightness[1]}%)`
-            ctx.drawImage(img[randomlayer], 0, 0, 1200, 798)
+            ctx.drawImage(img[randomlayer], 0, 0, 1280, 720)
 
 
         ctx.restore();
