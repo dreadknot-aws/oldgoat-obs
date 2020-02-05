@@ -171,7 +171,7 @@
         // ctx.filter = 'saturate(50%)'
         var time = new Date();
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
-        ctx.fillRect(0, 0, 1200, 798);
+        ctx.fillRect(0, 0, 1280, 720);
         // ctx.translate(150, 150);
         ctx.restore();
         // Earth
@@ -206,7 +206,7 @@
             // ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
             // console.log(ctx.filter)
             ctx.filter = `brightness(${brightness[i]}%)`
-            ctx.drawImage(img[layers[i]], dx1, dy1, 1280, 720, 0, 0, 1200, 798)
+            ctx.drawImage(img[layers[i]], dx1, dy1, 1280, 720, 0, 0, 1280, 720)
 
         }
         ctx.restore();
