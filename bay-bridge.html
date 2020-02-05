@@ -51,8 +51,10 @@
     var r1 = Math.floor(Math.random() * 1000)
 
     var dx1 = Math.floor(Math.random() * 1656)
-    var dy1 = Math.floor(Math.random() * 20)
+    var dy1 = Math.floor(Math.random() * 10)
 
+    var sx1 = Math.floor(Math.random() * 1656)
+    var sy1 = 0
 
     // var brightness = new Array('100', '100', )
 
@@ -206,7 +208,7 @@
             // ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
             // console.log(ctx.filter)
             ctx.filter = `brightness(${brightness[i]}%)`
-            ctx.drawImage(img[layers[i]], dx1, dy1, 1280, 720, 0, 0, 1280, 720)
+            ctx.drawImage(img[layers[i]], sx1, 0, 1280, 680, 0, 0, 1280, 720)
 
         }
         ctx.restore();
