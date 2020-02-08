@@ -39,7 +39,7 @@
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
-    var cityv = .08 * (Math.random() < 0.5 ? -1 : 1);
+    var cityv = .01 * (Math.random() < 0.5 ? -1 : 1);
     // var cityv = (Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1)
     var img = new Array(4);
     // var blur = new Array(4);
@@ -126,7 +126,7 @@
         // ctx.fillStyle = `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`;
 
         // var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x1, spin.y1);
-        var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x0, spin.y1);
+        var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x1, spin.y1);
         // Use for fun colors! Try with destination-top
         // gradient.addColorStop(0, `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 255)`);
         // gradient.addColorStop(Math.random(), 'rgba(200, 170, 118, 255)');
@@ -158,15 +158,15 @@
         // Earth
 
         cityy += cityv
-        if (cityy >= 720)
+        if (cityy >= 3)
             cityv = -cityv
         if (cityy <= 0)
             cityv = - cityv
 
-        spin.y0 += cityv
-        if (spin.y0 >= 1500)
+        spin.x0 += cityv
+        if (spin.x0 >= 1500)
             cityv = -cityv
-        if (spin.y0 <= -1500)
+        if (spin.x0 <= -1500)
             cityv = - cityv
 
 //cstop
@@ -192,12 +192,13 @@
         //     ctx.drawImage(img[layers[i]], 0, 0, 1200, 798)
 
         // }
+            
             // ctx.filter = `brightness(${brightness[0]}%)`
             ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
             ctx.drawImage(img[0], 0, 0, 1280, 720)
             ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
             // ctx.filter = `brightness(${brightness[1]}%)`
-            ctx.drawImage(img[randomlayer], 0, 0, 1280, 720)
+            ctx.drawImage(img[randomlayer], cityy, 0, 1280, 720)
 
 
         ctx.restore();
