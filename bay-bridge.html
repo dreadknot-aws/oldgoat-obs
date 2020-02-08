@@ -184,7 +184,18 @@
         if (cityy <= 0)
             cityv = - cityv
 
+        spin.x0 += cityv
+        if (spin.y0 >= 1500)
+            cityv = -cityv
+        if (spin.y0 <= -1500)
+            cityv = - cityv
 
+
+        spin.y0 += cityv
+        if (spin.y0 >= 1500)
+            cityv = -cityv
+        if (spin.y0 <= -1500)
+            cityv = - cityv
 
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         // ctx.translate(105, 0);
