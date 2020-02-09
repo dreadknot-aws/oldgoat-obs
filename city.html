@@ -39,7 +39,8 @@
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
-    var cityv = .01 * (Math.random() < 0.5 ? -1 : 1);
+    var cityv = .05 * (Math.random() < 0.5 ? -1 : 1);
+    var gradientv = .05 * (Math.random() < 0.5 ? -1 : 1);
     // var cityv = (Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1)
     var img = new Array(4);
     // var blur = new Array(4);
@@ -163,11 +164,13 @@
         if (cityy <= 0)
             cityv = - cityv
 
-        spin.x0 += cityv
-        if (spin.x0 >= 1500)
-            cityv = -cityv
-        if (spin.x0 <= -1500)
-            cityv = - cityv
+
+        // console.log(spin.x0)
+        spin.x0 += gradientv
+        if (spin.x0 >= 1500.00)
+            gradientv = -gradientv
+        if (spin.x0 <= -1500.00)
+            gradientv = - gradientv
 
 //cstop
         // cstop += cityv / 100
