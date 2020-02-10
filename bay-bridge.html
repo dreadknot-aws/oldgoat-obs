@@ -8,6 +8,7 @@
         body {
             margin: 0;
             background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
         }
 
         canvas {
@@ -51,8 +52,10 @@
     var r1 = Math.floor(Math.random() * 1000)
 
     var dx1 = Math.floor(Math.random() * 1656)
-    var dy1 = Math.floor(Math.random() * 20)
+    var dy1 = Math.floor(Math.random() * 10)
 
+    var sx1 = Math.floor(Math.random() * 1656)
+    var sy1 = 0
 
     // var brightness = new Array('100', '100', )
 
@@ -183,7 +186,18 @@
         if (cityy <= 0)
             cityv = - cityv
 
+        spin.x0 += cityv
+        if (spin.y0 >= 1500)
+            cityv = -cityv
+        if (spin.y0 <= -1500)
+            cityv = - cityv
 
+
+        spin.y0 += cityv
+        if (spin.y0 >= 1500)
+            cityv = -cityv
+        if (spin.y0 <= -1500)
+            cityv = - cityv
 
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         // ctx.translate(105, 0);
@@ -207,7 +221,7 @@
             // ctx.filter = `brightness(${Math.floor(Math.random() * 50)}%)`
             // console.log(ctx.filter)
             ctx.filter = `brightness(${brightness[i]}%)`
-            ctx.drawImage(img[layers[i]], dx1, dy1, 1280, 720, 0, 0, 1280, 720)
+            ctx.drawImage(img[layers[i]], sx1, 0, 1280, 680, 0, 0, 1280, 720)
 
         }
         ctx.restore();
