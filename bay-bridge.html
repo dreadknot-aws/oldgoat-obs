@@ -21,7 +21,7 @@
 
 <body>
     <canvas id="canvas" width="1280" height="720"></canvas>
-    <input type="button" value="save" onclick="save()">
+    <input type="button" value="save" id="savecanvas">
 </body>
 <script type="module">
     import { GUI } from './js/dat.gui.module.js';
@@ -112,10 +112,11 @@
         city.src = './city.jpg';
         window.requestAnimationFrame(draw);
     }
+    
 
-
-
-    function save() {
+    document.getElementById("savecanvas").addEventListener("click", savecanvas);
+     function savecanvas() {
+        console.log("Save")
         var canvas = document.getElementById('canvas');
 
         canvas.toBlob(function (blob) {
