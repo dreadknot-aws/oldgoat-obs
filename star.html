@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>City</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <img src="ring wide center clear.png"> -->
+    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate some
+        random to use as input to the draw context.
+    </canvas>
+
+</body>
+<script type="module">
+    import { GUI } from './js/dat.gui.module.js';
+
+
+    function init() {
+
+        window.requestAnimationFrame(draw);
+    }
+
+    function draw() {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        var canvas = document.getElementById('canvas');
+
+        for (let i = 0; i < 50; i++) {
+            let cwidth = Math.floor(Math.random() * canvas.width)
+            let cheight = Math.floor(Math.random() * canvas.height)
+            let pwidth = Math.floor(Math.random() * 25)
+            let pheight = Math.floor(Math.random() * 25)
+            let pr = Math.floor(Math.random() * 255)
+            let pg = Math.floor(Math.random() * 255)
+            let pb = Math.floor(Math.random() * 255)
+            let pa = Math.floor(Math.random() * 255)
+            let fblur = Math.floor(Math.random() * 5)
+            ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+            // ctx.filter = `blur(${fblur}px)`
+            ctx.fillRect(cwidth, cheight, pwidth, pheight);
+        }
+
+        window.requestAnimationFrame(draw);
+    }
+
+    init();
+
+</script>
+
+</html>
