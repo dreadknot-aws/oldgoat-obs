@@ -40,20 +40,27 @@
     function draw() {
         var ctx = document.getElementById('canvas').getContext('2d');
         var canvas = document.getElementById('canvas');
+        // ctx.clearRect(0, 0, 1280, 720);
 
         for (let i = 0; i < 50; i++) {
-            let cwidth = Math.floor(Math.random() * canvas.width)
-            let cheight = Math.floor(Math.random() * canvas.height)
+            let cx = Math.floor(Math.random() * canvas.width)
+            let cy = Math.floor(Math.random() * canvas.height)
             let pwidth = Math.floor(Math.random() * 25)
             let pheight = Math.floor(Math.random() * 25)
             let pr = Math.floor(Math.random() * 255)
             let pg = Math.floor(Math.random() * 255)
             let pb = Math.floor(Math.random() * 255)
             let pa = Math.floor(Math.random() * 255)
-            let fblur = Math.floor(Math.random() * 5)
-            ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-            // ctx.filter = `blur(${fblur}px)`
-            ctx.fillRect(cwidth, cheight, pwidth, pheight);
+            let fblur = Math.floor(Math.random() * 1)
+            // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+            let gradient = ctx.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
+            gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+            gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
+            gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
+            ctx.fillStyle = gradient;
+
+            ctx.filter = `blur(${fblur}px)`
+            ctx.fillRect(cx, cy, pwidth, pheight);
         }
 
         window.requestAnimationFrame(draw);
