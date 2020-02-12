@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Sann Francisco, California</title>
+    <title>San Francisco, California</title>
     <style>
         body {
             margin: 0;
@@ -58,7 +58,7 @@
 
     function draw() {
         var ctx = document.getElementById('canvas').getContext('2d');
-
+        ctx.save();
 
         for (let i = 0; i < 50; i++) {
             let cx = Math.floor(Math.random() * canvas.width)
@@ -95,7 +95,7 @@
 
 
         // ctx.drawImage(img, 0, 1080, 2999, 1088, 0, 400, 1280, 360)
-
+        ctx.restore();
         window.requestAnimationFrame(draw);
     }
 
