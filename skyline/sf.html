@@ -8,7 +8,7 @@
         body {
             margin: 0;
             background-color: rgba(0, 0, 0, 0);
-            overflow: hidden;
+            /* overflow: hidden; */
         }
 
         canvas {
@@ -21,7 +21,9 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="1280" height="720"></canvas>
+    <canvas id="frame" width="1280" height="720"></canvas>
+    <canvas id="canvas" width="2998" height="2025"></canvas>
+    
     <input type="button" value="save" id="savecanvas">
 </body>
 <script type="module">
@@ -57,8 +59,45 @@
 
 
     function draw() {
-        var ctx = document.getElementById('canvas').getContext('2d');
+        let ctx = document.getElementById('canvas').getContext('2d');
         ctx.save();
+        // ctx.clearRect(0, 0, 1280, 720);
+        for (let i = 0; i < 50; i++) {
+            let cx = Math.floor(Math.random() * canvas.width)
+            let cy = Math.floor(Math.random() * canvas.height)
+            let pwidth = Math.floor(Math.random() * 25)
+            let pheight = Math.floor(Math.random() * 25)
+            let pr = Math.floor(Math.random() * 255)
+            let pg = Math.floor(Math.random() * 255)
+            let pb = Math.floor(Math.random() * 255)
+            let pa = Math.floor(Math.random() * 255)
+            let fblur = Math.floor(Math.random() * 1)
+            // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+            let gradient = ctx.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
+            gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+            gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
+            gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
+            ctx.fillStyle = gradient;
+
+            ctx.filter = `blur(${fblur}px)`
+            ctx.fillRect(cx, cy, pwidth, pheight);
+        }
+
+        //3000x2024
+        //top
+        ctx.drawImage(img, 0, 0, 2992, 1088, 0, 0, 2992, 1088)
+
+        // bottom
+        ctx.drawImage(img, 0, 1336, 2996, 696, 0, 1336, 2996, 696)
+
+        // middle
+        ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
+
+        //cloud
+        // ctx.drawImage(img, 0, 0, 3008, 768, 0, 0, 1280, 360)
+
+        // ctx.drawImage(img, 0, 1080, 2999, 1088, 0, 400, 1280, 360)
+
 
         for (let i = 0; i < 50; i++) {
             let cx = Math.floor(Math.random() * canvas.width)
@@ -83,19 +122,12 @@
 
 
 
-        //top
-        ctx.drawImage(img, 0, 0, 2999, 1088, 0, 0, 1280, 360)
-
-        // bottom
-        ctx.drawImage(img, 0, 1080, 2999, 1088, 0, 420, 1280, 360)
-
-        // middle
-        ctx.drawImage(img, 9000, 1524, 2994, 1088, 0, 320, 1280, 410)
-
-
-
-        // ctx.drawImage(img, 0, 1080, 2999, 1088, 0, 400, 1280, 360)
         ctx.restore();
+
+        let frame_ctx = document.getElementById('frame').getContext('2d');
+        frame_ctx.putImageData(ctx.getImageData(975, 800, 1280, 720), 0, 0);
+        // frame_ctx.drawImage(ctx.i, 0, 0)
+
         window.requestAnimationFrame(draw);
     }
 
