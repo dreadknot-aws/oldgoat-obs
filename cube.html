@@ -30,13 +30,20 @@
 		import * as THREE from './js/three.module.js';
 		import { GUI } from './js/dat.gui.module.js';
 
+		const paint_texture_canvas = document.createElement('canvas').getContext('2d');
+
+		paint_texture_canvas.canvas.width = 512;
+		paint_texture_canvas.canvas.height = 512;
+
+
 		var camera, scene, renderer, solarSystem;
 		var mesh, cmesh;
 		var bg_texture;
+		var bg_oil_id;
 		var bg_city_texture;
 		var materials;
 		var city_img = new Array(4);
-		var comps = ['destination-over', 'source-over', 
+		var comps = ['destination-over', 'source-over',
 			'source-out', 'destination-over',
 			'destination-atop', 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
 			'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
@@ -58,7 +65,7 @@
 		var angle2 = Math.random() * Math.PI * 2;
 		var radius = 1000;
 		var x0 = Math.floor(Math.random() * 256) * (Math.random() < 0.5 ? -1 : 1)
-		var y0 = Math.floor(Math.random() * 128)  * (Math.random() < 0.5 ? -1 : 1)
+		var y0 = Math.floor(Math.random() * 128) * (Math.random() < 0.5 ? -1 : 1)
 		var x1 = Math.floor(Math.random() * 256) * (Math.random() < 0.5 ? -1 : 1)
 		var y1 = Math.floor(Math.random() * 128) * (Math.random() < 0.5 ? -1 : 1)
 		var r0 = Math.floor(Math.random() * 1000)
@@ -89,7 +96,7 @@
 
 		let rotx = Math.random() / 100
 		let roty = Math.random() / 100
-		const gui = new GUI({closed: true});
+		const gui = new GUI({ closed: true });
 		gui.hide()
 		var spin = new SpinSpeed();
 		gui.add(spin, 'roty', -.100, .100);
@@ -100,6 +107,34 @@
 		gui.addColor(spin, 'color3');
 		gui.addColor(spin, 'color4');
 		gui.addColor(spin, 'color5');
+
+
+		function paint_texture(paint_texture_canvas) {
+
+			for (let i = 0; i < 50; i++) {
+				let cx = Math.floor(Math.random() * paint_texture_canvas.canvas.width)
+				let cy = Math.floor(Math.random() * paint_texture_canvas.canvas.height)
+				let pwidth = Math.floor(Math.random() * 25)
+				let pheight = Math.floor(Math.random() * 25)
+				let pr = Math.floor(Math.random() * 255)
+				let pg = Math.floor(Math.random() * 255)
+				let pb = Math.floor(Math.random() * 255)
+				let pa = Math.floor(Math.random() * 255)
+				let fblur = Math.floor(Math.random() * 1)
+				paint_texture_canvas.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+				// let gradient = paint_texture_canvas.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
+				// gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+				// gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
+				// gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
+				// paint_texture_canvas.fillStyle = gradient;
+
+				// paint_texture_canvas.filter = `blur(${fblur}px)`
+				paint_texture_canvas.fillRect(cx, cy, pwidth, pheight);
+			}
+			bg_oil_id = new THREE.CanvasTexture(paint_texture_canvas.canvas);
+
+		}
+
 
 		function cpu_texture() {
 			const ctx = document.createElement('canvas').getContext('2d');
@@ -117,7 +152,7 @@
 			img.src = 'cpu.png'; // Set source path
 			// var bg_texture = 
 			bg_texture = new THREE.CanvasTexture(ctx.canvas);
-			bg_texture.center = new THREE.Vector2( 0.5, 0.5 )	
+			bg_texture.center = new THREE.Vector2(0.5, 0.5)
 		}
 
 		function city_texture() {
@@ -154,7 +189,7 @@
 
 			gradient.addColorStop(0, `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 255)`);
 			gradient.addColorStop(Math.random(), 'rgba(200, 170, 118, 255)');
-			gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');			
+			gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');
 			ctx.fillStyle = gradient;
 
 			ctx.fillRect(0, 0, 256, 128);
@@ -230,6 +265,7 @@
 
 			cpu_texture();
 			city_texture();
+
 			materials = [
 				new THREE.MeshPhongMaterial({
 					// map: loader.load('stationid.png'),
@@ -286,13 +322,17 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
 		function animate() {
+
+			paint_texture(paint_texture_canvas);
+
 			bg_texture.needsUpdate = true;
 			bg_texture_id.needsUpdate = true;
 			bg_city_texture.needsUpdate = true;
-			
+			bg_oil_id.needsUpdate = true;
+
 			bg_texture.rotation += .01;
 
-
+			mesh.material[3].map = bg_oil_id;
 
 			mesh.material[1].emissive = new THREE.Color(spin.color0);
 			mesh.material[3].emissive = new THREE.Color(spin.color1);
