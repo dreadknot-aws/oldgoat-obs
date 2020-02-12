@@ -73,7 +73,7 @@
 
 
 		let params = (new URL(document.location)).searchParams;
-		let bg_color = params.get('color'); // is the string "Jonathan Smith".
+		let bg_color = params.get('color'); 
 		let og_bg_color = params.get('ogcolor')
 		var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
 		var SpinSpeed = function () {
@@ -122,11 +122,11 @@
 				let pa = Math.floor(Math.random() * 255)
 				let fblur = Math.floor(Math.random() * 1)
 				paint_texture_canvas.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-				// let gradient = paint_texture_canvas.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
-				// gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
-				// gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
-				// gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
-				// paint_texture_canvas.fillStyle = gradient;
+				let gradient = paint_texture_canvas.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
+				gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+				gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
+				gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
+				paint_texture_canvas.fillStyle = gradient;
 
 				// paint_texture_canvas.filter = `blur(${fblur}px)`
 				paint_texture_canvas.fillRect(cx, cy, pwidth, pheight);
