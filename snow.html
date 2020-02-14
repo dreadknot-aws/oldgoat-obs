@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Snow</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <img src="ring wide center clear.png"> -->
+    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate some
+        random to use as input to the draw context.
+    </canvas>
+
+</body>
+<script type="module">
+    import { GUI } from './js/dat.gui.module.js';
+    let ctx = document.getElementById('canvas').getContext('2d');
+    let canvas = document.getElementById('canvas');
+
+    let particles = [];
+    let tick = 0;
+
+    function init() {
+
+        window.requestAnimationFrame(draw);
+    }
+
+
+    function createParticles() {
+        if (tick % 10 == 0) {
+            if (particles.length < 100) {
+                particles.push({
+                    x: Math.random() * canvas.width, //between 0 and canvas width 
+                    y: 0,
+                    speed: 2 + Math.random() * 3, //between 2 and 5 
+                    radius: 5 + Math.random() * 5, //between 5 and 10
+                    color: "white",
+                });
+            }
+        }
+    }
+
+
+    function updateParticles() {
+        for (var i in particles) {
+            var part = particles[i];
+            part.y += part.speed;
+        }
+    }
+
+    function killParticles() {
+        for (var i in particles) {
+            var part = particles[i];
+            if (part.y > canvas.height) {
+                part.y = 0;
+            }
+        }
+    }
+
+    function drawParticles() {
+        var c = canvas.getContext('2d');
+        c.fillStyle = "black";
+        c.fillRect(0, 0, canvas.width, canvas.height);
+
+        // for (let i = 0; i < 50; i++) {
+        //     let cx = Math.floor(Math.random() * canvas.width)
+        //     let cy = Math.floor(Math.random() * canvas.height)
+        //     let pwidth = Math.floor(Math.random() * 25)
+        //     let pheight = Math.floor(Math.random() * 25)
+        //     let pr = Math.floor(Math.random() * 255)
+        //     let pg = Math.floor(Math.random() * 255)
+        //     let pb = Math.floor(Math.random() * 255)
+        //     let pa = Math.floor(Math.random() * 255)
+        //     let fblur = Math.floor(Math.random() * 1)
+        //     // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+        //     let gradient = ctx.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
+        //     gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+        //     gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
+        //     gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
+        //     ctx.fillStyle = gradient;
+
+        //     ctx.filter = `blur(${fblur}px)`
+        //     ctx.fillRect(cx, cy, pwidth, pheight);
+        // }
+        for (var i in particles) {
+            var part = particles[i];
+            c.beginPath();
+            c.arc(part.x, part.y, part.radius, 0, Math.PI * 2);
+            c.closePath(); c.fillStyle = part.color;
+            c.fill();
+        }
+    }
+
+    function draw() {
+
+        // ctx.clearRect(0, 0, 1280, 720);
+
+        
+        createParticles();
+        updateParticles();
+        killParticles();
+        drawParticles();
+        window.requestAnimationFrame(draw);
+    }
+
+    init();
+
+</script>
+
+</html>
