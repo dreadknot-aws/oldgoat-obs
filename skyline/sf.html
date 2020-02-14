@@ -22,7 +22,7 @@
 
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
-    <canvas id="canvas" width="2998" height="2025"></canvas>
+    <canvas id="canvas" width="2998" height="2025" hidden="true"></canvas>
     
     <input type="button" value="save" id="savecanvas">
 </body>
@@ -73,13 +73,13 @@
             let pa = Math.floor(Math.random() * 255)
             let fblur = Math.floor(Math.random() * 1)
             // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-            let gradient = ctx.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
+            let gradient = ctx.createRadialGradient(cx, cy, 1, cx + 5, cy + 5, 1.5);
             gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
             gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
             gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
             ctx.fillStyle = gradient;
 
-            ctx.filter = `blur(${fblur}px)`
+            // ctx.filter = `blur(${fblur}px)`
             ctx.fillRect(cx, cy, pwidth, pheight);
         }
 
@@ -109,14 +109,16 @@
             let pb = Math.floor(Math.random() * 255)
             let pa = Math.floor(Math.random() * 255)
             let fblur = Math.floor(Math.random() * 1)
+            let brush_size = Math.random() * (1.5 - .5) + .5
+            let brush_distance = Math.random() * (5 - 1) + 1
             // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-            let gradient = ctx.createRadialGradient(cx, cy, .5, cx + 5, cy + 5, 1);
+            let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
             gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
             gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
             gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
             ctx.fillStyle = gradient;
 
-            ctx.filter = `blur(${fblur}px)`
+            // ctx.filter = `blur(${fblur}px)`
             ctx.fillRect(cx, cy, pwidth, pheight);
         }
 
