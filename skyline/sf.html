@@ -23,7 +23,7 @@
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
     <canvas id="canvas" width="2998" height="2025"></canvas>
-    
+
     <input type="button" value="save" id="savecanvas">
 </body>
 <script type="module">
@@ -43,13 +43,18 @@
         }
     }
 
-    let location = new Vector(500,700);
-    let velocity = new Vector(1,0);
+    let location = new Vector(500, 700);
+    let velocity = new Vector(1, 0);
+
+
+    let frameLocation = new Vector(975, 800);
+    let frameVelocity = new Vector(1, 0);
+
 
     let img = new Image();
 
     function init() {
-        img.src ='sheets/path1459.png';
+        img.src = 'sheets/path1459.png';
         window.requestAnimationFrame(draw);
     }
 
@@ -106,7 +111,15 @@
             velocity.y = velocity.y * -1;
         }
 
+        if ((frameLocation.x > canvas.width / 2 ) || (frameLocation.x < 0)) {
+            frameVelocity.x = frameVelocity.x * -1;
+        }
+        if ((frameLocation.y > canvas.height) || (frameLocation.y < 0)) {
+            frameLocation.y = frameLocation.y * -1;
+        }
+
         location.add(velocity);
+        frameLocation.add(frameVelocity)
 
         //3000x2024
         //  top
@@ -114,7 +127,7 @@
 
         // black cloud
         ctx.drawImage(img, 6006, 0, 2994, 810, 0, 0, 2994, 810)
-        
+
         // // bottom
         ctx.drawImage(img, 0, 1336, 2996, 696, 0, 1336, 2996, 696)
 
@@ -152,11 +165,10 @@
         }
 
 
-
         ctx.restore();
 
         let frame_ctx = document.getElementById('frame').getContext('2d');
-        frame_ctx.putImageData(ctx.getImageData(975, 800, 1280, 720), 0, 0);
+        frame_ctx.putImageData(ctx.getImageData(frameLocation.x, frameLocation.y, 1280, 720), 0, 0);
         // frame_ctx.drawImage(ctx.i, 0, 0)
 
         window.requestAnimationFrame(draw);
