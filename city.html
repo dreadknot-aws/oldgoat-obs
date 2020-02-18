@@ -4,19 +4,19 @@
 <head>
     <meta charset="utf-8" />
     <title>City</title>
-	<style>
-		body {
-			margin: 0;
+    <style>
+        body {
+            margin: 0;
             background-color: rgba(0, 0, 0, 0);
             overflow: hidden;
-    }
+        }
 
-		canvas {
-			width: 1280px;
-			height: 720px;
-			background-color: rgba(0, 0, 0, 0);
-			margin: 0;
-		}
+        canvas {
+            width: 1280px;
+            height: 720px;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -30,11 +30,28 @@
 <script type="module">
     import { GUI } from './js/dat.gui.module.js';
 
+
+    class Vector {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        add(vector) {
+            this.x = this.x + vector.x;
+            this.y = this.y + vector.y;
+        }
+    }
+
+        let location = new Vector(0, 0);
+        let velocity = new Vector(.01 * (Math.random() < 0.5 ? -1 : 1), 0);
+
+        let gradientPoint = new Vector(0, 0);
+
     var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
-    var comps = ['source-over', 
-			'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
-			'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
-			'hue', 'saturation', 'color', 'luminosity']
+    var comps = ['source-over',
+        'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+        'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+        'hue', 'saturation', 'color', 'luminosity']
     //2000 x 1333
     var city = new Image();
     var cityy = 0;
@@ -59,7 +76,7 @@
     // var brightness = new Array('100', '100', )
 
     // var layers = [Math.floor(Math.random() * 4),Math.floor(Math.random() * 4)]
-    var layers = [0,1]
+    var layers = [0, 1]
     // console.log(layers)
 
     var SpinSpeed = function () {
@@ -67,8 +84,8 @@
         this.rotx = Math.random() / 100;
         // this.color2 = [250, 132, 8, 0]; // RGB with alpha
         // this.color3 = [173, 153, 93, 0];
-        this.color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)]
-        this.color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256),Math.floor(Math.random() * 256)]
+        this.color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+        this.color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
 
         this.x0 = Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1);
         this.y0 = Math.floor(Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
@@ -92,7 +109,7 @@
         this.displayOutline = false;
     };
 
-    const gui = new GUI({closed: true});
+    const gui = new GUI({ closed: true });
     gui.hide()
     var spin = new SpinSpeed();
     // gui.add(spin, 'blur1', 0, 4)
@@ -157,21 +174,31 @@
         ctx.restore();
         // Earth
 
+        if ((location.x > 3) || (location.x < 0)) {
+            velocity.x = velocity.x * -1;
+        }
+        if ((location.y > 0) || (location.y < 0)) {
+            velocity.y = velocity.y * -1;
+        }
+
+
+        location.add(velocity);
+
         cityy += cityv
         if (cityy >= 3)
             cityv = -cityv
         if (cityy <= 0)
-            cityv = - cityv
+            cityv = -cityv
 
 
-        // console.log(spin.x0)
+        console.log(location.x)
         spin.x0 += gradientv
         if (spin.x0 >= 1500.00)
             gradientv = -gradientv
         if (spin.x0 <= -1500.00)
             gradientv = - gradientv
 
-//cstop
+        //cstop
         // cstop += cityv / 100
         // if (cstop >= 1)
         //     cityv = -cityv
@@ -194,13 +221,13 @@
         //     ctx.drawImage(img[layers[i]], 0, 0, 1200, 798)
 
         // }
-            
-            // ctx.filter = `brightness(${brightness[0]}%)`
-            ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
-            ctx.drawImage(img[0], 0, 0, 1280, 720)
-            ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
-            // ctx.filter = `brightness(${brightness[1]}%)`
-            ctx.drawImage(img[randomlayer], cityy, 0, 1280, 720)
+
+        // ctx.filter = `brightness(${brightness[0]}%)`
+        ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+        ctx.drawImage(img[0], 0, 0, 1280, 720)
+        ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
+        // ctx.filter = `brightness(${brightness[1]}%)`
+        ctx.drawImage(img[randomlayer], location.x, 0, 1280, 720)
 
 
         ctx.restore();

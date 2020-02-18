@@ -7,7 +7,7 @@
     <style>
         body {
             margin: 0;
-            background-color: rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
             /* overflow: hidden; */
         }
 
@@ -22,7 +22,7 @@
 
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
-    <canvas id="canvas" width="2998" height="2025" hidden="true"></canvas>
+    <canvas id="canvas" width="2998" height="2025"></canvas>
     
     <input type="button" value="save" id="savecanvas">
 </body>
@@ -30,6 +30,21 @@
     import { GUI } from '../js/dat.gui.module.js';
 
     document.getElementById("savecanvas").addEventListener("click", savecanvas);
+
+
+    class Vector {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        add(vector) {
+            this.x = this.x + vector.x;
+            this.y = this.y + vector.y;
+        }
+    }
+
+    let location = new Vector(500,700);
+    let velocity = new Vector(1,0);
 
     let img = new Image();
 
@@ -61,7 +76,8 @@
     function draw() {
         let ctx = document.getElementById('canvas').getContext('2d');
         ctx.save();
-        // ctx.clearRect(0, 0, 1280, 720);
+        // clear background. Get the paint on effect by commenting it out
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i = 0; i < 50; i++) {
             let cx = Math.floor(Math.random() * canvas.width)
             let cy = Math.floor(Math.random() * canvas.height)
@@ -83,20 +99,33 @@
             ctx.fillRect(cx, cy, pwidth, pheight);
         }
 
-        //3000x2024
-        //top
-        ctx.drawImage(img, 0, 0, 2992, 1088, 0, 0, 2992, 1088)
+        if ((location.x > canvas.width) || (location.x < 0)) {
+            velocity.x = velocity.x * -1;
+        }
+        if ((location.y > canvas.height) || (location.y < 0)) {
+            velocity.y = velocity.y * -1;
+        }
 
-        // bottom
+        location.add(velocity);
+
+        //3000x2024
+        //  top
+        // ctx.drawImage(img, 0, 0, 2992, 1088, 0, 0, 2992, 1088)
+
+        // black cloud
+        ctx.drawImage(img, 6006, 0, 2994, 810, 0, 0, 2994, 810)
+        
+        // // bottom
         ctx.drawImage(img, 0, 1336, 2996, 696, 0, 1336, 2996, 696)
 
-        // middle
+        // // middle
         ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
 
-        //cloud
+        //  water
         // ctx.drawImage(img, 0, 0, 3008, 768, 0, 0, 1280, 360)
-
-        // ctx.drawImage(img, 0, 1080, 2999, 1088, 0, 400, 1280, 360)
+        // cloud
+        // ctx.drawImage(img, 6230, 578, 193, 33, location.x, location.y, 193, 33)
+        // ctx.drawImage(img, 4118, 576, 164, 60, 642, 542, 164, 60)
 
 
         for (let i = 0; i < 50; i++) {
