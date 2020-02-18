@@ -42,10 +42,15 @@
         }
     }
 
-        let location = new Vector(0, 0);
-        let velocity = new Vector(.01 * (Math.random() < 0.5 ? -1 : 1), 0);
+    let location = new Vector(0, 0);
+    let velocity = new Vector(.01 * (Math.random() < 0.5 ? -1 : 1), 0);
 
-        let gradientPoint = new Vector(0, 0);
+    let gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+    let gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+    let gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+    let gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+    let gradientStop = new Vector(Math.random(), Math.random())
+    let gradientStopVelocity = new Vector(Math.random() * (.025 - .001) + .001)
 
     var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
     var comps = ['source-over',
@@ -77,7 +82,7 @@
 
     // var layers = [Math.floor(Math.random() * 4),Math.floor(Math.random() * 4)]
     var layers = [0, 1]
-    // console.log(layers)
+    console.log(gradientStopVelocity)
 
     var SpinSpeed = function () {
         this.roty = Math.random() / 100;
@@ -132,6 +137,40 @@
     }
 
     function draw() {
+
+        if ((location.x > 3) || (location.x < 0)) {
+            velocity.x = velocity.x * -1;
+        }
+        if ((location.y > 0) || (location.y < 0)) {
+            velocity.y = velocity.y * -1;
+        }
+
+
+        if ((gradientPointA.x > canvas.width * 2) || (gradientPointA.x < -canvas.width * 2)) {
+            gradientVelocityA.x = gradientVelocityA.x * -1;
+        }
+        if ((gradientPointA.y > canvas.height * 2) || (gradientPointA.y < -canvas.width * 2)) {
+            gradientVelocityA.y = gradientVelocityA.y * -1;
+        }
+
+        if ((gradientVelocityB.x > canvas.width * 2) || (gradientVelocityB.x < -canvas.width * 2)) {
+            gradientVelocityB.x = gradientVelocityB.x * -1;
+        }
+        if ((gradientVelocityB.y > canvas.height * 2) || (gradientVelocityB.y < -canvas.width * 2)) {
+            gradientVelocityB.y = gradientVelocityB.y * -1;
+        }
+
+        if ((gradientStop.x > 1) || (gradientStop.x < 0)) {
+            gradientStopVelocity.x = gradientStopVelocity.x * -1;
+        }
+
+        gradientPointA.add(gradientVelocityA)
+        gradientPointB.add(gradientVelocityB)
+        // gradientStop.add(gradientStopVelocity)
+        location.add(velocity);
+
+
+
         var ctx = document.getElementById('canvas').getContext('2d');
         ctx.globalCompositeOperation = comps[spin.Composite]
         // console.log(ctx.globalCompositeOperation)
@@ -143,7 +182,7 @@
         // ctx.fillStyle = `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`;
 
         // var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x1, spin.y1);
-        var gradient = ctx.createLinearGradient(spin.x0, spin.y0, spin.x1, spin.y1);
+        var gradient = ctx.createLinearGradient(gradientPointA.x, gradientPointA.y, gradientPointB.x, gradientPointB.y);
         // Use for fun colors! Try with destination-top
         // gradient.addColorStop(0, `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 255)`);
         // gradient.addColorStop(Math.random(), 'rgba(200, 170, 118, 255)');
@@ -153,9 +192,10 @@
         // gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
         // gradient.addColorStop(.5, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
         // gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+        // console.log(gradientStop.x)
 
         gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
-        gradient.addColorStop(cstop, 'rgba(200, 170, 118, 255)');
+        gradient.addColorStop(gradientStop.x, 'rgba(200, 170, 118, 255)');
         gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');
 
 
@@ -174,15 +214,7 @@
         ctx.restore();
         // Earth
 
-        if ((location.x > 3) || (location.x < 0)) {
-            velocity.x = velocity.x * -1;
-        }
-        if ((location.y > 0) || (location.y < 0)) {
-            velocity.y = velocity.y * -1;
-        }
 
-
-        location.add(velocity);
 
         cityy += cityv
         if (cityy >= 3)
@@ -191,7 +223,6 @@
             cityv = -cityv
 
 
-        console.log(location.x)
         spin.x0 += gradientv
         if (spin.x0 >= 1500.00)
             gradientv = -gradientv
