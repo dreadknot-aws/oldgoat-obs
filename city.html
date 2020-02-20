@@ -297,10 +297,17 @@
         // gradient.addColorStop(.5, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
         // gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
         // console.log(gradientStop.x)
+// free the gradient
 
         gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
         gradient.addColorStop(gradientStop.x, 'rgba(200, 170, 118, 255)');
-        gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');
+        gradient.addColorStop(1, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255)`);
+
+
+// good looking gradient stops here
+        // gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+        // gradient.addColorStop(gradientStop.x, 'rgba(200, 170, 118, 255)');
+        // gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');
 
 
 
@@ -374,6 +381,7 @@
 
         ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(0%) invert(0}%`
         aBoat.draw(ctx);
+        ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
 
         ctx.restore();
 
