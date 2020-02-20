@@ -22,14 +22,31 @@
 
 <body>
     <!-- <img src="ring wide center clear.png"> -->
-    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate some
-        random to use as input to the draw context.
-    </canvas>
+    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate somerandom to use as input to the draw context.</canvas>
+    <div><input type="button" value="save" id="savecanvas"></div>
 
 </body>
 <script type="module">
     import { GUI } from './js/dat.gui.module.js';
 
+    document.getElementById("savecanvas").addEventListener("click", savecanvas);
+    function savecanvas() {
+        console.log("Save")
+        var canvas = document.getElementById('canvas');
+
+        canvas.toBlob(function (blob) {
+            var newImg = document.createElement('img'),
+                url = URL.createObjectURL(blob);
+
+            newImg.onload = function () {
+                // no longer need to read the blob so it's revoked
+                URL.revokeObjectURL(url);
+            };
+
+            newImg.src = url;
+            document.body.appendChild(newImg);
+        });
+    }
 
     class Vector {
         constructor(x, y) {
@@ -39,6 +56,20 @@
         add(vector) {
             this.x = this.x + vector.x;
             this.y = this.y + vector.y;
+        }
+        sub(vector) {
+            this.x = this.x - vector.x;
+            this.y = this.y - vector.y;
+        }
+    }
+
+    class cityProperties {
+        constructor() {
+            this.paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439'];
+            this.comps = comps = ['source-over',
+                'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+                'hue', 'saturation', 'color', 'luminosity'];
         }
     }
 
