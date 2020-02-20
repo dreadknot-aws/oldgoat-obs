@@ -61,7 +61,32 @@
             this.x = this.x - vector.x;
             this.y = this.y - vector.y;
         }
+                mult(n) {
+            this.x = this.x * n;
+            this.y = this.y * n;
+        }
+        div(n) {
+            this.x = this.x / n;
+            this.y = this.y / n;
+        }
+        mag() {
+            return Math.sqrt(this.x * this.x + this.y * this.y);
+        }
+        normalize() {
+            m = this.mag()
+            if (m != 0) {
+                div(m);
+            }
+        }
+        limit(max) {
+            if (this.mag() > max) {
+                this.normalize();
+                this.mult(max);
+            }
+
+        }
     }
+
 
     class cityProperties {
         constructor() {
@@ -70,8 +95,55 @@
                 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
                 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
                 'hue', 'saturation', 'color', 'luminosity'];
+
         }
     }
+    class Boat {
+        constructor() {
+            this.location = new Vector(1000, 500);
+            this.velocity = new Vector(0, 0);
+            this.acceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), 0);
+            this.size = 10
+            this.width = this.location.x + 50
+            this.height = this.location.y + 5
+            this.sx = 658
+            this.sy = 350
+            this.sw = 6
+            this.sh = 11
+        }
+        update() {
+            this.velocity.add(this.acceleration)
+            this.velocity.limit(10)
+            this.location.add(this.velocity)
+        }
+        draw(ctx) {
+            ctx.save()
+            // ctx.globalCompositeOperation = comps[spin.Composite]
+            ctx.globalCompositeOperation = 'hue'
+            // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
+            ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+
+            ctx.fillStyle = "black";
+            ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
+            // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
+            ctx.restore()
+        }
+        checkEdges() {
+            if (this.location.x > this.width) {
+                this.velocity.x = -this.velocity.x;
+            } else if (this.location.x < (this.width - 100)) {
+                this.velocity.x = -this.velocity.x;
+            }
+
+            if (this.location.y > this.height) {
+                this.velocity.y = -this.velocity.y;
+            } else if (this.location.y < this.height) {
+                this.velocity.y = -this.velocity.y;
+            }
+        }
+    }
+
+    let aBoat = new Boat();
 
     let location = new Vector(0, 0);
     let velocity = new Vector(.01 * (Math.random() < 0.5 ? -1 : 1), 0);
@@ -291,8 +363,12 @@
         // ctx.filter = `brightness(${brightness[1]}%)`
         ctx.drawImage(img[randomlayer], location.x, 0, 1280, 720)
 
-
         ctx.restore();
+
+        aBoat.checkEdges();
+        aBoat.update();
+        aBoat.draw(ctx);
+
         window.requestAnimationFrame(draw);
     }
 

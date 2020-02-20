@@ -50,6 +50,10 @@
                     speed: 2 + Math.random() * 3, //between 2 and 5 
                     radius: 5 + Math.random() * 5, //between 5 and 10
                     color: "white",
+                    pr: Math.floor(Math.random() * 255),
+                    pg: Math.floor(Math.random() * 255),
+                    pb: Math.floor(Math.random() * 255),
+                    pa: Math.floor(Math.random() * 255)
                 });
             }
         }
@@ -74,8 +78,10 @@
 
     function drawParticles() {
         var c = canvas.getContext('2d');
-        c.fillStyle = "black";
-        c.fillRect(0, 0, canvas.width, canvas.height);
+        // c.fillStyle = "black";
+        // c.fillStyle = 'rgba(0, 0, 0, 0)'
+        // c.fillRect(0, 0, canvas.width, canvas.height);
+        c.clearRect(0, 0, canvas.width, canvas.height);
 
         // for (let i = 0; i < 50; i++) {
         //     let cx = Math.floor(Math.random() * canvas.width)
@@ -101,7 +107,13 @@
             var part = particles[i];
             c.beginPath();
             c.arc(part.x, part.y, part.radius, 0, Math.PI * 2);
-            c.closePath(); c.fillStyle = part.color;
+            let gradient = ctx.createRadialGradient(part.x, part.y, part.radius, part.x + 15, part.y + 15, part.radius + 5);
+            gradient.addColorStop(0, `rgba(${part.pr}, ${part.pg}, ${part.pb}, ${part.pa})`);
+            gradient.addColorStop(.5, `rgba(${part.pb}, ${part.pg}, ${part.pr}, ${part.pg})`);
+            gradient.addColorStop(1, `rgba(${part.pg}, ${part.pb}, ${part.pa}, ${part.pb})`);
+            c.fillStyle = gradient
+            // c.fillStyle = part.color;
+            c.closePath();
             c.fill();
         }
     }
@@ -110,7 +122,7 @@
 
         // ctx.clearRect(0, 0, 1280, 720);
 
-        
+
         createParticles();
         updateParticles();
         killParticles();
