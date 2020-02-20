@@ -22,7 +22,8 @@
 
 <body>
     <!-- <img src="ring wide center clear.png"> -->
-    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate somerandom to use as input to the draw context.</canvas>
+    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate somerandom to use as input to
+        the draw context.</canvas>
     <div><input type="button" value="save" id="savecanvas"></div>
 
 </body>
@@ -61,7 +62,7 @@
             this.x = this.x - vector.x;
             this.y = this.y - vector.y;
         }
-                mult(n) {
+        mult(n) {
             this.x = this.x * n;
             this.y = this.y * n;
         }
@@ -73,9 +74,9 @@
             return Math.sqrt(this.x * this.x + this.y * this.y);
         }
         normalize() {
-            m = this.mag()
+            let m = this.mag()
             if (m != 0) {
-                div(m);
+                this.div(m);
             }
         }
         limit(max) {
@@ -100,11 +101,11 @@
     }
     class Boat {
         constructor() {
-            this.location = new Vector(1000, 500);
+            this.location = new Vector(1280, 500);
             this.velocity = new Vector(0, 0);
-            this.acceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), 0);
+            this.acceleration = new Vector(-.005 * (Math.random()), 0);
             this.size = 10
-            this.width = this.location.x + 50
+            this.width = 0
             this.height = this.location.y + 5
             this.sx = 658
             this.sy = 350
@@ -113,26 +114,26 @@
         }
         update() {
             this.velocity.add(this.acceleration)
-            this.velocity.limit(10)
+            this.velocity.limit(.05)
             this.location.add(this.velocity)
         }
         draw(ctx) {
-            ctx.save()
+            // ctx.save()
             // ctx.globalCompositeOperation = comps[spin.Composite]
-            ctx.globalCompositeOperation = 'hue'
+            // ctx.globalCompositeOperation = 'hue'
             // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
-            ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+            // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
 
-            ctx.fillStyle = "black";
+            // ctx.fillStyle = "black";
             ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
             // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
-            ctx.restore()
+            // ctx.restore()
         }
         checkEdges() {
-            if (this.location.x > this.width) {
-                this.velocity.x = -this.velocity.x;
-            } else if (this.location.x < (this.width - 100)) {
-                this.velocity.x = -this.velocity.x;
+            if (this.location.x > 1280) {
+                this.location.x = 1279
+            } else if (this.location.x < 590) {
+                this.location.x = 1279
             }
 
             if (this.location.y > this.height) {
@@ -311,8 +312,15 @@
         // ctx.filter = 'contrast(50%)'
         // ctx.filter = 'saturate(50%)'
         var time = new Date();
+
+        aBoat.checkEdges();
+        aBoat.update();
+        aBoat.draw(ctx);
+
         // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
         ctx.fillRect(0, 0, 1280, 720);
+
+
         // ctx.translate(150, 150);
         ctx.restore();
         // Earth
@@ -355,9 +363,9 @@
         //     ctx.drawImage(img[layers[i]], 0, 0, 1200, 798)
 
         // }
-
         // ctx.filter = `brightness(${brightness[0]}%)`
         ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+
         ctx.drawImage(img[0], 0, 0, 1280, 720)
         ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
         // ctx.filter = `brightness(${brightness[1]}%)`
@@ -365,9 +373,7 @@
 
         ctx.restore();
 
-        aBoat.checkEdges();
-        aBoat.update();
-        aBoat.draw(ctx);
+
 
         window.requestAnimationFrame(draw);
     }
