@@ -56,13 +56,20 @@
                 div(m);
             }
         }
+        limit(max) {
+            if (this.mag() > max) {
+                this.normalize();
+                this.mult(max);
+            }
+
+        }
     }
 
     class Boat {
         constructor() {
             this.location = new Vector(1000, 500);
             this.velocity = new Vector(0, 0);
-            this.acceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1));
+            this.acceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), 0);
             this.size = 10
             this.width = this.location.x + 50
             this.height = this.location.y + 5
@@ -73,6 +80,7 @@
         }
         update() {
             this.velocity.add(this.acceleration)
+            this.velocity.limit(10)
             this.location.add(this.velocity)
         }
         draw(ctx) {
