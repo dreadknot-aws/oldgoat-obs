@@ -39,12 +39,30 @@
             this.x = this.x + vector.x;
             this.y = this.y + vector.y;
         }
+        mult(n) {
+            this.x = this.x * n;
+            this.y = this.y * n;
+        }
+        div(n) {
+            this.x = this.x / n;
+            this.y = this.y / n;
+        }
+        mag() {
+            return Math.sqrt(this.x * this.x + this.y * this.y);
+        }
+        normalize() {
+            m = this.mag()
+            if (m != 0) {
+                div(m);
+            }
+        }
     }
 
     class Boat {
         constructor() {
             this.location = new Vector(1000, 500);
-            this.velocity = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1));
+            this.velocity = new Vector(0, 0);
+            this.acceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1));
             this.size = 10
             this.width = this.location.x + 50
             this.height = this.location.y + 5
@@ -54,14 +72,15 @@
             this.sh = 11
         }
         update() {
+            this.velocity.add(this.acceleration)
             this.location.add(this.velocity)
         }
         draw(ctx) {
             ctx.save()
             // ctx.globalCompositeOperation = comps[spin.Composite]
-            ctx.globalCompositeOperation = 'source-over'
-            ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
-            // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+            ctx.globalCompositeOperation = 'hue'
+            // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
+            ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
 
             ctx.fillStyle = "black";
             ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
@@ -307,7 +326,7 @@
 
         aBoat.checkEdges();
         aBoat.update();
-        // aBoat.draw(ctx);
+        aBoat.draw(ctx);
 
         window.requestAnimationFrame(draw);
     }
