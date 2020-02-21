@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Walker</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 1280px;
+            height: 720px;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <img src="ring wide center clear.png"> -->
+    <canvas id="canvas" width="1280" height="720">Walker.html</canvas>
+    <div><input type="button" value="save" id="savecanvas"></div>
+
+</body>
+<script type="module">
+    import { GUI } from './js/dat.gui.module.js';
+
+    document.getElementById("savecanvas").addEventListener("click", savecanvas);
+
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+    }
+
+    function getRandomIntInclusive_bm(min, max) {
+        // min = Math.ceil(min);
+        // max = Math.floor(max);
+        // return Math.floor(randn_bm() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        return randn_bm();
+    }
+
+    function randn_bm() {
+        var u = 0, v = 0;
+        while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
+    console.log(getRandomIntInclusive_bm(1,5))
+    function savecanvas() {
+        console.log("Save")
+        var canvas = document.getElementById('canvas');
+
+        canvas.toBlob(function (blob) {
+            var newImg = document.createElement('img'),
+                url = URL.createObjectURL(blob);
+
+            newImg.onload = function () {
+                // no longer need to read the blob so it's revoked
+                URL.revokeObjectURL(url);
+            };
+
+            newImg.src = url;
+            document.body.appendChild(newImg);
+        });
+    }
+
+    class Vector {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        add(vector) {
+            this.x = this.x + vector.x;
+            this.y = this.y + vector.y;
+        }
+        sub(vector) {
+            this.x = this.x - vector.x;
+            this.y = this.y - vector.y;
+        }
+        mult(n) {
+            this.x = this.x * n;
+            this.y = this.y * n;
+        }
+        div(n) {
+            this.x = this.x / n;
+            this.y = this.y / n;
+        }
+        mag() {
+            return Math.sqrt(this.x * this.x + this.y * this.y);
+        }
+        normalize() {
+            let m = this.mag()
+            if (m != 0) {
+                this.div(m);
+            }
+        }
+        limit(max) {
+            if (this.mag() > max) {
+                this.normalize();
+                this.mult(max);
+            }
+
+        }
+    }
+
+    class Walker {
+        constructor() {
+            this.location = new Vector(canvas.width / 2, canvas.height / 2);
+            this.velocity = new Vector(0, 0);
+            this.acceleration = new Vector(-.005 * (Math.random()), 0);
+            this.size = 1
+            this.width = 0
+            this.height = this.location.y + 5
+            this.sx = 658
+            this.sy = 350
+            this.sw = 6
+            this.sh = 11
+        }
+        update() {
+            // this.velocity.add(this.acceleration)
+            // this.velocity.limit(.05)
+            // this.location.add(this.velocity)
+            let x = Math.floor(Math.random() * (1 - -1 + 1)) + -1
+            let y = Math.floor(Math.random() * (1 - -1 + 1)) + -1
+            this.location.x = this.location.x + x
+            this.location.y = this.location.y + y
+
+        }
+        draw(ctx) {
+            // ctx.save()
+            // ctx.globalCompositeOperation = comps[spin.Composite]
+            // ctx.globalCompositeOperation = 'hue'
+            // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
+            // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+            ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`;
+
+            // ctx.fillStyle = "black";
+            // ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
+            ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
+            // ctx.restore()
+        }
+        checkEdges() {
+            if (this.location.x > 1280) {
+                this.location.x = 1279
+            } else if (this.location.x < 590) {
+                this.location.x = 1279
+            }
+
+            if (this.location.y > this.height) {
+                this.velocity.y = -this.velocity.y;
+            } else if (this.location.y < this.height) {
+                this.velocity.y = -this.velocity.y;
+            }
+        }
+    }
+
+    let aWalker = new Walker();
+
+    function init() {
+
+        window.requestAnimationFrame(draw);
+    }
+
+    function draw() {
+        let ctx = document.getElementById('canvas').getContext('2d');
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+        aWalker.checkEdges();
+        aWalker.update();
+        aWalker.draw(ctx);
+
+        window.requestAnimationFrame(draw);
+    }
+
+    init();
+
+</script>
+
+</html>
