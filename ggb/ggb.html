@@ -88,10 +88,10 @@
         }
     }
 
-    class camera {
+    class Camera {
         constructor() {
             this.center = new Vector(0, 720)
-            this.topLeft = new Vector(0, 0)
+            this.topLeft = new Vector(getRandomIntInclusive(0, 638), getRandomIntInclusive(0,555))
             this.bottomRight = new Vector(1280, 720)
         }
     }
@@ -103,10 +103,10 @@
             this.horizonLine = [new Vector(0, 720), new Vector(1919, 720)]
             this.sheet = getRandomIntInclusive(1,7)
             this.sheetGap = 12
-                this.sx = 0;
+            this.sx = 0;
             this.sy = 0;
-            this.sWidth = 1919;
-            this.sHeight = 1292;
+            this.sWidth = 1920;
+            this.sHeight = 1280;
             this.comps = ['source-over',
                 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
                 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
@@ -117,6 +117,7 @@
     }
 
     let aBridge = new ggbProperties();
+    let aCamera = new Camera();
 
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
@@ -222,6 +223,10 @@
         location.add(velocity);
         frameLocation.add(frameVelocity)
 
+        gradientPointA.add(gradientVelocityA)
+        gradientPointB.add(gradientVelocityB)
+
+
         //3000x2024
         //  top
         // ctx.drawImage(img, 0, 0, 2992, 1088, 0, 0, 2992, 1088)
@@ -252,6 +257,7 @@
 
         // ctx.filter = `brightness(50) hue-rotate(${hue[0]}deg)`
         ctx.filter = `opacity(100%)`
+        // ctx.drawImage(img, aBridge.sx + (aBridge.sWidth * 9), aBridge.sy, aBridge.sWidth, aBridge.sHeight, 0, 0, aBridge.sWidth, aBridge.sHeight)
         ctx.drawImage(img, aBridge.sx + (aBridge.sWidth * 9), aBridge.sy, aBridge.sWidth, aBridge.sHeight, 0, 0, aBridge.sWidth, aBridge.sHeight)
 
         // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(${opacity[0]}%)`
@@ -303,7 +309,7 @@
         ctx.restore();
 
         let frame_ctx = document.getElementById('frame').getContext('2d');
-        frame_ctx.putImageData(ctx.getImageData(0, 0, 1280, 720), 0, 0);
+        frame_ctx.putImageData(ctx.getImageData(aCamera.topLeft.x, aCamera.topLeft.y, 1280, 720), 0, 0);
         // frame_ctx.drawImage(ctx.i, 0, 0)
 
         window.requestAnimationFrame(draw);
