@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <canvas id="frame" width="1280" height="720"></canvas>
+    <canvas id="frame" width="900" height="645"></canvas>
     <canvas id="canvas" width="1059" height="705"></canvas>
 
     <input type="button" value="save" id="savecanvas">
@@ -30,7 +30,18 @@
     import { GUI } from '../js/dat.gui.module.js';
 
     document.getElementById("savecanvas").addEventListener("click", savecanvas);
+    
+    function getCursorPosition(canvas, event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        console.log("x: " + x + " y: " + y)
+    }
 
+    const canvas = document.getElementById("frame")
+    canvas.addEventListener('mousedown', function (e) {
+        getCursorPosition(canvas, e)
+    })
 
     class Vector {
         constructor(x, y) {
@@ -103,9 +114,11 @@
     let gradientStop = new Vector(Math.random(), Math.random())
     let gradientStopVelocity = new Vector(Math.random() * (.025 - .001) + .001)
 
+    let color1 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
     let color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
     let color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
-    
+
+
     var hue = new Array(4);
     var saturate = new Array(4)
     var brightness = new Array(4)
@@ -113,13 +126,13 @@
     var invert = new Array(4)
 
     for (var i = 0; i <= 4; i++) {
-            blur[i] = Math.floor(Math.random() * 4)
-            hue[i] = Math.floor(Math.random() * 180)
-            brightness[i] = Math.floor(Math.random() * 50)
-            saturate[i] = Math.floor(Math.random() * 100)
-            opacity[i] = Math.floor(Math.random() * 100)
-            invert[i] = Math.floor(Math.random() * 100)
-        }
+        blur[i] = Math.floor(Math.random() * 4)
+        hue[i] = Math.floor(Math.random() * 180)
+        brightness[i] = Math.floor(Math.random() * 50)
+        saturate[i] = Math.floor(Math.random() * 100)
+        opacity[i] = Math.floor(Math.random() * 100)
+        invert[i] = Math.floor(Math.random() * 100)
+    }
 
     let img = new Image();
 
@@ -181,7 +194,7 @@
             velocity.y = velocity.y * -1;
         }
 
-        if ((frameLocation.x > canvas.width / 2 ) || (frameLocation.x < 0)) {
+        if ((frameLocation.x > canvas.width / 2) || (frameLocation.x < 0)) {
             frameVelocity.x = frameVelocity.x * -1;
         }
         if ((frameLocation.y > canvas.height) || (frameLocation.y < 0)) {
@@ -195,18 +208,18 @@
         //  top
         // ctx.drawImage(img, 0, 0, 2992, 1088, 0, 0, 2992, 1088)
         var gradient = ctx.createLinearGradient(gradientPointA.x, gradientPointA.y, gradientPointB.x, gradientPointB.y);
-        
+
         gradient.addColorStop(0, `rgba(${color2[0]}, ${color2[1]}, ${color2[2]}, 255 )`);
-        gradient.addColorStop(gradientStop.x, 'rgba(200, 170, 118, 255)');
+        gradient.addColorStop(gradientStop.x, `rgba(${color1[0]}, ${color1[1]}, ${color1[2]}, 255)`);
         gradient.addColorStop(1, `rgba(${color3[0]}, ${color3[1]}, ${color3[2]}, 255)`);
-        
+
         ctx.fillStyle = gradient;
 
         ctx.fillRect(0, 0, 1280, 720);
         // black cloud
         // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(${opacity[0]}%)`
         // ctx.drawImage(img, aBridge.sx, aBridge.sy, aBridge.sWidth, aBridge.sHeight, 0, 0, aBridge.sWidth, aBridge.sHeight)
-        
+
         // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%)`
         // ctx.drawImage(img, 0, 641, 960, 581, 0, 60, 960, 581)
 
