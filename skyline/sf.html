@@ -22,7 +22,7 @@
 
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
-    <canvas id="canvas" width="2998" height="2025" hidden="true"></canvas>
+    <canvas id="canvas" width="2998" height="2025"></canvas>
 
     <input type="button" value="save" id="savecanvas">
 </body>
@@ -49,13 +49,29 @@
 
     let frameLocation = new Vector(975, 800);
     let frameVelocity = new Vector(1, 0);
-
+    let redRangeEnd = Math.floor(Math.random() * 255)
+    let blueRangeEnd = Math.floor(Math.random() * 255)
+    let greenRangeEnd = Math.floor(Math.random() * 255)
 
     let img = new Image();
 
     function init() {
         img.src = 'sheets/path1459.png';
         window.requestAnimationFrame(draw);
+    }
+
+    function randn_bm(min, max, skew) {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+        while (v === 0) v = Math.random();
+        let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+        num = num / 10.0 + 0.5; // Translate to 0 -> 1
+        if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+        num = Math.pow(num, skew); // Skew
+        num *= max - min; // Stretch to fill range
+        num += min; // offset to min
+        return num;
     }
 
 
@@ -83,26 +99,26 @@
         ctx.save();
         // clear background. Get the paint on effect by commenting it out
         // ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < 50; i++) {
-            let cx = Math.floor(Math.random() * canvas.width)
-            let cy = Math.floor(Math.random() * canvas.height)
-            let pwidth = Math.floor(Math.random() * 25)
-            let pheight = Math.floor(Math.random() * 25)
-            let pr = Math.floor(Math.random() * 255)
-            let pg = Math.floor(Math.random() * 255)
-            let pb = Math.floor(Math.random() * 255)
-            let pa = Math.floor(Math.random() * 255)
-            let fblur = Math.floor(Math.random() * 1)
-            // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-            let gradient = ctx.createRadialGradient(cx, cy, 1, cx + 5, cy + 5, 1.5);
-            gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
-            gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
-            gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
-            ctx.fillStyle = gradient;
+        // for (let i = 0; i < 50; i++) {
+        //     let cx = Math.floor(Math.random() * canvas.width)
+        //     let cy = Math.floor(Math.random() * canvas.height)
+        //     let pwidth = Math.floor(Math.random() * 25)
+        //     let pheight = Math.floor(Math.random() * 25)
+        //     let pr = Math.floor(Math.random() * 255)
+        //     let pg = Math.floor(Math.random() * 255)
+        //     let pb = Math.floor(Math.random() * 255)
+        //     let pa = Math.floor(Math.random() * 255)
+        //     let fblur = Math.floor(Math.random() * 1)
+        //     // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+        //     let gradient = ctx.createRadialGradient(cx, cy, 1, cx + 5, cy + 5, 1.5);
+        //     gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+        //     gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
+        //     gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
+        //     ctx.fillStyle = gradient;
 
-            // ctx.filter = `blur(${fblur}px)`
-            ctx.fillRect(cx, cy, pwidth, pheight);
-        }
+        //     // ctx.filter = `blur(${fblur}px)`
+        //     // ctx.fillRect(cx, cy, pwidth, pheight);
+        // }
 
         if ((location.x > canvas.width) || (location.x < 0)) {
             velocity.x = velocity.x * -1;
@@ -111,7 +127,7 @@
             velocity.y = velocity.y * -1;
         }
 
-        if ((frameLocation.x > canvas.width / 2 ) || (frameLocation.x < 0)) {
+        if ((frameLocation.x > canvas.width / 2) || (frameLocation.x < 0)) {
             frameVelocity.x = frameVelocity.x * -1;
         }
         if ((frameLocation.y > canvas.height) || (frameLocation.y < 0)) {
@@ -126,38 +142,70 @@
         // ctx.drawImage(img, 0, 0, 2992, 1088, 0, 0, 2992, 1088)
 
         // black cloud
-        ctx.drawImage(img, 6006, 0, 2994, 810, 0, 0, 2994, 810)
+        // ctx.drawImage(img, 6006, 0, 2994, 810, 0, 0, 2994, 810)
 
         // // bottom
-        ctx.drawImage(img, 0, 1336, 2996, 696, 0, 1336, 2996, 696)
+        // ctx.drawImage(img, 0, 1336, 2996, 696, 0, 1336, 2996, 696)
 
         // // middle
-        ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
+        // ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
+
+        ctx.drawImage(img, 8997, 1559, 2999, 470, 0, 923, 2999, 470)
+
 
         //  water
         // ctx.drawImage(img, 0, 0, 3008, 768, 0, 0, 1280, 360)
         // cloud
         // ctx.drawImage(img, 6230, 578, 193, 33, location.x, location.y, 193, 33)
         // ctx.drawImage(img, 4118, 576, 164, 60, 642, 542, 164, 60)
+        // let pr = randn_bm(0, 25, 1)
+        // let pg = randn_bm(0, 50, 1)
+        // let pb = randn_bm(0, 255, 1)
+        // let pa = randn_bm(200, 255, 1)
+
+        // let pr2 = randn_bm(0, 25, 1)
+        // let pg2 = randn_bm(0, 50, 1)
+        // let pb2 = randn_bm(0, 255, 1)
+        // let pa2 = randn_bm(200, 255, 1)
+
+        // let pr3 = randn_bm(0, 25, 1)
+        // let pg3 = randn_bm(0, 50, 1)
+        // let pb3 = randn_bm(0, 255, 1)
+        // let pa3 = randn_bm(200, 255, 1)
+
 
 
         for (let i = 0; i < 50; i++) {
-            let cx = Math.floor(Math.random() * canvas.width)
-            let cy = Math.floor(Math.random() * canvas.height)
+            let cx = Math.floor(randn_bm(0, canvas.width, 1))
+            let cy = Math.floor(randn_bm(0, canvas.height, 1))
             let pwidth = Math.floor(Math.random() * 25)
             let pheight = Math.floor(Math.random() * 25)
-            let pr = Math.floor(Math.random() * 255)
-            let pg = Math.floor(Math.random() * 255)
-            let pb = Math.floor(Math.random() * 255)
-            let pa = Math.floor(Math.random() * 255)
+
+
+
+            let pr = randn_bm(0, redRangeEnd, 1)
+            let pg = randn_bm(0, blueRangeEnd, 1)
+            let pb = randn_bm(0, greenRangeEnd, 1)
+            let pa = randn_bm(200, 255, 1)
+
+            let pr2 = randn_bm(0, redRangeEnd, 1)
+            let pg2 = randn_bm(0, blueRangeEnd, 1)
+            let pb2 = randn_bm(0, greenRangeEnd, 1)
+            let pa2 = randn_bm(200, 255, 1)
+
+            let pr3 = randn_bm(0, redRangeEnd, 1)
+            let pg3 = randn_bm(0, blueRangeEnd, 1)
+            let pb3 = randn_bm(0, greenRangeEnd, 1)
+            let pa3 = randn_bm(200, 255, 1)
+
             let fblur = Math.floor(Math.random() * 1)
             let brush_size = Math.random() * (1.5 - .5) + .5
             let brush_distance = Math.random() * (5 - 1) + 1
             // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
             let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
             gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
-            gradient.addColorStop(.5, `rgba(${pb}, ${pg}, ${pr}, ${pg})`);
-            gradient.addColorStop(1, `rgba(${pg}, ${pb}, ${pa}, ${pb})`);
+            gradient.addColorStop(.5, `rgba(${pr2}, ${pg2}, ${pb2}, ${pa2})`);
+            gradient.addColorStop(1, `rgba(${pr3}, ${pg3}, ${pb3}, ${pa3})`);
             ctx.fillStyle = gradient;
 
             // ctx.filter = `blur(${fblur}px)`
