@@ -49,6 +49,12 @@
 
     let frameLocation = new Vector(975, 800);
     let frameVelocity = new Vector(1, 0);
+
+
+
+    let redRangeStart = Math.floor(Math.random() * 255)
+    let blueRangeStart = Math.floor(Math.random() * 255)
+    let greenRangeStart = Math.floor(Math.random() * 255)
     let redRangeEnd = Math.floor(Math.random() * 255)
     let blueRangeEnd = Math.floor(Math.random() * 255)
     let greenRangeEnd = Math.floor(Math.random() * 255)
@@ -176,26 +182,26 @@
 
 
         for (let i = 0; i < 50; i++) {
-            let cx = Math.floor(randn_bm(0, canvas.width, 1))
-            let cy = Math.floor(randn_bm(0, canvas.height, 1))
+            let cx = Math.floor(randn_bm(frameLocation.x, frameLocation.x + 1280, 1))
+            let cy = Math.floor(randn_bm(frameLocation.y - 360, frameLocation.y + 720, 1))
             let pwidth = Math.floor(Math.random() * 25)
             let pheight = Math.floor(Math.random() * 25)
 
 
 
-            let pr = randn_bm(0, redRangeEnd, 1)
-            let pg = randn_bm(0, blueRangeEnd, 1)
-            let pb = randn_bm(0, greenRangeEnd, 1)
+            let pr = randn_bm(redRangeStart, redRangeEnd, 1)
+            let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
+            let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
             let pa = randn_bm(200, 255, 1)
 
-            let pr2 = randn_bm(0, redRangeEnd, 1)
-            let pg2 = randn_bm(0, blueRangeEnd, 1)
-            let pb2 = randn_bm(0, greenRangeEnd, 1)
+            let pr2 = randn_bm(redRangeStart, redRangeEnd, 1)
+            let pg2 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+            let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
             let pa2 = randn_bm(200, 255, 1)
 
-            let pr3 = randn_bm(0, redRangeEnd, 1)
-            let pg3 = randn_bm(0, blueRangeEnd, 1)
-            let pb3 = randn_bm(0, greenRangeEnd, 1)
+            let pr3 = randn_bm(redRangeStart, redRangeEnd, 1)
+            let pg3 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+            let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
             let pa3 = randn_bm(200, 255, 1)
 
             let fblur = Math.floor(Math.random() * 1)
