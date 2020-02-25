@@ -41,17 +41,27 @@
         // min = Math.ceil(min);
         // max = Math.floor(max);
         // return Math.floor(randn_bm() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
-        return randn_bm();
+        // min = Math.ceil(min);
+        // max = Math.floor(max);
+        // return Math.floor(randn_bm() * (max - min + 1)) + min;
+        // return randn_bm();
     }
 
-    function randn_bm() {
-        var u = 0, v = 0;
+    function randn_bm(min, max, skew) {
+        let u = 0, v = 0;
         while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
         while (v === 0) v = Math.random();
-        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+        num = num / 10.0 + 0.5; // Translate to 0 -> 1
+        if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+        num = Math.pow(num, skew); // Skew
+        num *= max - min; // Stretch to fill range
+        num += min; // offset to min
+        return num;
     }
 
-    console.log(getRandomIntInclusive_bm(1,5))
+    console.log(randn_bm(1, 5, 1))
     function savecanvas() {
         console.log("Save")
         var canvas = document.getElementById('canvas');
@@ -126,8 +136,10 @@
             // this.velocity.add(this.acceleration)
             // this.velocity.limit(.05)
             // this.location.add(this.velocity)
-            let x = Math.floor(Math.random() * (1 - -1 + 1)) + -1
-            let y = Math.floor(Math.random() * (1 - -1 + 1)) + -1
+            // let x = Math.floor(Math.random() * (1 - -1 + 1)) + -1
+            // let y = Math.floor(Math.random() * (1 - -1 + 1)) + -1
+            let x = randn_bm(-1, 1, 1)
+            let y = randn_bm(-1, 1, 1)
             this.location.x = this.location.x + x
             this.location.y = this.location.y + y
 
@@ -138,7 +150,7 @@
             // ctx.globalCompositeOperation = 'hue'
             // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
             // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
-            ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`;
+            ctx.fillStyle = `rgba(${randn_bm(0, 255, 1)}, ${randn_bm(0, 255, 1)}, ${randn_bm(0, 255, 1)}, 255)`;
 
             // ctx.fillStyle = "black";
             // ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
