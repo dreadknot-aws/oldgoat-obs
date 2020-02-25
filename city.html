@@ -152,7 +152,10 @@
     let gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
     let gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
     let gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+    let gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
     let gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+    let gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+
     let gradientStop = new Vector(Math.random(), Math.random())
     let gradientStopVelocity = new Vector(Math.random() * (.025 - .001) + .001)
 
@@ -186,7 +189,7 @@
 
     // var layers = [Math.floor(Math.random() * 4),Math.floor(Math.random() * 4)]
     var layers = [0, 1]
-    console.log(gradientStopVelocity)
+    // console.log(gradientStopVelocity)
 
     var SpinSpeed = function () {
         this.roty = Math.random() / 100;
@@ -251,24 +254,50 @@
 
 
         if ((gradientPointA.x > canvas.width * 2) || (gradientPointA.x < -canvas.width * 2)) {
-            gradientVelocityA.x = gradientVelocityA.x * -1;
+            // gradientVelocityA.x = gradientVelocityA.x * -1;
+            gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+            gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            console.log("limit new gradient: " + gradientPointA.x + "," + gradientPointA.y)
+
         }
         if ((gradientPointA.y > canvas.height * 2) || (gradientPointA.y < -canvas.width * 2)) {
-            gradientVelocityA.y = gradientVelocityA.y * -1;
+            gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+            gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            console.log("limit new gradient: " + gradientPointA.x + "," + gradientPointA.y)
+
         }
 
+
         if ((gradientVelocityB.x > canvas.width * 2) || (gradientVelocityB.x < -canvas.width * 2)) {
-            gradientVelocityB.x = gradientVelocityB.x * -1;
+            gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+            gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
+
         }
         if ((gradientVelocityB.y > canvas.height * 2) || (gradientVelocityB.y < -canvas.width * 2)) {
-            gradientVelocityB.y = gradientVelocityB.y * -1;
+            gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+            gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
+
         }
 
         if ((gradientStop.x > 1) || (gradientStop.x < 0)) {
             gradientStopVelocity.x = gradientStopVelocity.x * -1;
         }
 
+        // gradientPointA.add(gradientVelocityA)
+        // gradientPointB.add(gradientVelocityB)
+
+        gradientVelocityA.add(gradientPointAacceleration)
+        gradientVelocityA.limit(5)
         gradientPointA.add(gradientVelocityA)
+
+        gradientVelocityB.add(gradientPointBacceleration)
+        gradientVelocityB.limit(5)
         gradientPointB.add(gradientVelocityB)
         // gradientStop.add(gradientStopVelocity)
         location.add(velocity);
@@ -297,14 +326,14 @@
         // gradient.addColorStop(.5, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255 )`);
         // gradient.addColorStop(1, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
         // console.log(gradientStop.x)
-// free the gradient
+        // free the gradient
 
         gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
         gradient.addColorStop(gradientStop.x, 'rgba(200, 170, 118, 255)');
         gradient.addColorStop(1, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255)`);
 
 
-// good looking gradient stops here
+        // good looking gradient stops here
         // gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
         // gradient.addColorStop(gradientStop.x, 'rgba(200, 170, 118, 255)');
         // gradient.addColorStop(1, 'rgba(201, 36, 63, 255)');
@@ -374,7 +403,7 @@
         ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
 
         ctx.drawImage(img[0], 0, 0, 1280, 720)
-                // aBoat.draw(ctx);
+        // aBoat.draw(ctx);
         ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
         // ctx.filter = `brightness(${brightness[1]}%)`
         ctx.drawImage(img[randomlayer], location.x, 0, 1280, 720)
