@@ -293,11 +293,11 @@
         // gradientPointB.add(gradientVelocityB)
 
         gradientVelocityA.add(gradientPointAacceleration)
-        gradientVelocityA.limit(5)
+        gradientVelocityA.limit(1)
         gradientPointA.add(gradientVelocityA)
 
         gradientVelocityB.add(gradientPointBacceleration)
-        gradientVelocityB.limit(5)
+        gradientVelocityB.limit(1)
         gradientPointB.add(gradientVelocityB)
         // gradientStop.add(gradientStopVelocity)
         location.add(velocity);
