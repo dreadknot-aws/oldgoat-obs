@@ -59,11 +59,34 @@
     let blueRangeEnd = Math.floor(Math.random() * 255)
     let greenRangeEnd = Math.floor(Math.random() * 255)
 
+    let gredRangeStart = Math.floor(Math.random() * 255)
+    let gblueRangeStart = Math.floor(Math.random() * 255)
+    let ggreenRangeStart = Math.floor(Math.random() * 255)
+    let gredRangeEnd = Math.floor(Math.random() * 255)
+    let gblueRangeEnd = Math.floor(Math.random() * 255)
+    let ggreenRangeEnd = Math.floor(Math.random() * 255)
+
+
+    let x0 = Math.floor(Math.random() * canvas.width)
+    let y0 = Math.floor(Math.random() * canvas.height)
+    let r0 = Math.floor(Math.random() * canvas.height)
+    let x1 = Math.floor(Math.random() * canvas.width)
+    let y1 = Math.floor(Math.random() * canvas.height)
+    let r1 = Math.floor(Math.random() * canvas.height)
+
     let img = new Image();
 
     function init() {
         img.src = 'sheets/path1459.png';
         window.requestAnimationFrame(draw);
+        let ctx = document.getElementById('canvas').getContext('2d');
+        var gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+        gradient.addColorStop(0, `rgba(${prg}, ${pgg}, ${pbg}, ${pag})`);
+        gradient.addColorStop(.5, `rgba(${pr2g}, ${pg2g}, ${pb2g}, ${pa2g})`);
+        gradient.addColorStop(1, `rgba(${pr3g}, ${pg3g}, ${pb3g}, ${pa3g})`);
+        ctx.fillStyle = gradient;
+
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     function randn_bm(min, max, skew) {
@@ -98,6 +121,21 @@
             document.body.appendChild(newImg);
         });
     }
+    let prg = randn_bm(gredRangeStart, gredRangeEnd, 1)
+    let pgg = randn_bm(gblueRangeStart, gblueRangeEnd, 1)
+    let pbg = randn_bm(ggreenRangeStart, ggreenRangeEnd, 1)
+    let pag = randn_bm(200, 255, 1)
+
+    let pr2g = randn_bm(gredRangeStart, gredRangeEnd, 1)
+    let pg2g = randn_bm(gblueRangeStart, gblueRangeEnd, 1)
+    let pb2g = randn_bm(ggreenRangeStart, ggreenRangeEnd, 1)
+    let pa2g = randn_bm(200, 255, 1)
+
+    let pr3g = randn_bm(gredRangeStart, gredRangeEnd, 1)
+    let pg3g = randn_bm(gblueRangeStart, gblueRangeEnd, 1)
+    let pb3g = randn_bm(ggreenRangeStart, ggreenRangeEnd, 1)
+    let pa3g = randn_bm(200, 255, 1)
+
 
 
     function draw() {
@@ -155,6 +193,10 @@
 
         // // middle
         // ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
+
+
+
+
 
         ctx.drawImage(img, 8997, 1559, 2999, 470, 0, 923, 2999, 470)
 
