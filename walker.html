@@ -12,8 +12,8 @@
         }
 
         canvas {
-            width: 1280px;
-            height: 720px;
+            width: 300px;
+            height: 300px;
             background-color: rgba(0, 0, 0, 0);
             margin: 0;
         }
@@ -22,7 +22,7 @@
 
 <body>
     <!-- <img src="ring wide center clear.png"> -->
-    <canvas id="canvas" width="1280" height="720">Walker.html</canvas>
+    <canvas id="canvas" width="300" height="300">Walker.html</canvas>
     <div><input type="button" value="save" id="savecanvas"></div>
 
 </body>
@@ -61,7 +61,7 @@
         return num;
     }
 
-    console.log(randn_bm(1, 5, 1))
+    console.log(randn_bm(0, 255, 1))
     function savecanvas() {
         console.log("Save")
         var canvas = document.getElementById('canvas');
@@ -79,6 +79,15 @@
             document.body.appendChild(newImg);
         });
     }
+
+    let redRangeStart = Math.floor(Math.random() * 255)
+    let blueRangeStart = Math.floor(Math.random() * 255)
+    let greenRangeStart = Math.floor(Math.random() * 255)
+    let redRangeEnd = getRandomIntInclusive(redRangeStart, 255)
+    let blueRangeEnd = getRandomIntInclusive(blueRangeStart, 255)
+    let greenRangeEnd = getRandomIntInclusive(greenRangeStart, 255)
+
+    console.log(redRangeStart, redRangeEnd)
 
     class Vector {
         constructor(x, y) {
@@ -124,7 +133,7 @@
             this.location = new Vector(canvas.width / 2, canvas.height / 2);
             this.velocity = new Vector(0, 0);
             this.acceleration = new Vector(-.005 * (Math.random()), 0);
-            this.size = 1
+            this.size = 5
             this.width = 0
             this.height = this.location.y + 5
             this.sx = 658
@@ -145,23 +154,25 @@
 
         }
         draw(ctx) {
-            // ctx.save()
+            ctx.save()
             // ctx.globalCompositeOperation = comps[spin.Composite]
             // ctx.globalCompositeOperation = 'hue'
             // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
             // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
-            ctx.fillStyle = `rgba(${randn_bm(0, 255, 1)}, ${randn_bm(0, 255, 1)}, ${randn_bm(0, 255, 1)}, 255)`;
-
+            ctx.fillStyle = `rgba(${randn_bm(redRangeStart, redRangeEnd, .5)}, ${randn_bm(greenRangeStart, greenRangeEnd, .5)}, ${randn_bm(blueRangeStart, blueRangeEnd, .5)}, 255)`;
+            // console.log(ctx.fillStyle)
+            // ctx.strokeStyle = "black"
             // ctx.fillStyle = "black";
             // ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
             ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
-            // ctx.restore()
+            ctx.fillRect(0,0,10,10)
+            ctx.restore()
         }
         checkEdges() {
-            if (this.location.x > 1280) {
-                this.location.x = 1279
-            } else if (this.location.x < 590) {
-                this.location.x = 1279
+            if (this.location.x > 300) {
+                this.location.x = 299
+            } else if (this.location.x < 0) {
+                this.location.x = 1
             }
 
             if (this.location.y > this.height) {
