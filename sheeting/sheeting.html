@@ -138,9 +138,17 @@
             this.velocity.add(this.acceleration)
             this.velocity.limit(.05)
             this.location.add(this.velocity)
+
+            this.gradientVelocityA.add(this.acceleration)
+            this.gradientVelocityA.limit(1)
+            this.gradientPointA.add(this.gradientVelocityA)
+
+            this.gradientVelocityB.add(this.acceleration)
+            this.gradientVelocityB.limit(1)
+            this.gradientPointB.add(this.gradientVelocityA)
         }
         draw(ctx) {
-            // ctx.save()
+            ctx.save()
             var gradient = ctx.createLinearGradient(this.gradientPointA.x, this.gradientPointA.y, this.gradientPointB.x, this.gradientPointB.y);
             var gradient2 = ctx.createLinearGradient(this.gradientPointA.x, this.gradientPointA.y, this.gradientPointB.x, this.gradientPointB.y);
 
@@ -154,7 +162,7 @@
 
             ctx.fillRect(0, 0, this.width, this.height);
 
-            // ctx.restore()
+            ctx.restore()
         }
         checkEdges() {
             if (this.location.x > 1280) {
@@ -173,12 +181,13 @@
     }
 
     class Sheeting {
-        constructor() {
+        constructor(minOpacity) {
             this.paths = ['path1449'];
             this.comps = ['source-over',
                 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
                 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
                 'hue', 'saturation', 'color', 'luminosity'];
+            this.CompositeOperation = getRandomIntInclusive(0, this.comps.length)
             this.width = 640
             this.height = 960
             this.sx = 0
@@ -193,11 +202,11 @@
             this.sheetSpriteMap.src = this.paths[0] + '.png'
             this.sheet = Math.floor(Math.random()* this.sheets)
 
-            this.blur = Math.floor(Math.random() * 4)
+            // this.blur = Math.floor(Math.random() * 4)
             this.hue = Math.floor(Math.random() * 180)
-            this.brightness = Math.floor(Math.random() * 50)
+            this.brightness = Math.floor(Math.random() * 100)
             this.saturate = Math.floor(Math.random() * 100)
-            this.opacity = Math.floor(Math.random() * 100)
+            this.opacity = getRandomIntInclusive(minOpacity, 100)
             this.invert = Math.floor(Math.random() * 100)
         }
         update() {
@@ -206,8 +215,8 @@
             this.location.add(this.velocity)
         }
         draw(ctx, sheet) {
-            // ctx.save()
-            // ctx.globalCompositeOperation = comps[spin.Composite]
+            ctx.save()
+            ctx.globalCompositeOperation = this.comps[this.CompositeOperation]
             // ctx.globalCompositeOperation = 'hue'
             // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
             ctx.filter = `hue-rotate(${this.hue}deg) brightness(${this.brightness}%) saturate(${this.saturate}%) opacity(${this.opacity}%)`
@@ -215,7 +224,7 @@
             // ctx.fillStyle = "black";
             ctx.drawImage(this.sheetSpriteMap, this.sx + (this.width * this.sheet), this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw, this.sh)
             // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
-            // ctx.restore()
+            ctx.restore()
         }
         checkEdges() {
             if (this.location.x > 1280) {
@@ -233,8 +242,13 @@
 
     }
 
-    let aSheet = new Sheeting();
+    let aSheet = new Sheeting(25);
+    let bSheet = new Sheeting(50);
+    let cSheet = new Sheeting(70);
+    let dSheet = new Sheeting(100);
+
     let aGradient = new Gradient();
+    let bGradient = new Gradient();
 
 
     function init() {
@@ -244,8 +258,14 @@
 
     function draw() {
         let ctx = document.getElementById('canvas').getContext('2d');
+
+        aGradient.update()
+
         aGradient.draw(ctx)
         aSheet.draw(ctx)
+        bSheet.draw(ctx)
+        cSheet.draw(ctx)
+        dSheet.draw(ctx)
 
         window.requestAnimationFrame(draw);
     }
