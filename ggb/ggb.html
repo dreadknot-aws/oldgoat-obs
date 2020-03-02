@@ -46,7 +46,7 @@
         dir.normalize()
         dir.mult(500)
         aBallon.acceleration = dir
-       
+
     }
 
     const canvas = document.getElementById("canvas")
@@ -55,9 +55,10 @@
         getCursorPosition(canvas, e)
     })
 
-        canvas.addEventListener('mousemove', function (e) {
-            getCursorPosition(canvas, e)
-        })
+    canvas.addEventListener('mousemove', function (e) {
+        getCursorPosition(canvas, e)
+    })
+
 
     function getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
@@ -147,26 +148,31 @@
             this.size = new Vector(getRandomIntInclusive(2, 10), getRandomIntInclusive(2, 10))
             this.rotation = 0
             this.topspeed = 1
+            this.draw_help = false
             this.color = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255 )`
         }
 
         draw(ctx) {
-            ctx.beginPath();
-            ctx.ellipse(this.location.x, this.location.y, this.size.x, this.size.y, this.rotation, 0, 2 * Math.PI);
-            ctx.strokeStyle = this.color;
-            
-            ctx.stroke();
+
+            if (this.draw_help) {
+                ctx.beginPath();
+                ctx.ellipse(this.location.x, this.location.y, this.size.x, this.size.y, this.rotation, 0, 2 * Math.PI);
+                ctx.strokeStyle = this.color;
+
+                ctx.stroke();
 
 
-                    ctx.strokeStyle = 'black'
-            ctx.beginPath();       // Start a new path
-            ctx.moveTo(aBallon.location.x, aBallon.location.y);    // Move the pen to (30, 50)
-            ctx.lineTo(mouseVector.x, mouseVector.y);  // Draw a line to (150, 100)
-            ctx.stroke();          // Render the path
+
+                ctx.strokeStyle = 'black'
+                ctx.beginPath();       // Start a new path
+                ctx.moveTo(aBallon.location.x, aBallon.location.y);    // Move the pen to (30, 50)
+                ctx.lineTo(mouseVector.x, mouseVector.y);  // Draw a line to (150, 100)
+                ctx.stroke();          // Render the path
+            }
         }
 
         update() {
-            
+
             this.velocity.add(this.acceleration)
             this.velocity.limit(this.topspeed)
             this.location.add(this.velocity)
@@ -191,12 +197,16 @@
         }
     }
 
-        var mouseVector = new Vector(0, 0)
+    var mouseVector = new Vector(0, 0)
 
 
     let aBridge = new ggbProperties();
     let aCamera = new Camera();
     let aBallon = new Ballon();
+
+    const gui = new GUI({ closed: true });
+    gui.add(aBallon, 'draw_help');
+    gui.hide()
 
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
