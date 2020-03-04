@@ -24,13 +24,13 @@
     <!-- <img src="ring wide center clear.png"> -->
     <canvas id="canvas" width="640" height="960">City.html load some sheets and generate somerandom to use as input to
         the draw context.</canvas>
-        <figure>
-            <figcaption>Hear it?</figcaption>
-            <audio controls src="./ZOOM0042_01.mp3">
-                Your browser does not support the
-                <code>audio</code> element.
-            </audio>
-        </figure>
+    <figure>
+        <figcaption>Hear it?</figcaption>
+        <audio controls src="./ZOOM0042_01.mp3">
+            Your browser does not support the
+            <code>audio</code> element.
+        </audio>
+    </figure>
 
     <div><input type="button" value="save" id="savecanvas"></div>
 
@@ -96,6 +96,18 @@
             }
 
         }
+        static add(a, b) {
+            let vector = new Vector(a.x + b.x, a.y + b.y)
+            return vector;
+        }
+        static sub(a, b) {
+            let vector = new Vector(a.x - b.x, a.y - b.y)
+            return vector;
+        }
+        static div(a, b) {
+            let vector = new Vector(a.x / b, a.y / b)
+            return vector
+        }
     }
 
     function getRandomIntInclusive(min, max) {
@@ -146,9 +158,9 @@
         }
         update() {
             this.velocity.add(this.acceleration)
-            this.velocity.limit(.05)
+            this.velocity.limit(10)
             this.location.add(this.velocity)
-            
+
 
             this.gradientVelocityA.add(this.acceleration)
             this.gradientVelocityA.limit(1)
@@ -157,7 +169,7 @@
             this.gradientVelocityB.add(this.acceleration)
             this.gradientVelocityB.limit(1)
             this.gradientPointB.add(this.gradientVelocityA)
-            
+
             this.acceleration.mult(0)
         }
         draw(ctx) {
@@ -191,8 +203,8 @@
             }
         }
         applyForce(force) {
-            force.div(this.mass)
-            this.acceleration.add(force)
+            let f = Vector.div(force,this.mass)
+            this.acceleration.add(f)
         }
 
     }
@@ -217,7 +229,7 @@
             this.sheets = 16
             this.sheetSpriteMap = new Image();
             this.sheetSpriteMap.src = this.paths[0] + '.png'
-            this.sheet = Math.floor(Math.random()* this.sheets)
+            this.sheet = Math.floor(Math.random() * this.sheets)
 
             // this.blur = Math.floor(Math.random() * 4)
             this.hue = Math.floor(Math.random() * 360)
@@ -267,6 +279,7 @@
     let aGradient = new Gradient();
     let bGradient = new Gradient();
 
+    let wind = new Vector(0, 50);
 
     function init() {
 
@@ -276,6 +289,7 @@
     function draw() {
         let ctx = document.getElementById('canvas').getContext('2d');
 
+        aGradient.applyForce(wind)
         aGradient.update()
 
         aGradient.draw(ctx)
