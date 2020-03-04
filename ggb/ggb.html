@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <canvas id="frame" width="1280" height="720"></canvas>
+    <!-- <canvas id="frame" width="1280" height="720" hidden="true"></canvas> -->
     <canvas id="canvas" width="1919" height="1279"></canvas>
 
     <input type="button" value="save" id="savecanvas">
@@ -33,15 +33,32 @@
 
     function getCursorPosition(canvas, event) {
         const rect = canvas.getBoundingClientRect()
-        const x = event.clientX - rect.left
-        const y = event.clientY - rect.top
+        const x = event.pageX// - rect.left
+        const y = event.pageY// - rect.top
+
         console.log("x: " + x + " y: " + y)
+        console.log(event)
+        console.log("aBallon x: " + aBallon.location.x + " y: " + aBallon.location.y)
+        mouseVector.x = x
+        mouseVector.y = y
+        let dir = Vector.sub(mouseVector, aBallon.location)
+        console.log("dir x: " + dir.x + " y: " + dir.y)
+        dir.normalize()
+        dir.mult(500)
+        aBallon.acceleration = dir
+
     }
 
-    const canvas = document.getElementById("frame")
+    const canvas = document.getElementById("canvas")
+
     canvas.addEventListener('mousedown', function (e) {
         getCursorPosition(canvas, e)
     })
+
+    canvas.addEventListener('mousemove', function (e) {
+        getCursorPosition(canvas, e)
+    })
+
 
     function getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
@@ -84,14 +101,21 @@
                 this.normalize();
                 this.mult(max);
             }
-
+        }
+        static add(a, b) {
+            let vector = new Vector(a.x + b.x, a.y + b.y)
+            return vector;
+        }
+        static sub(a, b) {
+            let vector = new Vector(a.x - b.x, a.y - b.y)
+            return vector;
         }
     }
 
     class Camera {
         constructor() {
             this.center = new Vector(0, 720)
-            this.topLeft = new Vector(getRandomIntInclusive(0, 638), getRandomIntInclusive(0,555))
+            this.topLeft = new Vector(getRandomIntInclusive(0, 638), getRandomIntInclusive(0, 555))
             this.bottomRight = new Vector(1280, 720)
         }
     }
@@ -101,7 +125,7 @@
             this.paths = ['colorsheet'];
             this.cords = [1059, 705];
             this.horizonLine = [new Vector(0, 720), new Vector(1919, 720)]
-            this.sheet = getRandomIntInclusive(1,7)
+            this.sheet = getRandomIntInclusive(1, 7)
             this.sheetGap = 12
             this.sx = 0;
             this.sy = 0;
@@ -116,8 +140,73 @@
         }
     }
 
+    class Ballon { // or a ring?
+        constructor() {
+            this.location = new Vector(aCamera.topLeft.x + 150, aCamera.topLeft.y + 150)
+            this.velocity = new Vector(getRandomIntInclusive(-1, 1), getRandomIntInclusive(-1, 1))
+            this.acceleration = new Vector(0, 0)
+            this.size = new Vector(getRandomIntInclusive(2, 10), getRandomIntInclusive(2, 10))
+            this.rotation = 0
+            this.topspeed = 1
+            this.draw_help = false
+            this.color = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255 )`
+        }
+
+        draw(ctx) {
+
+            if (this.draw_help) {
+                ctx.beginPath();
+                ctx.ellipse(this.location.x, this.location.y, this.size.x, this.size.y, this.rotation, 0, 2 * Math.PI);
+                ctx.strokeStyle = this.color;
+
+                ctx.stroke();
+
+
+
+                ctx.strokeStyle = 'black'
+                ctx.beginPath();       // Start a new path
+                ctx.moveTo(aBallon.location.x, aBallon.location.y);    // Move the pen to (30, 50)
+                ctx.lineTo(mouseVector.x, mouseVector.y);  // Draw a line to (150, 100)
+                ctx.stroke();          // Render the path
+            }
+        }
+
+        update() {
+
+            this.velocity.add(this.acceleration)
+            this.velocity.limit(this.topspeed)
+            this.location.add(this.velocity)
+        }
+
+        checkEdges() {
+            if (this.location.x > 1920) {
+                this.location = new Vector(aCamera.topLeft.x + 150, aCamera.topLeft.y + 150)
+                this.acceleration = new Vector(getRandomIntInclusive(-1, 1), getRandomIntInclusive(-1, 1))
+            } else if (this.location.x < 0) {
+                this.location = new Vector(aCamera.topLeft.x + 150, aCamera.topLeft.y + 150)
+                this.acceleration = new Vector(getRandomIntInclusive(-1, 1), getRandomIntInclusive(-1, 1))
+            }
+
+            if (this.location.y > 1280) {
+                this.location = new Vector(aCamera.topLeft.x + 150, aCamera.topLeft.y + 150)
+                this.acceleration = new Vector(getRandomIntInclusive(-1, 1), getRandomIntInclusive(-1, 1))
+            } else if (this.location.y < 0) {
+                this.location = new Vector(aCamera.topLeft.x + 150, aCamera.topLeft.y + 150)
+                this.acceleration = new Vector(getRandomIntInclusive(-1, 1), getRandomIntInclusive(-1, 1))
+            }
+        }
+    }
+
+    var mouseVector = new Vector(0, 0)
+
+
     let aBridge = new ggbProperties();
     let aCamera = new Camera();
+    let aBallon = new Ballon();
+
+    const gui = new GUI({ closed: true });
+    gui.add(aBallon, 'draw_help');
+    gui.hide()
 
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
@@ -126,7 +215,8 @@
     let frameLocation = new Vector(0, 0);
     let frameVelocity = new Vector(1, 0);
 
-    let gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+    // let gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+    var gradientPointA = aBallon.location
     let gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
     let gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
     let gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
@@ -233,12 +323,12 @@
         var gradient = ctx.createLinearGradient(gradientPointA.x, gradientPointA.y, gradientPointB.x, gradientPointB.y);
         var gradient2 = ctx.createLinearGradient(gradientPointA.x, gradientPointA.y, gradientPointB.x, gradientPointB.y);
 
- 
+
 
         gradient.addColorStop(0, `rgba(${color2[0]}, ${color2[1]}, ${color2[2]}, 255 )`);
         gradient.addColorStop(gradientStop.x, `rgba(${color1[0]}, ${color1[1]}, ${color1[2]}, 255)`);
         gradient.addColorStop(1, `rgba(${color3[0]}, ${color3[1]}, ${color3[2]}, 255)`);
-    
+
         ctx.fillStyle = gradient;
 
         ctx.fillRect(0, 0, 1919, 688);
@@ -262,7 +352,7 @@
 
         // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(${opacity[0]}%)`
         // ctx.drawImage(img, 8232, 521, 1196, 223, 550, 500, 1196, 223)
-//8232, 521
+        //8232, 521
         // ctx.filter = `hue-rotate(${hue[2]}deg) brightness(${brightness[2]}%) saturate(${saturate[2]}%) opacity(${opacity[2]}%)`
         // ctx.drawImage(img, 1922, 0, 960, 645, 0, 0, 960, 645)
 
@@ -305,11 +395,14 @@
         //     ctx.fillRect(cx, cy, pwidth, pheight);
         // }
 
+        aBallon.checkEdges()
+        aBallon.update()
+        aBallon.draw(ctx)
 
         ctx.restore();
 
-        let frame_ctx = document.getElementById('frame').getContext('2d');
-        frame_ctx.putImageData(ctx.getImageData(aCamera.topLeft.x, aCamera.topLeft.y, 1280, 720), 0, 0);
+        // let frame_ctx = document.getElementById('frame').getContext('2d');
+        // frame_ctx.putImageData(ctx.getImageData(aCamera.topLeft.x, aCamera.topLeft.y, 1280, 720), 0, 0);
         // frame_ctx.drawImage(ctx.i, 0, 0)
 
         window.requestAnimationFrame(draw);
