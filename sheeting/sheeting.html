@@ -190,16 +190,16 @@
             ctx.restore()
         }
         checkEdges() {
-            if (this.location.x > 1280) {
-                this.location.x = 1279
-            } else if (this.location.x < 590) {
-                this.location.x = 1279
+            if (this.location.x > 1500) {
+                this.location.x = 0
+            } else if (this.location.x < -1500) {
+                this.location.x = 0
             }
 
-            if (this.location.y > this.height) {
-                this.velocity.y = -this.velocity.y;
-            } else if (this.location.y < this.height) {
-                this.velocity.y = -this.velocity.y;
+            if (this.location.y > 1500) {
+                this.location.y = 0
+            } else if (this.location.y < -1500) {
+                this.location.y = 0
             }
         }
         applyForce(force) {
