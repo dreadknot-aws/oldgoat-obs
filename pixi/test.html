@@ -1,18 +1,75 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Hello World</title>
 </head>
-  <script src="../js/pixi.min.js"></script>
+<script src="../js/pixi.min.js"></script>
+
 <body>
   <script type="text/javascript">
-    let type = "WebGL"
-    if(!PIXI.utils.isWebGLSupported()){
-      type = "canvas"
+
+let sprite;
+    let TextureCache = PIXI.utils.TextureCache
+    //Create a Pixi Application
+    let app = new PIXI.Application({
+      width: 640,
+      height: 960,
+      antialias: true,
+      transparent: true,
+      resolution: 1
+    });
+
+    //Add the canvas that Pixi automatically created for you to the HTML document
+    document.body.appendChild(app.view);
+
+    PIXI.Loader.shared
+      .add(["../stationid.png",
+        "../sheeting/path1397.png"])
+      .load(setup);
+
+    // PIXI.Loader.shared
+    //   .add("../sheeting/path1397.png")
+    //   .load(setupSheet);
+
+    function setup() {
+      sprite = new PIXI.Sprite(
+        PIXI.Loader.shared.resources["../stationid.png"].texture
+      );
+
+      sprite.position.set(100, 100);
+      sprite.scale.set(0.5, 0.5);
+      sprite.anchor.set(.5, .5);
+      sprite.rotation = 0.5;
+      app.stage.addChild(sprite);
+
+      let sheet = TextureCache["../sheeting/path1397.png"];
+
+      let anchor = new PIXI.Point(0, 0)
+      let rectangle = new PIXI.Rectangle(640 * 4, 0, 640, 960);
+
+      sheet.frame = rectangle;
+      let rocket = new PIXI.Sprite(sheet);
+
+      rocket.position.set(0, 0);
+      // rocket.scale.set(0.5, 0.5);
+      // rocket.anchor.set(.5, .5);
+      // rocket.rotation = 0.5;
+      app.stage.addChild(rocket);
+
+      app.ticker.add(delta => gameLoop(delta));
     }
 
-    PIXI.utils.sayHello(type)
+    function gameLoop(delta) {
+
+      //Move the cat 1 pixel 
+      sprite.x += 1;
+      sprite.rotation += .01;
+      if (sprite.x > 640) sprite.x = 0
+    }
+
   </script>
 </body>
+
 </html>
