@@ -11,7 +11,14 @@
   <script type="text/javascript">
 
 let sprite;
-    let TextureCache = PIXI.utils.TextureCache
+//Aliases
+let Application = PIXI.Application,
+    Container = PIXI.Container,
+    loader = PIXI.Loader.shared,
+    resources = PIXI.loader.resources,
+    TextureCache = PIXI.utils.TextureCache,
+    Sprite = PIXI.Sprite,
+    Rectangle = PIXI.Rectangle;
     //Create a Pixi Application
     let app = new PIXI.Application({
       width: 640,
@@ -24,28 +31,54 @@ let sprite;
     //Add the canvas that Pixi automatically created for you to the HTML document
     document.body.appendChild(app.view);
 
-    PIXI.Loader.shared
-      .add(["../stationid.png",
-        "../sheeting/path1397.png"])
-      .load(setup);
+    // PIXI.Loader.shared
+    //   .add(["../stationid.png",
+    //     "../sheeting/path1397.png"])
+    //   .load(setup);
 
     // PIXI.Loader.shared
     //   .add("../sheeting/path1397.png")
     //   .load(setupSheet);
 
-    function setup() {
-      sprite = new PIXI.Sprite(
-        PIXI.Loader.shared.resources["../stationid.png"].texture
-      );
+        // PIXI.Loader.shared
+    //   .add(["../stationid.png",
+    //     "../sheeting/path1397.png"])
+    //   .load(setup);
 
+    loader
+  .add(["atlas.json",
+  "../stationid.png"])
+  .load(setup);
+
+    function setup() {
+      // sprite = new PIXI.Sprite(
+      //   PIXI.Loader.shared.resources["../stationid.png"].texture
+      // );
+
+      let spriteTexture = TextureCache["../stationid.png"];
+      sprite = new Sprite(spriteTexture);
+      // sprite = TextureCache["../stationid.png"];
       sprite.position.set(100, 100);
       sprite.scale.set(0.5, 0.5);
       sprite.anchor.set(.5, .5);
       sprite.rotation = 0.5;
       // app.stage.addChild(sprite);
 
-      let sheet = TextureCache["../sheeting/path1397.png"];
-      let sheet2 = TextureCache["../sheeting/path1397.png"];
+      let sheet = TextureCache["sheet1.png"];
+      let sheet2 = TextureCache["sheet2.png"];
+      let sheet3 = TextureCache["sheet3.png"];
+      let sheet4 = TextureCache["sheet4.png"];
+      let sheet5 = TextureCache["sheet5.png"];
+      let sheet6 = TextureCache["sheet6.png"];
+      let sheet7 = TextureCache["sheet7.png"];
+      let sheet8 = TextureCache["sheet8.png"];
+      let sheet9 = TextureCache["sheet9.png"];
+      let sheet10 = TextureCache["sheet10.png"];
+      let sheet11 = TextureCache["sheet11.png"];
+      let sheet12 = TextureCache["sheet12.png"];
+      let sheet13 = TextureCache["sheet13.png"];
+      let sheet14 = TextureCache["sheet14.png"];
+      let sheet15 = TextureCache["sheet15.png"];
 
       let anchor = new PIXI.Point(0, 0)
 
@@ -66,27 +99,65 @@ let sprite;
       // app.stage.addChild(sheetContainer);
 
 
-      let rectangle2 = new PIXI.Rectangle(640 * 5, 0, 640, 960);
-      sheet.frame = rectangle2;
+      // let rectangle2 = new PIXI.Rectangle(640 * 5, 0, 640, 960);
+      // sheet.frame = rectangle2;
       let rocket2 = new PIXI.Sprite(sheet);
-      rocket2.scale.set(0.5, 0.5);
+      // rocket2.scale.set(0.5, 0.5);
       rocket2.zIndex = 1
+      rocket2.alpha = .5
+
       sheetContainer.addChild(rocket2);
 
-      let rectangle = new PIXI.Rectangle(640 * 1, 0, 640, 960);
-      sheet2.frame = rectangle;
+      // let rectangle = new PIXI.Rectangle(640 * 1, 0, 640, 960);
+      // sheet2.frame = rectangle;
       let rocket = new PIXI.Sprite(sheet2);
-
       rocket.zIndex = 2
+      rocket.alpha = .5
 
       sheetContainer.addChild(rocket);
 
+      let rocket3 = new PIXI.Sprite(sheet3);
+      rocket3.zIndex = 3
+      rocket3.alpha = .5
+      sheetContainer.addChild(rocket3);
 
+      let rocket4 = new PIXI.Sprite(sheet4);
+      rocket4.zIndex = 4
+      rocket4.alpha = .5
+      sheetContainer.addChild(rocket4);
 
-      app.stage.addChild(sprite);
+      let rocket5 = new PIXI.Sprite(sheet5);
+      rocket5.zIndex = 5
+      rocket5.alpha = .5
+      sheetContainer.addChild(rocket5);
 
+      let rocket6 = new PIXI.Sprite(sheet6);
+      rocket6.zIndex = 5
+      rocket6.alpha = .5
+      // rocket6.blendMode = PIXI.BLEND_MODES.ADD
+
+      sheetContainer.addChild(rocket6);
+
+      let rocket7 = new PIXI.Sprite(sheet7);
+      rocket7.zIndex = 5
+      rocket7.alpha = .5
+      // rocket7.blendMode = PIXI.BLEND_MODES.ADD
+      sheetContainer.addChild(rocket7);
+
+      let rocket8 = new PIXI.Sprite(sheet8);
+      rocket8.zIndex = 5
+      rocket8.alpha = .5
+      // rocket7.blendMode = PIXI.BLEND_MODES.ADD
+      sheetContainer.addChild(rocket8);
+
+      let rocket9 = new PIXI.Sprite(sheet9);
+      rocket9.zIndex = 5
+      rocket9.alpha = .5
+      // rocket7.blendMode = PIXI.BLEND_MODES.ADD
+      sheetContainer.addChild(rocket9);
 
       app.stage.addChild(sheetContainer)
+      app.stage.addChild(sprite);
 
 
       // sheet.frame = rectangle;

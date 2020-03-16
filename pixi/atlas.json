@@ -47,6 +47,318 @@
                 "x": 0,
                 "y": 0
             }
+        },
+        "sheet3.png": {
+            "frame": {
+                "x": 1920,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 1920,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet4.png": {
+            "frame": {
+                "x": 2560,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 2560,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet5.png": {
+            "frame": {
+                "x": 3200,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 3200,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet6.png": {
+            "frame": {
+                "x": 3840,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 3840,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet7.png": {
+            "frame": {
+                "x": 4480,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 4480,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet8.png": {
+            "frame": {
+                "x": 5120,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 5120,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet9.png": {
+            "frame": {
+                "x": 5760,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 5760,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet10.png": {
+            "frame": {
+                "x": 6400,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 6400,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet11.png": {
+            "frame": {
+                "x": 7040,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 7040,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet12.png": {
+            "frame": {
+                "x": 7680,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 7680,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet13.png": {
+            "frame": {
+                "x": 8320,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 8320,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet14.png": {
+            "frame": {
+                "x": 8960,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 8960,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        "sheet15.png": {
+            "frame": {
+                "x": 9600,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 9600,
+                "y": 0,
+                "w": 640,
+                "h": 960
+            },
+            "sourceSize": {
+                "w": 640,
+                "h": 960
+            },
+            "pivot": {
+                "x": 0,
+                "y": 0
+            }
         }
     },
     "meta": {
