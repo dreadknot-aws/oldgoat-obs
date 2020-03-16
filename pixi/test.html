@@ -10,7 +10,57 @@
 <body>
   <script type="text/javascript">
 
+
+    class Vector {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+      }
+      add(vector) {
+        this.x = this.x + vector.x;
+        this.y = this.y + vector.y;
+      }
+      sub(vector) {
+        this.x = this.x - vector.x;
+        this.y = this.y - vector.y;
+      }
+      mult(n) {
+        this.x = this.x * n;
+        this.y = this.y * n;
+      }
+      div(n) {
+        this.x = this.x / n;
+        this.y = this.y / n;
+      }
+      mag() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+      }
+      normalize() {
+        let m = this.mag()
+        if (m != 0) {
+          this.div(m);
+        }
+      }
+      limit(max) {
+        if (this.mag() > max) {
+          this.normalize();
+          this.mult(max);
+        }
+      }
+      static add(a, b) {
+        let vector = new Vector(a.x + b.x, a.y + b.y)
+        return vector;
+      }
+      static sub(a, b) {
+        let vector = new Vector(a.x - b.x, a.y - b.y)
+        return vector;
+      }
+    }
+
     let sprite;
+    let slocation = new Vector(0, 0);
+    let svelocity = new Vector(1, 0);
+    
     //Aliases
     let Application = PIXI.Application,
       Container = PIXI.Container,
@@ -76,7 +126,9 @@
       for (let i = 1; i < 16; i++) {
         let sheet = TextureCache[`sheet${i}.png`];
         let rocket = new PIXI.Sprite(sheet);
-        // rocket.blendMode = PIXI.BLEND_MODES.ADD
+        rocket.blendMode = PIXI.BLEND_MODES.NORMAL
+        // rocket.blendMode = PIXI.BLEND_MODES.MULTIPLY SCREEN ADD 
+        rocket.tint = 0x0033ff
         rocket.zIndex = i
         rocket.alpha = .1
         sheetContainer.addChild(rocket);
