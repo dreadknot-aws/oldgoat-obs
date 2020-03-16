@@ -10,6 +10,11 @@
 <body>
   <script type="text/javascript">
 
+function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+    }
 
     class Vector {
       constructor(x, y) {
@@ -59,8 +64,8 @@
 
     let sprite;
     let slocation = new Vector(0, 0);
-    let svelocity = new Vector(1, 0);
-    
+    let svelocity = new Vector(1, 1);
+
     //Aliases
     let Application = PIXI.Application,
       Container = PIXI.Container,
@@ -126,16 +131,16 @@
       for (let i = 1; i < 16; i++) {
         let sheet = TextureCache[`sheet${i}.png`];
         let rocket = new PIXI.Sprite(sheet);
-        rocket.blendMode = PIXI.BLEND_MODES.NORMAL
+        // rocket.blendMode = PIXI.BLEND_MODES.NORMAL
         // rocket.blendMode = PIXI.BLEND_MODES.MULTIPLY SCREEN ADD 
-        rocket.tint = 0x0033ff
+        rocket.tint = getRandomIntInclusive(0, 16777216)
         rocket.zIndex = i
-        rocket.alpha = .1
+        rocket.alpha = .25
         sheetContainer.addChild(rocket);
       }
 
-      app.stage.addChild(sprite);
       app.stage.addChild(sheetContainer)
+      app.stage.addChild(sprite);
 
 
       app.ticker.add(delta => gameLoop(delta));
@@ -143,10 +148,14 @@
 
     function gameLoop(delta) {
 
+      slocation.add(svelocity)
+
       //Move the cat 1 pixel 
-      sprite.x += 1;
+      sprite.x = slocation.x;
+      sprite.y = slocation.y;
       sprite.rotation += .01;
-      if (sprite.x > 640) sprite.x = 0
+      if (slocation.x > 640) slocation.x = 0
+      if (slocation.y > 960) slocation.y = 0
     }
 
   </script>
