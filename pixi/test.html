@@ -42,21 +42,61 @@ let sprite;
       sprite.scale.set(0.5, 0.5);
       sprite.anchor.set(.5, .5);
       sprite.rotation = 0.5;
-      app.stage.addChild(sprite);
+      // app.stage.addChild(sprite);
 
       let sheet = TextureCache["../sheeting/path1397.png"];
+      let sheet2 = TextureCache["../sheeting/path1397.png"];
 
       let anchor = new PIXI.Point(0, 0)
-      let rectangle = new PIXI.Rectangle(640 * 4, 0, 640, 960);
 
-      sheet.frame = rectangle;
-      let rocket = new PIXI.Sprite(sheet);
+      // // let rectangle = new PIXI.Rectangle(640 * 4, 0, 640, 960);
+      // let sheets = new Array()
+      let sheetContainer = new PIXI.Container();
+      sheetContainer.sortableChildren = true
+      // for (let i = 0; i < 15; i++) {
+      //   console.log("for")
+      //   let rectangle = new PIXI.Rectangle(640 * i, 0, 640, 960);
+      //   sheet.frame = rectangle;
+      //   let rocket = new PIXI.Sprite(sheet);
+      //   rocket.position.set(0, 0);
+      //   // rocket.blendMode = PIXI.BLEND_MODES.ADD
+      //   sheets.push(rocket)
+      //   sheetContainer.addChild(sheets[i]);
+      // }
+      // app.stage.addChild(sheetContainer);
 
-      rocket.position.set(0, 0);
-      // rocket.scale.set(0.5, 0.5);
-      // rocket.anchor.set(.5, .5);
-      // rocket.rotation = 0.5;
-      app.stage.addChild(rocket);
+
+      let rectangle2 = new PIXI.Rectangle(640 * 5, 0, 640, 960);
+      sheet.frame = rectangle2;
+      let rocket2 = new PIXI.Sprite(sheet);
+      rocket2.scale.set(0.5, 0.5);
+      rocket2.zIndex = 1
+      sheetContainer.addChild(rocket2);
+
+      let rectangle = new PIXI.Rectangle(640 * 1, 0, 640, 960);
+      sheet2.frame = rectangle;
+      let rocket = new PIXI.Sprite(sheet2);
+
+      rocket.zIndex = 2
+
+      sheetContainer.addChild(rocket);
+
+
+
+      app.stage.addChild(sprite);
+
+
+      app.stage.addChild(sheetContainer)
+
+
+      // sheet.frame = rectangle;
+      // let rocket = new PIXI.Sprite(sheet);
+
+      // rocket.position.set(0, 0);
+      // // rocket.scale.set(0.5, 0.5);
+      // // rocket.anchor.set(.5, .5);
+      // // rocket.rotation = 0.5;
+      // app.stage.addChild(rocket);
 
       app.ticker.add(delta => gameLoop(delta));
     }
