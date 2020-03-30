@@ -86,6 +86,18 @@
             }
 
         }
+        static add(a, b) {
+            let vector = new Vector(a.x + b.x, a.y + b.y)
+            return vector;
+        }
+        static sub(a, b) {
+            let vector = new Vector(a.x - b.x, a.y - b.y)
+            return vector;
+        }
+        static div(a, b) {
+            let vector = new Vector(a.x / b, a.y / b)
+            return vector
+        }
     }
 
 
@@ -106,6 +118,7 @@
             this.acceleration = new Vector(-.005 * (Math.random()), 0);
             this.size = 10
             this.width = 0
+            this.mass = 10
             this.height = this.location.y + 5
             this.sx = 658
             this.sy = 350
@@ -151,6 +164,8 @@
 
     let gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
     let gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+    let gradientPointAMass = 10;
+    let gradientPointBMass = 10;
     let gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
     let gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
     let gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
@@ -158,6 +173,8 @@
 
     let gradientStop = new Vector(Math.random(), Math.random())
     let gradientStopVelocity = new Vector(Math.random() * (.025 - .001) + .001)
+
+    let aForce = new Vector(0, -.1)
 
     var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
     var comps = ['source-over',
@@ -254,33 +271,39 @@
 
 
         if ((gradientPointA.x > canvas.width * 2) || (gradientPointA.x < -canvas.width * 2)) {
-            // gradientVelocityA.x = gradientVelocityA.x * -1;
             gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
-            gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
-            gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            // gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientVelocityA.mult(-1)
             console.log("limit new gradient: " + gradientPointA.x + "," + gradientPointA.y)
 
         }
         if ((gradientPointA.y > canvas.height * 2) || (gradientPointA.y < -canvas.width * 2)) {
             gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
-            gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
-            gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientVelocityA.mult(-1)
+
             console.log("limit new gradient: " + gradientPointA.x + "," + gradientPointA.y)
 
         }
 
 
-        if ((gradientVelocityB.x > canvas.width * 2) || (gradientVelocityB.x < -canvas.width * 2)) {
+        if ((gradientPointB.x > canvas.width * 2) || (gradientPointB.x < -canvas.width * 2)) {
             gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
-            gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
-            gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            // gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientVelocityB.mult(-1)
+
             console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
 
         }
-        if ((gradientVelocityB.y > canvas.height * 2) || (gradientVelocityB.y < -canvas.width * 2)) {
+        if ((gradientVelocityB.y > canvas.height * 2) || (gradientPointB.y < -canvas.width * 2)) {
             gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
-            gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
-            gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            // gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            //gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            ///gradientVelocityB.mult(-1)
+
             console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
 
         }
@@ -292,9 +315,11 @@
         // gradientPointA.add(gradientVelocityA)
         // gradientPointB.add(gradientVelocityB)
 
+        //gradientPointAacceleration.add(aForce)
         gradientVelocityA.add(gradientPointAacceleration)
         gradientVelocityA.limit(1)
         gradientPointA.add(gradientVelocityA)
+        // gradientPointA.mult(0)
 
         gradientVelocityB.add(gradientPointBacceleration)
         gradientVelocityB.limit(1)
@@ -341,6 +366,13 @@
 
 
         ctx.fillStyle = gradient;
+
+        ctx.beginPath();
+        ctx.ellipse(gradientPointA.x, gradientPointA.y, 3, 3, 0, 0, 2 * Math.PI);
+        ctx.ellipse(gradientPointB.x, gradientPointB.y, 3, 3, 0, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
+
         // ctx.fillStyle = 'rgba(42, 100, 65, 255 )';
         // ctx.fillStyle = 'green'
         // ctx.filter = 'blur(4px)';
@@ -362,10 +394,10 @@
         // Earth
 
 
-//         ctx.beginPath();       // Start a new path
-// ctx.moveTo(gradientPointA.x, gradientPointA.y);    // Move the pen to (30, 50)
-// ctx.lineTo(gradientPointB.x, gradientPointB.y);  // Draw a line to (150, 100)
-// ctx.stroke();          // Render the path
+        //         ctx.beginPath();       // Start a new path
+        // ctx.moveTo(gradientPointA.x, gradientPointA.y);    // Move the pen to (30, 50)
+        // ctx.lineTo(gradientPointB.x, gradientPointB.y);  // Draw a line to (150, 100)
+        // ctx.stroke();          // Render the path
 
 
         cityy += cityv
