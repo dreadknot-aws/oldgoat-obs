@@ -30,6 +30,7 @@
 <script type="module">
     import { GUI } from './js/dat.gui.module.js';
 
+
     document.getElementById("savecanvas").addEventListener("click", savecanvas);
     function savecanvas() {
         console.log("Save")
@@ -48,6 +49,7 @@
             document.body.appendChild(newImg);
         });
     }
+
 
     class Vector {
         constructor(x, y) {
@@ -108,14 +110,13 @@
                 'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
                 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
                 'hue', 'saturation', 'color', 'luminosity'];
-
         }
     }
     class Boat {
         constructor() {
-            this.location = new Vector(1280, 500);
+            this.location = new Vector(1000, 500);
             this.velocity = new Vector(0, 0);
-            this.acceleration = new Vector(-.005 * (Math.random()), 0);
+            this.acceleration = new Vector(0, 0);
             this.size = 10
             this.width = 0
             this.mass = 10
@@ -124,43 +125,103 @@
             this.sy = 350
             this.sw = 6
             this.sh = 11
+
+            // Assuming myButton is a button element
+            // canvas.addEventListener('click', this.onClick, false)
+
+
         }
+
+        // onClick(event) {
+        //     console.log('Boat:', arguments)
+        //     console.log('Boat:', event)
+        //     console.log('Boat:', event.clientY)
+        //     console.log('Boat:', this)
+
+        //     let MouseVector = new Vector(event.clientX, event.clientY);
+        //     Vector.sub(MouseVector, MouseVector)
+        //     //force = arguments.
+        //     //applyForce(force)
+        // }
         update() {
             this.velocity.add(this.acceleration)
-            this.velocity.limit(.05)
+            this.velocity.limit(.5)
             this.location.add(this.velocity)
+            this.acceleration.mult(0)
+        }
+        applyForce(force) {
+            let f = Vector.div(force, this.mass)
+            this.acceleration.add(f)
         }
         draw(ctx) {
-            // ctx.save()
+            ctx.save()
             // ctx.globalCompositeOperation = comps[spin.Composite]
-            // ctx.globalCompositeOperation = 'hue'
+            ctx.globalCompositeOperation = 'xor'
             // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
             // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
 
             // ctx.fillStyle = "black";
             ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
             // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
-            // ctx.restore()
+            ctx.restore()
+
+            // Draw vector line to mouse
+            ctx.lineWidth = 2;
+            ctx.fillStyle = 'orange';
+            ctx.lineCap = 'round'
+
+            ctx.globalCompositeOperation = 'xor';
+            ctx.beginPath();
+            ctx.moveTo(aBoat.location.x, aBoat.location.y);
+            ctx.lineTo(mouseLocation.x, mouseLocation.y);
+            //ctx.rect(40, 40, 70, 70);
+            // ctx.stroke();
         }
         checkEdges() {
             if (this.location.x > 1280) {
-                this.location.x = 1279
-            } else if (this.location.x < 590) {
-                this.location.x = 1279
+                this.location.x = 1000
+            } else if (this.location.x < 0) {
+                this.location.x = 1000
             }
 
-            if (this.location.y > this.height) {
-                this.velocity.y = -this.velocity.y;
-            } else if (this.location.y < this.height) {
-                this.velocity.y = -this.velocity.y;
+            if (this.location.y > 720) {
+                this.location.y = 500
+            } else if (this.location.y < 0) {
+                this.location.y = 500
             }
         }
     }
 
+
+
+    let mouseLocation = new Vector(0, 0);
+
     let aBoat = new Boat();
+
+
+    // Assuming myButton is a button element
+    canvas.addEventListener('click', Blow, false)
+    function Blow(event) {
+        // print and have a look at the event object 
+        // always print arguments in case of overlooking any other arguments
+        console.log('Blow:', arguments)
+        mouseLocation = new Vector(event.clientX, event.clientY)
+        // let windFrom = new Vector(-.5, 0)
+        // windFrom.sub(mouseLocation)
+        // windFrom.mag(5)
+        console.log('Blow:', mouseLocation)
+        let windFrom = Vector.sub(mouseLocation, aBoat.location)
+        windFrom.normalize()
+        // windFrom.mult(0.5);
+        aBoat.applyForce(windFrom)
+        console.log('Blow:', windFrom)
+    }
+
 
     let location = new Vector(0, 0);
     let velocity = new Vector(.01 * (Math.random() < 0.5 ? -1 : 1), 0);
+
+    let gravity = new Vector(-0.001, 0)
 
     let gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
     let gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
@@ -382,6 +443,7 @@
         var time = new Date();
 
         aBoat.checkEdges();
+        aBoat.applyForce(gravity);
         aBoat.update();
 
 
@@ -450,6 +512,8 @@
         ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
 
         ctx.restore();
+
+
 
 
 
