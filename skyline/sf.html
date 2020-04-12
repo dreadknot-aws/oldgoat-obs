@@ -28,29 +28,16 @@
 </body>
 <script type="module">
     import { GUI } from '../js/dat.gui.module.js';
+    import { Vector } from  '../js/mr.vector.js';
 
     document.getElementById("savecanvas").addEventListener("click", savecanvas);
 
 
-    class Vector {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-        }
-        add(vector) {
-            this.x = this.x + vector.x;
-            this.y = this.y + vector.y;
-        }
-    }
-
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
 
-
     let frameLocation = new Vector(975, 800);
     let frameVelocity = new Vector(1, 0);
-
-
 
     let redRangeStart = Math.floor(Math.random() * 255)
     let blueRangeStart = Math.floor(Math.random() * 255)
@@ -77,7 +64,8 @@
     let img = new Image();
 
     function init() {
-        img.src = 'sheets/path1459.png';
+        // img.src = 'sheets/path1459.png';
+        img.src = 'sheets/1x/sf.png'
         window.requestAnimationFrame(draw);
         let ctx = document.getElementById('canvas').getContext('2d');
         var gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
@@ -194,11 +182,21 @@
         // // middle
         // ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
 
+                let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
+
+        ctx.drawImage(img, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
+
+
+        ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
 
 
 
+        // slice of bridge and city
 
-        ctx.drawImage(img, 8997, 1559, 2999, 470, 0, 923, 2999, 470)
+        ctx.drawImage(img, 0, 0, 3617, 568, 0, 923, 3617, 568)
+
+
+
 
 
         //  water
