@@ -204,7 +204,7 @@
             velocity.y = velocity.y * -1;
         }
 
-        if ((frameLocation.x > canvas.width / 2) || (frameLocation.x < 0)) {
+        if ((frameLocation.x > canvas.width * .75) || (frameLocation.x < 0)) {
             frameVelocity.x = frameVelocity.x * -1;
         }
         if ((frameLocation.y > canvas.height) || (frameLocation.y < 0)) {
