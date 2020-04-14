@@ -21,7 +21,7 @@
 
         #tint {
             background: transparent;
-            background-color: rgb(169, 26, 182)
+            background-color: rgba(169, 26, 182, 0)
         }
     </style>
 </head>
@@ -52,24 +52,18 @@
         let image = new Image();
         image.id = "pic";
         img.addEventListener('load', function () {
-            // ctx.fillRect(0, 0, 3000, 2000)
-            ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
-            tint_ctx.fillStyle = 'pink'
 
+            ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
+
+            tint_ctx.fillStyle = 'orange'
             tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
             tint_ctx.globalCompositeOperation = 'source-atop'
-
             tint_ctx.fillRect(0, 0, 3617, 568)
 
-            tint_ctx.strokeRect(10, 10, 2999, 500)
-            // let dataURL = canvas.toDataURL();
             image.src = canvas.toDataURL();
             image.addEventListener('load', function () {
                 ctx.drawImage(image, 0, 923)
             }, false);
-            // let imgData = tint_ctx.getImageData(0, 0, 3617, 568);
-            // ctx.putImageData(imgData, 0, 0); 
-
 
         }, false);
 
