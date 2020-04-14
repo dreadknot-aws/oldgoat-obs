@@ -7,15 +7,21 @@
     <style>
         body {
             margin: 0;
-            background-color: rgb(255, 255, 255);
+            background-color: rgba(46, 38, 116, 0.835);
+            background: transparent;
             /* overflow: hidden; */
         }
 
         canvas {
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0);
+            background-color: rgba(255, 255, 255, 1);
             margin: 0;
+        }
+
+        #tint {
+            background: transparent;
+            background-color: rgba(182, 26, 26, 1)
         }
     </style>
 </head>
@@ -28,7 +34,7 @@
 </body>
 <script type="module">
     import { GUI } from '../js/dat.gui.module.js';
-    import { Vector } from  '../js/mr.vector.js';
+    import { Vector } from '../js/mr.vector.js';
 
     document.getElementById("savecanvas").addEventListener("click", savecanvas);
 
@@ -132,6 +138,11 @@
         let ctx = document.getElementById('canvas').getContext('2d');
         let tint_ctx = document.getElementById('tint').getContext('2d');
 
+        let canvas2 = document.createElement("canvas");
+        canvas2.width = 3617;
+        canvas2.height = 568;
+        let ctx2 = canvas2.getContext("2d");
+
         ctx.save();
         // clear background. Get the paint on effect by commenting it out
         // ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -201,23 +212,54 @@
         // ctx.filter = 'hue-rotate(45deg)'
         // myCanvas.offscreenCanvas.width = 3617;
         // myCanvas.offscreenCanvas.height = 568;
-        // tint_ctx.fillStyle = 'yellow'
+        // tint_ctx.globalAlpha = 0.0;
+        // tint_ctx.fillStyle = 'rgba(255, 0, 0, 0)'
         // tint_ctx.fillRect(0, 0, 3617, 568)
+        // tint_ctx.clearRect(0, 0, 3617, 568)
+
         // tint_ctx.draw
+        // tint_ctx.globalCompositeOperation = "destination-atop"
+
+        ctx2.globalCompositeOperation = "source-over"
+
         tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
         let imgData = tint_ctx.getImageData(0, 0, 3617, 568);
-        // ctx.drawImage(img, 3, 0, 3617, 568, 0, 923, 3617, 568)
-        // var i;
-        // for (i = 0; i < imgData.data.length; i += 4) {
-        //     imgData.data[i] = 255 - imgData.data[i];
-        //     imgData.data[i + 1] = 255 - imgData.data[i + 1];
-        //     imgData.data[i + 2] = 255 - imgData.data[i + 2];
-        //     imgData.data[i + 3] = 255;
-        // }
+
+        let imgDataDest = ctx.getImageData(0, 932, 3617, 568);
+
+        // ctx2.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
+        // let c2imgData = ctx2.getImageData(0, 0, 3617, 568);
+
+        ctx.drawImage(img, 3, 0, 3617, 568, 0, 923, 3617, 568)
+
+        var i;
+        for (i = 0; i < imgData.data.length; i += 4) {
+            if (imgData.data[i+3] > 0){
+                // imgData.data[i] = imgDataDest.data[i];
+                // imgData.data[i + 1] = imgDataDest.data[i + 1];
+                // imgData.data[i + 2] = imgDataDest.data[i + 2];
+                // imgData.data[i] = imgData.data[i];
+                // imgData.data[i + 1] = imgData.data[i + 1];
+                // imgData.data[i + 2] = imgData.data[i + 2];
+            }
+            else {
+                // imgData.data[i] = imgDataDest.data[i];
+                // imgData.data[i + 1] = imgDataDest.data[i + 1];
+                // imgData.data[i + 2] = imgDataDest.data[i + 2];
+            }
+
+            //imgData.data[i + 3] = imgData.data[i + 3];
+        }
+        // ctx.globalCompositeOperation = "source-over"
+
+        // ctx.putImageData(imgData, 0, 932); 
+
 
         // ctx.putImageData(imgData, 3, 0, 3617, 568, 0, 923, 3617, 568); 
-        // ctx.putImageData(imgData, 3, 923); 
 
+        //ctx.putImageData(imgData, 3, 923); 
+        // ctx.putImageData(c2imgData, 3, 923); 
+        // ctx.drawImage(c2imgData, 3, 932)
 
         // var imgData = ctx.getImageData(0, 923, 1617, 568);
 
@@ -229,7 +271,7 @@
         //     imgData.data[i + 3] = 255;
         // }
 
-        // ctx.putImageData(imgData, 3, 0); 
+        // ctx.putImageData(imgData, 3, 0, 0, 923, 3617, 568); 
 
         ctx.fillStyle = 'black'
         ctx.font = '12px serif';
