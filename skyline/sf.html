@@ -28,7 +28,7 @@
 
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
-    <canvas id="canvas" width="2998" height="2025"></canvas>
+    <canvas id="canvas" width="3617" height="2025"></canvas>
     <canvas id="tint" width="3617" height="568"></canvas>
     <input type="button" value="save" id="savecanvas">
 </body>
@@ -68,6 +68,7 @@
     let r1 = Math.floor(Math.random() * canvas.height)
 
     let img = new Image();
+    let image = new Image();
 
     let date = Date.now();
 
@@ -76,6 +77,8 @@
         img.src = 'sheets/1x/sf.png'
         window.requestAnimationFrame(draw);
         let ctx = document.getElementById('canvas').getContext('2d');
+        let tint_ctx = document.getElementById('tint').getContext('2d');
+        let tint_canvas = document.getElementById('tint')
         var gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
         gradient.addColorStop(0, `rgba(${prg}, ${pgg}, ${pbg}, ${pag})`);
         gradient.addColorStop(.5, `rgba(${pr2g}, ${pg2g}, ${pb2g}, ${pa2g})`);
@@ -83,6 +86,28 @@
         ctx.fillStyle = gradient;
 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+
+        image.id = "pic";
+        img.addEventListener('load', function () {
+
+            // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
+
+            // tint_ctx.fillStyle = 'orange'
+            tint_ctx.fillStyle = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
+            tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
+            tint_ctx.globalCompositeOperation = 'source-atop'
+            tint_ctx.fillRect(0, 0, 3617, 568)
+
+            image.src = tint_canvas.toDataURL();
+            image.addEventListener('load', function () {
+                ctx.drawImage(image, 0, 923)
+            }, false);
+
+        }, false);
+
+
+
     }
 
     function randn_bm(min, max, skew) {
@@ -202,9 +227,9 @@
         let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
         ctx.drawImage(img, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
 
-
         ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
-
+        // ctx.drawImage(image, 0, 1391, 3617, 568, 0, 923, 3617, 568)
+        ctx.drawImage(image, 0, 923)
 
 
         // slice of bridge and city
@@ -220,36 +245,36 @@
         // tint_ctx.draw
         // tint_ctx.globalCompositeOperation = "destination-atop"
 
-        ctx2.globalCompositeOperation = "source-over"
+        // ctx2.globalCompositeOperation = "source-over"
 
-        tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
-        let imgData = tint_ctx.getImageData(0, 0, 3617, 568);
+        // tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
+        // let imgData = tint_ctx.getImageData(0, 0, 3617, 568);
 
-        let imgDataDest = ctx.getImageData(0, 932, 3617, 568);
+        // let imgDataDest = ctx.getImageData(0, 932, 3617, 568);
 
         // ctx2.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
         // let c2imgData = ctx2.getImageData(0, 0, 3617, 568);
 
-        ctx.drawImage(img, 3, 0, 3617, 568, 0, 923, 3617, 568)
+        // ctx.drawImage(img, 3, 0, 3617, 568, 0, 923, 3617, 568)
 
-        var i;
-        for (i = 0; i < imgData.data.length; i += 4) {
-            if (imgData.data[i+3] > 0){
-                // imgData.data[i] = imgDataDest.data[i];
-                // imgData.data[i + 1] = imgDataDest.data[i + 1];
-                // imgData.data[i + 2] = imgDataDest.data[i + 2];
-                // imgData.data[i] = imgData.data[i];
-                // imgData.data[i + 1] = imgData.data[i + 1];
-                // imgData.data[i + 2] = imgData.data[i + 2];
-            }
-            else {
-                // imgData.data[i] = imgDataDest.data[i];
-                // imgData.data[i + 1] = imgDataDest.data[i + 1];
-                // imgData.data[i + 2] = imgDataDest.data[i + 2];
-            }
+        // var i;
+        // for (i = 0; i < imgData.data.length; i += 4) {
+        //     if (imgData.data[i+3] > 0){
+        //         // imgData.data[i] = imgDataDest.data[i];
+        //         // imgData.data[i + 1] = imgDataDest.data[i + 1];
+        //         // imgData.data[i + 2] = imgDataDest.data[i + 2];
+        //         // imgData.data[i] = imgData.data[i];
+        //         // imgData.data[i + 1] = imgData.data[i + 1];
+        //         // imgData.data[i + 2] = imgData.data[i + 2];
+        //     }
+        //     else {
+        //         // imgData.data[i] = imgDataDest.data[i];
+        //         // imgData.data[i + 1] = imgDataDest.data[i + 1];
+        //         // imgData.data[i + 2] = imgDataDest.data[i + 2];
+        //     }
 
-            //imgData.data[i + 3] = imgData.data[i + 3];
-        }
+        //     //imgData.data[i + 3] = imgData.data[i + 3];
+        // }
         // ctx.globalCompositeOperation = "source-over"
 
         // ctx.putImageData(imgData, 0, 932); 
