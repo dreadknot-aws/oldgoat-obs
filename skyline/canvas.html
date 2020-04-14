@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>San Francisco, California</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgba(46, 38, 116, 0.835);
+            background: transparent;
+            /* overflow: hidden; */
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(12, 230, 121);
+            margin: 0;
+        }
+
+        #tint {
+            background: transparent;
+            background-color: rgb(169, 26, 182)
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <canvas id="frame" width="1280" height="720"></canvas> -->
+    <canvas id="canvas" width="2998" height="2025"></canvas>
+    <canvas id="tint" width="3617" height="568"></canvas>
+    <input type="button" value="save" id="savecanvas">
+</body>
+<script type="module">
+    import { GUI } from '../js/dat.gui.module.js';
+    import { Vector } from '../js/mr.vector.js';
+
+    document.getElementById("savecanvas").addEventListener("click", savecanvas);
+
+
+    let img = new Image();
+
+
+    function init() {
+        // img.src = 'sheets/path1459.png';
+        img.src = 'sheets/1x/sf.png'
+        window.requestAnimationFrame(draw);
+        let ctx = document.getElementById('canvas').getContext('2d');
+        let tint_ctx = document.getElementById('tint').getContext('2d');
+        let canvas = document.getElementById('tint')
+        let image = new Image();
+        image.id = "pic";
+        img.addEventListener('load', function () {
+            // ctx.fillRect(0, 0, 3000, 2000)
+            ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
+            tint_ctx.fillStyle = 'pink'
+
+            tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
+            tint_ctx.globalCompositeOperation = 'source-atop'
+
+            tint_ctx.fillRect(0, 0, 3617, 568)
+
+            tint_ctx.strokeRect(10, 10, 2999, 500)
+            // let dataURL = canvas.toDataURL();
+            image.src = canvas.toDataURL();
+            image.addEventListener('load', function () {
+                ctx.drawImage(image, 0, 923)
+            }, false);
+            // let imgData = tint_ctx.getImageData(0, 0, 3617, 568);
+            // ctx.putImageData(imgData, 0, 0); 
+
+
+        }, false);
+
+
+    }
+
+    function randn_bm(min, max, skew) {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+        while (v === 0) v = Math.random();
+        let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+        num = num / 10.0 + 0.5; // Translate to 0 -> 1
+        if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+        num = Math.pow(num, skew); // Skew
+        num *= max - min; // Stretch to fill range
+        num += min; // offset to min
+        return num;
+    }
+
+
+    function savecanvas() {
+        console.log("Save")
+        var canvas = document.getElementById('canvas');
+
+        canvas.toBlob(function (blob) {
+            var newImg = document.createElement('img'),
+                url = URL.createObjectURL(blob);
+
+            newImg.onload = function () {
+                // no longer need to read the blob so it's revoked
+                URL.revokeObjectURL(url);
+            };
+
+            newImg.src = url;
+            document.body.appendChild(newImg);
+        });
+    }
+
+
+
+    function draw() {
+        // let ctx = document.getElementById('canvas').getContext('2d');
+
+        // ctx.save();
+
+        // let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
+        // ctx.drawImage(img, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
+
+        // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
+
+        // ctx.drawImage(img, 3, 0, 3617, 568, 0, 923, 3617, 568)
+
+        // ctx.restore();
+
+        window.requestAnimationFrame(draw);
+    }
+
+    init();
+
+</script>
+
+</html>
