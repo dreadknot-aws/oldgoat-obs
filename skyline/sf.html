@@ -38,6 +38,11 @@
 
     document.getElementById("savecanvas").addEventListener("click", savecanvas);
 
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        }
 
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
@@ -94,7 +99,7 @@
             // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
 
             // tint_ctx.fillStyle = 'orange'
-            tint_ctx.fillStyle = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
+            tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0,255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
             tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
             tint_ctx.globalCompositeOperation = 'source-atop'
             tint_ctx.fillRect(0, 0, 3617, 568)
