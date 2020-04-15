@@ -32,7 +32,7 @@
     <canvas id="tint" width="3617" height="568"></canvas>
     <input type="button" value="save" id="savecanvas">
 </body>
-<script type="module">
+<script type="module"> 
     import { GUI } from '../js/dat.gui.module.js';
     import { Vector } from '../js/mr.vector.js';
 
@@ -76,6 +76,8 @@
     let image = new Image();
 
     let date = Date.now();
+
+
 
     function init() {
         // img.src = 'sheets/path1459.png';
@@ -204,7 +206,7 @@
             velocity.y = velocity.y * -1;
         }
 
-        if ((frameLocation.x > canvas.width * .75) || (frameLocation.x < 0)) {
+        if ((frameLocation.x > canvas.width - 1280) || (frameLocation.x < 0)) {
             frameVelocity.x = frameVelocity.x * -1;
         }
         if ((frameLocation.y > canvas.height) || (frameLocation.y < 0)) {
