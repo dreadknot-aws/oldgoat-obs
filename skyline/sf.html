@@ -100,6 +100,7 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 
+
         image.id = "pic";
         cloud.id = "cloud"
         img.addEventListener('load', function () {
@@ -118,15 +119,25 @@
             }, false);
 
             cloud_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
+            
+            
+            
+            let cloud_gradient = cloud_ctx.createRadialGradient(0, 0, 1000, 3000, 500, 1000);
+            cloud_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            cloud_gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            cloud_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            cloud_ctx.fillStyle = cloud_gradient
+            // cloud_ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             cloud_ctx.drawImage(img, 0, 574, 3412, 810, 0, 0, 3412, 810)
             cloud_ctx.globalCompositeOperation = 'source-atop'
             cloud_ctx.fillRect(0, 0, 3412, 810)
-
             cloud.src = cloud_canvas.toDataURL();
             cloud.addEventListener('load', function () {
                 // ctx.drawImage(cloud, 0, 574)
             }, false);
 
+            ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
 
         }, false);
 
@@ -233,6 +244,11 @@
         location.add(velocity);
         frameLocation.add(frameVelocity)
 
+
+        // ctx.fillStyle = gradient;
+
+        // ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         //3000x2024
         //  top
         // ctx.drawImage(img, 0, 0, 2992, 1088, 0, 0, 2992, 1088)
@@ -246,8 +262,17 @@
         // // middle
         // ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
 
+        // ctx.globalCompositeOperation = "source-in"
+        ctx.save();
+        // ctx.globalCompositeOperation = "source-in"
 
         ctx.drawImage(cloud, 0, 200)
+
+        ctx.restore();
+
+
+
+
         let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
         ctx.drawImage(img, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
 
