@@ -109,6 +109,14 @@
 
             // tint_ctx.fillStyle = 'orange'
             tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0,255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
+            let tint_gradient = tint_ctx.createRadialGradient(0, 0, 1500, 3000, 500, 1000);
+            tint_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            tint_gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            tint_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            tint_ctx.fillStyle = tint_gradient
+            
+            
+            
             tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
             tint_ctx.globalCompositeOperation = 'source-atop'
             tint_ctx.fillRect(0, 0, 3617, 568)
