@@ -34,17 +34,20 @@
 
     <input type="button" value="save" id="savecanvas">
 </body>
-<script type="module"> 
+<script type="module">
     import { GUI } from '../js/dat.gui.module.js';
     import { Vector } from '../js/mr.vector.js';
 
     document.getElementById("savecanvas").addEventListener("click", savecanvas);
 
-        function getRandomIntInclusive(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
-        }
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+    }
+
+
+
 
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
@@ -80,7 +83,64 @@
 
     let date = Date.now();
 
+        function drawPaintBrush(ctx, screenX, screenY, radius=1280) {
 
+            let redStartMax = 0
+            let blueStartMax = 0
+            let greenStartMax = 0
+
+            let pwidth = Math.floor(Math.random() * 25)
+            let pheight = Math.floor(Math.random() * 25)
+
+            let redRangeStart = Math.floor(Math.random() * 255)
+            let blueRangeStart = Math.floor(Math.random() * 255)
+            let greenRangeStart = Math.floor(Math.random() * 255)
+
+            let redRangeEnd = Math.floor(Math.random() * 255)
+            let blueRangeEnd = Math.floor(Math.random() * 255)
+            let greenRangeEnd = Math.floor(Math.random() * 255)
+
+            let gredRangeStart = Math.floor(Math.random() * 255)
+            let gblueRangeStart = Math.floor(Math.random() * 255)
+            let ggreenRangeStart = Math.floor(Math.random() * 255)
+
+            let gredRangeEnd = Math.floor(Math.random() * 255)
+            let gblueRangeEnd = Math.floor(Math.random() * 255)
+            let ggreenRangeEnd = Math.floor(Math.random() * 255)
+
+            for (let i = 0; i < 50; i++) {
+                let cx = Math.floor(randn_bm(screenX, screenX + radius, 1))
+                let cy = Math.floor(randn_bm(screenY, screenY + radius, 1))
+
+                let pr = randn_bm(redRangeStart, redRangeEnd, 1)
+                let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
+                let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
+                let pa = randn_bm(200, 255, 1)
+
+                let pr2 = randn_bm(redRangeStart, redRangeEnd, 1)
+                let pg2 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+                let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+                let pa2 = randn_bm(200, 255, 1)
+
+                let pr3 = randn_bm(redRangeStart, redRangeEnd, 1)
+                let pg3 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+                let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+                let pa3 = randn_bm(200, 255, 1)
+
+                let fblur = Math.floor(Math.random() * 1)
+                let brush_size = Math.random() * (1.5 - .5) + .5
+                let brush_distance = Math.random() * (5 - 1) + 1
+                // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+                let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
+                gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+                gradient.addColorStop(.5, `rgba(${pr2}, ${pg2}, ${pb2}, ${pa2})`);
+                gradient.addColorStop(1, `rgba(${pr3}, ${pg3}, ${pb3}, ${pa3})`);
+                ctx.fillStyle = gradient;
+
+                // ctx.filter = `blur(${fblur}px)`
+                ctx.fillRect(cx, cy, pwidth, pheight);
+            }
+        }
 
     function init() {
         // img.src = 'sheets/path1459.png';
@@ -108,15 +168,15 @@
             // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
 
             // tint_ctx.fillStyle = 'orange'
-            tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0,255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
+            tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
             let tint_gradient = tint_ctx.createRadialGradient(0, 0, 1500, 3000, 500, 1000);
             tint_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
             tint_gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
             tint_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
             tint_ctx.fillStyle = tint_gradient
-            
-            
-            
+
+
+
             tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
             tint_ctx.globalCompositeOperation = 'source-atop'
             tint_ctx.fillRect(0, 0, 3617, 568)
@@ -127,15 +187,17 @@
             }, false);
 
             cloud_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
-            
-            
-            
+
+
+
             let cloud_gradient = cloud_ctx.createRadialGradient(0, 0, 1000, 3000, 500, 1000);
             cloud_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
             cloud_gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
             cloud_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
             cloud_ctx.fillStyle = cloud_gradient
             // cloud_ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // cloud_ctx.globalAlpha = 0.5;
 
             cloud_ctx.drawImage(img, 0, 574, 3412, 810, 0, 0, 3412, 810)
             cloud_ctx.globalCompositeOperation = 'source-atop'
@@ -274,7 +336,10 @@
         ctx.save();
         // ctx.globalCompositeOperation = "source-in"
 
+        // ctx.globalAlpha = 0.1;
+
         ctx.drawImage(cloud, 0, 200)
+        // ctx.globalAlpha = 1;
 
         ctx.restore();
 
@@ -383,15 +448,11 @@
         // let pb3 = randn_bm(0, 255, 1)
         // let pa3 = randn_bm(200, 255, 1)
 
-
-
         for (let i = 0; i < 50; i++) {
             let cx = Math.floor(randn_bm(frameLocation.x, frameLocation.x + 1280, 1))
             let cy = Math.floor(randn_bm(frameLocation.y - 360, frameLocation.y + 720, 1))
             let pwidth = Math.floor(Math.random() * 25)
             let pheight = Math.floor(Math.random() * 25)
-
-
 
             let pr = randn_bm(redRangeStart, redRangeEnd, 1)
             let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
@@ -421,6 +482,9 @@
             // ctx.filter = `blur(${fblur}px)`
             ctx.fillRect(cx, cy, pwidth, pheight);
         }
+
+        
+        drawPaintBrush(ctx, frameLocation.x, frameLocation.y + 200)
 
 
         ctx.restore();
