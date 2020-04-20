@@ -28,9 +28,9 @@
 
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
-    <canvas id="canvas" width="3617" height="2025"></canvas>
-    <canvas id="tint" width="3617" height="568"></canvas>
-    <canvas id="cloud" width="3412" height="810"></canvas>
+    <canvas id="canvas" width="3617" height="2025" hidden></canvas>
+    <canvas id="tint" width="3617" height="568" hidden></canvas>
+    <canvas id="cloud" width="3412" height="810" hidden></canvas>
 
     <input type="button" value="save" id="savecanvas">
 </body>
@@ -83,7 +83,7 @@
 
     let date = Date.now();
 
-        function drawPaintBrush(ctx, screenX, screenY, radius=1280, redShift=0, blueShift=0, greenShift=0,
+        function drawPaintBrush(ctx, screenX, screenY, radius=1280, redShift=-50, blueShift=100, greenShift=-50,
                                     redMax=100, blueMax=255, greenMax=255,
                                     redStartMax=0, blueStartMax=100, greenStartMax=50
         ) {
@@ -113,17 +113,17 @@
 
                 let pr = randn_bm(redRangeStart + redShift, redRangeEnd + redShift, 1)
                 let pg = randn_bm(blueRangeStart + blueShift, blueRangeEnd + blueShift, 1)
-                let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
+                let pb = randn_bm(greenRangeStart + greenShift, greenRangeEnd + greenShift, 1)
                 let pa = randn_bm(200, 255, 1)
 
                 let pr2 = randn_bm(redRangeStart + redShift, redRangeEnd + redShift, 1)
                 let pg2 = randn_bm(blueRangeStart + blueShift, blueRangeEnd + blueShift, 1)
-                let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+                let pb2 = randn_bm(greenRangeStart + greenShift, greenRangeEnd + greenShift, 1)
                 let pa2 = randn_bm(200, 255, 1)
 
                 let pr3 = randn_bm(redRangeStart + redShift, redRangeEnd + redShift, 1)
                 let pg3 = randn_bm(blueRangeStart + blueShift, blueRangeEnd + blueShift, 1)
-                let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+                let pb3 = randn_bm(greenRangeStart + greenShift, greenRangeEnd + greenShift, 1)
                 let pa3 = randn_bm(200, 255, 1)
 
                 let fblur = Math.floor(Math.random() * 1)
