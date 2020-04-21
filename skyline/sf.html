@@ -168,7 +168,7 @@
                 ctx.beginPath()
             ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
             ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
-            ctx.arc(2500, 1400, 500 + i * 100, (Math.PI / 180) * 180, 0, 0)
+            ctx.arc(2000, 1415, 1000 + i * 100, (Math.PI / 180) * 180, 0, 0)
             ctx.stroke()
             ctx.fill()
         }
@@ -374,7 +374,7 @@
         // ctx.globalAlpha = 0.1;
         // ctx.drawImage(img, 3615, 318, 3599, 1090, 0, 200, 3599, 1090)
 
-        // ctx.drawImage(cloud, 0, 100)
+        ctx.drawImage(cloud, 0, 100)
         // ctx.globalAlpha = 1;
 
         ctx.restore();
