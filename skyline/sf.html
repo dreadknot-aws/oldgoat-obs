@@ -164,9 +164,9 @@
             //     0,
             //     ${Math.floor(255 - 42.5 * i)},
             //     ${Math.floor(255 - 42.5 * i)})`;
-
-                ctx.beginPath()
-            ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
+            ctx.lineWidth = 5
+            ctx.beginPath()
+            ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
             ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
             ctx.arc(2000, 1415, 1000 + i * 100, (Math.PI / 180) * 180, 0, 0)
             ctx.stroke()
@@ -193,11 +193,11 @@
             // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
 
             // tint_ctx.fillStyle = 'orange'
-            tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
+            tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
             let tint_gradient = tint_ctx.createRadialGradient(0, 0, 1500, 3000, 500, 1000);
-            tint_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
-            tint_gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
-            tint_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            tint_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 0)`);
+            tint_gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`);
+            tint_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`);
             tint_ctx.fillStyle = tint_gradient
 
 
@@ -212,14 +212,14 @@
                 ctx.drawImage(image, 0, 923)
             }, false);
 
-            cloud_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`
+            cloud_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
 
 
 
             let cloud_gradient = cloud_ctx.createRadialGradient(0, 0, 1000, 3000, 250, 1000);
-            cloud_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
-            cloud_gradient.addColorStop(.75, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
-            cloud_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)})`);
+            cloud_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`);
+            cloud_gradient.addColorStop(.75, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`);
+            cloud_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .1)`);
             cloud_ctx.fillStyle = cloud_gradient
             // cloud_ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -457,6 +457,8 @@
         // ctx.putImageData(imgData, 3, 0, 0, 923, 3617, 568); 
 
         ctx.fillStyle = 'black'
+        ctx.lineWidth = 1
+
         ctx.font = '12px serif';
         ctx.strokeText('Dreadknot:' + date, 850, 1400)
 
@@ -522,12 +524,38 @@
 
         drawPaintBrush(ctx, frameLocation.x, frameLocation.y + 150)
 
+        // This works
+        // let cloud_el = document.getElementById('cloud');
+        // ctx.drawImage(cloud_el, 3, 0, 3617, 568, 0, 923, 3617, 568)
+
+
+        // for (let i = 6; i > 0; i--) {
+        //     // ctx.strokeStyle = `rgb(
+        //     //     0,
+        //     //     ${Math.floor(255 - 42.5 * i)},
+        //     //     ${Math.floor(255 - 42.5 * i)})`;
+        //     // ctx.fillStyle = `rgb(
+        //     //     0,
+        //     //     ${Math.floor(255 - 42.5 * i)},
+        //     //     ${Math.floor(255 - 42.5 * i)})`;
+
+        //     // ctx.beginPath(rainbow)
+        //             let rainbow = new Path2D();
+
+        //     rainbow.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
+        //     rainbow.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
+        //     rainbow.arc(2000, 1415, 1000 + i * 100, (Math.PI / 180) * 180, 0, 0)
+        //     ctx.stroke(rainbow)
+        //     ctx.fill(rainbow)
+        // }
 
         ctx.restore();
 
         let frame_ctx = document.getElementById('frame').getContext('2d');
         frame_ctx.putImageData(ctx.getImageData(frameLocation.x, frameLocation.y, 1280, 720), 0, 0);
         // frame_ctx.drawImage(ctx.i, 0, 0)
+
+          
 
         window.requestAnimationFrame(draw);
     }
