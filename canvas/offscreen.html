@@ -52,7 +52,7 @@
             }
 
             checkEdges() {
-                console.log('checkEdges:', this.location.x)
+                // console.log('checkEdges:', this.location.x)
 
                 if (this.location.x > .99) {
                     this.velocity.x = -.01;
@@ -73,19 +73,39 @@
                 // }
             }
         }
-    
+
 
 
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
         var tick = 0;
-        var wind = new Vector(.01, .01);
+        var wind = new Vector(0, 0);
+        var mouse = new Vector(0, 0)
 
         var colorStop = new Boat();
+        var running = false;
+        var raf;
+
+        canvas.addEventListener('mousemove', function (e) {
+            if (!running) {
+                // clear();
+                // ball.x = e.clientX;
+                // ball.y = e.clientY;
+                // ball.draw();
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+
+            }
+        });
+
+        canvas.addEventListener('mouseout', function (e) {
+            window.cancelAnimationFrame(loop);
+            running = false;
+        });
 
         function loop() {
             window.requestAnimationFrame(loop);
-            // colorStop.applyForce(wind);
+            colorStop.applyForce(wind);
             colorStop.checkEdges();
 
             colorStop.update();
@@ -119,6 +139,24 @@
 
                 ctx_background.fillStyle = gradient;
                 ctx_background.fillRect(0, 0, background.width, background.height);
+                
+                ctx_background.save();
+                ctx_background.globalCompositeOperation = 'destination-atop';
+                // ctx_background.fillStyle = 'rgba(255,255,255,1)';
+                ctx_background.translate(50, 50)
+                ctx_background.fillRect(90,150, 25, 25);
+                ctx_background.beginPath();
+                ctx_background.moveTo(75, 25);
+                ctx_background.quadraticCurveTo(25, 25, 25, 62.5);
+                ctx_background.quadraticCurveTo(25, 100, 50, 100);
+                ctx_background.quadraticCurveTo(50, 120, 30, 125);
+                ctx_background.quadraticCurveTo(60, 120, 65, 100);
+                ctx_background.quadraticCurveTo(125, 100, 125, 62.5);
+                ctx_background.quadraticCurveTo(125, 25, 75, 25);
+                ctx_background.stroke();
+                ctx_background.fill();
+                ctx_background.restore();
+
 
 
                 ctx.drawImage(background, 0, 0, canvas.width, canvas.height, 0, 0, background.width, background.height)
@@ -138,7 +176,7 @@
             }
         }
 
-        window.requestAnimationFrame(loop);
+        raf = window.requestAnimationFrame(loop);
 
 
     </script>
