@@ -37,7 +37,7 @@
 
             update() {
                 this.velocity.add(this.acceleration)
-                this.velocity.limit(this.limit)
+                // this.velocity.limit(this.limit)
                 this.location.add(this.velocity)
                 this.acceleration.mult(0)
             }
@@ -55,22 +55,22 @@
                 console.log('checkEdges:', this.location.x)
 
                 if (this.location.x > .99) {
-                    this.velocity.x *= -.10;
-                    // this.location.x = 1000
+                    this.velocity.x = -.01;
+                    this.location.x = .99
                 } else if (this.location.x < .01) {
-                    // this.location.x = 1000
-                    this.velocity.x *= .10;
+                    this.location.x = .01
+                    this.velocity.x = .01;
                 }
 
-                if (this.location.y > .99) {
-                    // this.location.y = 500
-                    this.velocity.y *= -.01;
+                // if (this.location.y > .99) {
+                //     // this.location.y = 500
+                //     this.velocity.y *= -.01;
 
-                } else if (this.location.y < .01) {
-                    // this.location.y = 500
-                    this.velocity.y *= -.01;
+                // } else if (this.location.y < .01) {
+                //     // this.location.y = 500
+                //     this.velocity.y *= -.01;
 
-                }
+                // }
             }
         }
     
@@ -124,6 +124,7 @@
                 ctx.drawImage(background, 0, 0, canvas.width, canvas.height, 0, 0, background.width, background.height)
 
                 // Quadratric curves example
+                ctx.fillStyle = 'white';
                 ctx.beginPath();
                 ctx.moveTo(75, 25);
                 ctx.quadraticCurveTo(25, 25, 25, 62.5);
@@ -133,6 +134,7 @@
                 ctx.quadraticCurveTo(125, 100, 125, 62.5);
                 ctx.quadraticCurveTo(125, 25, 75, 25);
                 ctx.stroke();
+                ctx.fill();
             }
         }
 
