@@ -28,9 +28,9 @@
 
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
-    <canvas id="canvas" width="3617" height="2025"></canvas>
-    <canvas id="tint" width="3617" height="568" hidden></canvas>
-    <canvas id="cloud" width="3412" height="1090"></canvas>
+    <canvas id="canvas" width="2140" height="1430"></canvas>
+    <canvas id="tint" width="2140" height="1430"></canvas>
+    <canvas id="cloud" width="2140" height="1090"></canvas>
 
     <input type="button" value="save" id="savecanvas">
 </body>
@@ -49,8 +49,8 @@
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
 
-    let frameLocation = new Vector(975, 800);
-    let frameVelocity = new Vector(1, 0);
+    let frameLocation = new Vector(0, 700);
+    let frameVelocity = new Vector(1, 1);
 
     let redRangeStart = Math.floor(Math.random() * 255)
     let blueRangeStart = Math.floor(Math.random() * 255)
@@ -327,14 +327,14 @@
 
 
 
-            tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
+            tint_ctx.drawImage(img, 0, 0, 2140, 1430, 0, 0, 2140, 1430)
             tint_ctx.globalCompositeOperation = 'source-atop'
 
-            tint_ctx.fillRect(0, 0, 3617, 568)
+            tint_ctx.fillRect(0, 0, canvas.width, canvas.height)
 
             image.src = tint_canvas.toDataURL();
             image.addEventListener('load', function () {
-                ctx.drawImage(image, 0, 923)
+                ctx.drawImage(image, 0, 0)
             }, false);
 
             cloud_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
@@ -354,7 +354,7 @@
             // cloud_ctx.drawImage(img, 3615 , 318 , 3599 , 1090 , 0, 0, 3599 , 1090 )
             // cloud_ctx.globalAlpha = 0.5;
 
-            cloud_ctx.drawImage(img, 0, 574, 3412, 810, 0, 200, 3412, 810)
+            cloud_ctx.drawImage(img, 6100, 166, 366, 700, 0, 0, 366, 700)
             cloud_ctx.globalCompositeOperation = 'source-in'
             cloud_ctx.fillRect(0, 0, 3412, 1090)
             cloud.src = cloud_canvas.toDataURL();
@@ -459,19 +459,20 @@
         //     // ctx.filter = `blur(${fblur}px)`
         //     // ctx.fillRect(cx, cy, pwidth, pheight);
         // }
-
+            // console.log(frameLocation.y)
         if ((location.x > canvas.width) || (location.x < 0)) {
-            velocity.x = velocity.x * -1;
-        }
-        if ((location.y > canvas.height) || (location.y < 0)) {
-            velocity.y = velocity.y * -1;
-        }
-
-        if ((frameLocation.x > canvas.width - 1280) || (frameLocation.x < 0)) {
             frameVelocity.x = frameVelocity.x * -1;
         }
-        if ((frameLocation.y > canvas.height) || (frameLocation.y < 0)) {
-            frameLocation.y = frameLocation.y * -1;
+        if ((location.y > canvas.height) || (location.y < 0)) {
+            frameVelocity.y = frameVelocity.y * -1;
+        }
+
+        if ((frameLocation.x + 1280 > canvas.width) || (frameLocation.x < 0)) {
+            frameVelocity.x = frameVelocity.x * -1;
+        }
+        if ((frameLocation.y + 720 > canvas.height) || (frameLocation.y < 0)) {
+            // frameLocation.y = frameLocation.y * -1;
+            frameVelocity.y = frameVelocity.y * -1;
         }
 
         location.add(velocity);
@@ -507,20 +508,27 @@
         // ctx.globalAlpha = 0.1;
         // ctx.drawImage(img, 3615, 318, 3599, 1090, 0, 200, 3599, 1090)
 
-        ctx.drawImage(cloud, 0, 100)
+        ctx.drawImage(cloud, 0, 0)
         // ctx.globalAlpha = 1;
 
         ctx.restore();
 
+        ctx.filter = `brightness(50%) opacity(100%) invert(%75)`
+
+        ctx.drawImage(img, 6110, 0, 2140, 1430, -310, 0, 2140, 1430)
 
 
+        // let bridge = { x: 0, y: 0, width: 2140, height: 1430 }
+        // ctx.drawImage(img, 0, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
+        ctx.filter = `brightness(50%) opacity(100%) invert(75%)`
 
-        let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
-        ctx.drawImage(img, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
-
-        ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
+        ctx.drawImage(img, 2140, 0, 1836, 1430, 0, 0, 1836, 1430)
         // ctx.drawImage(image, 0, 1391, 3617, 568, 0, 923, 3617, 568)
-        ctx.drawImage(image, 0, 923)
+        // ctx.drawImage(image, 0, 923)
+        // ctx.drawImage(img, 4279, 0, 2140, 1430, 0, 0, 2140, 1430)
+        ctx.filter = `brightness(100%) opacity(100%) invert(0%)`
+
+        ctx.drawImage(image, 0, 0)
 
 
         // slice of bridge and city
@@ -619,43 +627,43 @@
         // let pb3 = randn_bm(0, 255, 1)
         // let pa3 = randn_bm(200, 255, 1)
 
-        for (let i = 0; i < 50; i++) {
-            let cx = Math.floor(randn_bm(frameLocation.x, frameLocation.x + 1280, 1))
-            let cy = Math.floor(randn_bm(frameLocation.y - 360, frameLocation.y + 1000, 1))
-            let pwidth = Math.floor(Math.random() * 25)
-            let pheight = Math.floor(Math.random() * 25)
+        // for (let i = 0; i < 50; i++) {
+        //     let cx = Math.floor(randn_bm(frameLocation.x, frameLocation.x + 1280, 1))
+        //     let cy = Math.floor(randn_bm(frameLocation.y - 360, frameLocation.y + 1000, 1))
+        //     let pwidth = Math.floor(Math.random() * 25)
+        //     let pheight = Math.floor(Math.random() * 25)
 
-            let pr = randn_bm(redRangeStart, redRangeEnd, 1)
-            let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
-            let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
-            let pa = randn_bm(200, 255, 1)
+        //     let pr = randn_bm(redRangeStart, redRangeEnd, 1)
+        //     let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
+        //     let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
+        //     let pa = randn_bm(200, 255, 1)
 
-            let pr2 = randn_bm(redRangeStart, redRangeEnd, 1)
-            let pg2 = randn_bm(blueRangeStart, blueRangeEnd, 1)
-            let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
-            let pa2 = randn_bm(200, 255, 1)
+        //     let pr2 = randn_bm(redRangeStart, redRangeEnd, 1)
+        //     let pg2 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+        //     let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+        //     let pa2 = randn_bm(200, 255, 1)
 
-            let pr3 = randn_bm(redRangeStart, redRangeEnd, 1)
-            let pg3 = randn_bm(blueRangeStart, blueRangeEnd, 1)
-            let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
-            let pa3 = randn_bm(200, 255, 1)
+        //     let pr3 = randn_bm(redRangeStart, redRangeEnd, 1)
+        //     let pg3 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+        //     let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+        //     let pa3 = randn_bm(200, 255, 1)
 
-            let fblur = Math.floor(Math.random() * 1)
-            let brush_size = Math.random() * (1.5 - .5) + .5
-            let brush_distance = Math.random() * (5 - 1) + 1
-            // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-            let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
-            gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
-            gradient.addColorStop(.5, `rgba(${pr2}, ${pg2}, ${pb2}, ${pa2})`);
-            gradient.addColorStop(1, `rgba(${pr3}, ${pg3}, ${pb3}, ${pa3})`);
-            ctx.fillStyle = gradient;
+        //     let fblur = Math.floor(Math.random() * 1)
+        //     let brush_size = Math.random() * (1.5 - .5) + .5
+        //     let brush_distance = Math.random() * (5 - 1) + 1
+        //     // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+        //     let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
+        //     gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+        //     gradient.addColorStop(.5, `rgba(${pr2}, ${pg2}, ${pb2}, ${pa2})`);
+        //     gradient.addColorStop(1, `rgba(${pr3}, ${pg3}, ${pb3}, ${pa3})`);
+        //     ctx.fillStyle = gradient;
 
-            // ctx.filter = `blur(${fblur}px)`
-            ctx.fillRect(cx, cy, pwidth, pheight);
-        }
+        //     // ctx.filter = `blur(${fblur}px)`
+        //     ctx.fillRect(cx, cy, pwidth, pheight);
+        // }
 
 
-        drawPaintBrush(ctx, frameLocation.x, frameLocation.y + 150)
+        // drawPaintBrush(ctx, frameLocation.x, frameLocation.y)
 
         // This works
         // let cloud_el = document.getElementById('cloud');
