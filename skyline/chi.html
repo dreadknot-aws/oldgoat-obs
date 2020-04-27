@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>San Francisco, California</title>
+    <title>chicago, illinois</title>
     <style>
         body {
             margin: 0;
@@ -80,9 +80,9 @@
 
     let date = Date.now();
 
-    function drawPaintBrush(ctx, screenX, screenY, radius = 1280, redShift = -50, blueShift = 100, greenShift = -50,
-        redMax = 100, blueMax = 255, greenMax = 255,
-        redStartMax = 0, blueStartMax = 100, greenStartMax = 50
+    function drawPaintBrush(ctx, screenX, screenY, radius = 1280, redShift = 0, blueShift = 0, greenShift = -0,
+        redMax = 255, blueMax = 255, greenMax = 255,
+        redStartMax = 0, blueStartMax = 0, greenStartMax = 0
     ) 
     {
 
@@ -105,24 +105,24 @@
         // let gblueRangeEnd = Math.floor(Math.random() * 255)
         // let ggreenRangeEnd = Math.floor(Math.random() * 255)
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 5; i++) {
             let cx = Math.floor(randn_bm(screenX, screenX + radius, 1))
             let cy = Math.floor(randn_bm(screenY, screenY + radius, 1))
 
             let pr = randn_bm(redRangeStart + redShift, redRangeEnd + redShift, 1)
             let pg = randn_bm(blueRangeStart + blueShift, blueRangeEnd + blueShift, 1)
             let pb = randn_bm(greenRangeStart + greenShift, greenRangeEnd + greenShift, 1)
-            let pa = randn_bm(200, 255, 1)
+            let pa = randn_bm(200, 255, .5)
 
             let pr2 = randn_bm(redRangeStart + redShift, redRangeEnd + redShift, 1)
             let pg2 = randn_bm(blueRangeStart + blueShift, blueRangeEnd + blueShift, 1)
             let pb2 = randn_bm(greenRangeStart + greenShift, greenRangeEnd + greenShift, 1)
-            let pa2 = randn_bm(200, 255, 1)
+            let pa2 = randn_bm(200, 255, .5)
 
             let pr3 = randn_bm(redRangeStart + redShift, redRangeEnd + redShift, 1)
             let pg3 = randn_bm(blueRangeStart + blueShift, blueRangeEnd + blueShift, 1)
             let pb3 = randn_bm(greenRangeStart + greenShift, greenRangeEnd + greenShift, 1)
-            let pa3 = randn_bm(200, 255, 1)
+            let pa3 = randn_bm(200, 255, .5)
 
             let fblur = Math.floor(Math.random() * 1)
             let brush_size = Math.random() * (1.5 - .5) + .5
@@ -280,23 +280,23 @@
 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        for (let i = 6; i > 0; i--) {
-            // ctx.strokeStyle = `rgb(
-            //     0,
-            //     ${Math.floor(255 - 42.5 * i)},
-            //     ${Math.floor(255 - 42.5 * i)})`;
-            // ctx.fillStyle = `rgb(
-            //     0,
-            //     ${Math.floor(255 - 42.5 * i)},
-            //     ${Math.floor(255 - 42.5 * i)})`;
-            ctx.lineWidth = 5
-            ctx.beginPath()
-            ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
-            ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
-            ctx.arc(2000, 1415, 1000 + i * 100, (Math.PI / 180) * 180, 0, 0)
-            ctx.stroke()
-            ctx.fill()
-        }
+        // for (let i = 6; i > 0; i--) {
+        //     // ctx.strokeStyle = `rgb(
+        //     //     0,
+        //     //     ${Math.floor(255 - 42.5 * i)},
+        //     //     ${Math.floor(255 - 42.5 * i)})`;
+        //     // ctx.fillStyle = `rgb(
+        //     //     0,
+        //     //     ${Math.floor(255 - 42.5 * i)},
+        //     //     ${Math.floor(255 - 42.5 * i)})`;
+        //     ctx.lineWidth = 5
+        //     ctx.beginPath()
+        //     ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
+        //     ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
+        //     ctx.arc(2000, 1415, 1000 + i * 100, (Math.PI / 180) * 180, 0, 0)
+        //     ctx.stroke()
+        //     ctx.fill()
+        // }
 
 
         // ctx.fillStyle = `rgb(255, 0, 0)`
@@ -663,7 +663,7 @@
         // }
 
 
-        // drawPaintBrush(ctx, frameLocation.x, frameLocation.y)
+        drawPaintBrush(ctx, frameLocation.x, frameLocation.y)
 
         // This works
         // let cloud_el = document.getElementById('cloud');
