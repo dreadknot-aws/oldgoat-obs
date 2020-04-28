@@ -418,8 +418,21 @@
         ctx.restore();
 
 
+        ctx.filter = ``
 
+        ctx.fillRect(175,150,500,75)
+        ctx.filter = `brightness(100%) opacity(100%)`
 
+        ctx.strokeStyle = 'white'
+        ctx.strokeText('The Beat Bunker', 200, 200)
+
+        ctx.filter = `brightness(100%) opacity(75%)`
+
+        ctx.fillStyle = gradient
+        ctx.lineWidth = 5
+
+        ctx.font = '50px monospace';
+        ctx.fillText('The Beat Bunker', 200, 200)
 
         window.requestAnimationFrame(draw);
     }
