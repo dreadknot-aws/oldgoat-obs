@@ -231,6 +231,9 @@
 
     let aForce = new Vector(0, -.1)
 
+    let squarePointA = new Vector(Math.floor(Math.random() * 1280), Math.floor(Math.random() * 1280));
+    let squarePointB = new Vector(Math.floor(Math.random() * 1280), Math.floor(Math.random() * 1280));
+
     var paths = ['sheets/1x/drum1', 'sheets/1x/drum1', 'sheets/1x/drum2', 'sheets/1x/drum3', 'sheets/1x/drum']
     var comps = ['source-over',
         'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
@@ -420,11 +423,11 @@
 
         ctx.filter = ``
 
-        ctx.fillRect(175,150,500,75)
+        ctx.fillRect(squarePointA.x, squarePointA.y, squarePointB.x, squarePointB.y)
         ctx.filter = `brightness(100%) opacity(100%)`
 
         ctx.strokeStyle = 'white'
-        ctx.strokeText('The Beat Bunker', 200, 200)
+        // ctx.strokeText('The Beat Bunker', 200, 200)
 
         ctx.filter = `brightness(100%) opacity(75%)`
 
@@ -432,7 +435,7 @@
         ctx.lineWidth = 5
 
         ctx.font = '50px monospace';
-        ctx.fillText('The Beat Bunker', 200, 200)
+        // ctx.fillText('The Beat Bunker', 200, 200)
 
         window.requestAnimationFrame(draw);
     }
