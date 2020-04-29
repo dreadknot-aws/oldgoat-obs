@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
     <meta charset="utf-8" />
     <title>Canvas tutorial</title>
     <script type="module">
@@ -152,7 +153,7 @@ console.log(title.gradientColor[0])
                 ctx.fillStyle = gradient
                 ctx.lineWidth = title.lineWidth
 
-                ctx.font = 'bold 50px monospace';
+                ctx.font = 'bold 50px Monoton';
                 ctx.fillText('The BeatBunker', 20, 50)
             }
         }
@@ -170,7 +171,7 @@ console.log(title.gradientColor[0])
         }
     
         canvas {
-            width: 500px;
+            width: 700px;
             height: 75px;
             background-color: rgba(0, 0, 0, 0);
             margin: 0;
@@ -179,7 +180,7 @@ console.log(title.gradientColor[0])
 </head>
 
 <body>
-    <canvas id="canvas" width="500" height="75"></canvas>
+    <canvas id="canvas" width="700" height="75"></canvas>
     <canvas id="background" width="300" height="300" hidden></canvas>
 </body>
 
