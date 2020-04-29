@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Galindo&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Bangers&family=Faster+One&family=Galindo&family=Holtwood+One+SC&display=swap"
+    rel="stylesheet">
+<meta charset="utf-8" />
+    <title>Canvas tutorial</title>
+    <script type="module">
+        import { GUI } from '../js/dat.gui.module.js';
+        import { Vector } from '../js/mr.vector.js';
+
+        class Boat {
+            constructor() {
+                this.location = new Vector(0, 0);
+                this.velocity = new Vector(0, 0);
+                this.acceleration = new Vector(.01, 0);
+                this.size = 10
+                this.width = 0
+                this.mass = 10
+                this.limit = .9
+
+            }
+
+            update() {
+                this.velocity.add(this.acceleration)
+                // this.velocity.limit(this.limit)
+                this.location.add(this.velocity)
+                this.acceleration.mult(0)
+            }
+
+            applyForce(force) {
+                let f = Vector.div(force, this.mass)
+                this.acceleration.add(f)
+            }
+
+            draw(ctx) {
+
+            }
+
+            checkEdges() {
+                // console.log('checkEdges:', this.location.x)
+
+                if (this.location.x > .99) {
+                    this.velocity.x = -.01;
+                    this.location.x = .99
+                } else if (this.location.x < .01) {
+                    this.location.x = .01
+                    this.velocity.x = .01;
+                }
+
+            }
+        }
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        }
+
+        function randn_bm(min, max, skew) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+            while (v === 0) v = Math.random();
+            let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+            num = num / 10.0 + 0.5; // Translate to 0 -> 1
+            if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+            num = Math.pow(num, skew); // Skew
+            num *= max - min; // Stretch to fill range
+            num += min; // offset to min
+            return num;
+        }
+
+
+        var canvas = document.getElementById('canvas');
+        var background = document.getElementById('background');
+        var tick = 0;
+        var wind = new Vector(0, 0);
+        var mouse = new Vector(0, 0)
+
+        var colorStop = new Boat();
+        var running = false;
+        var raf;
+
+
+        var title = {
+            text: 'Happy Hour',
+            gradientColor: [
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255)
+            ],
+            gradientAlpha: [
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random()
+            ],
+            lineWidth: getRandomIntInclusive(0, 20),
+            fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
+            randomFont: getRandomIntInclusive(0, 3)
+
+        }
+
+console.log(title.gradientColor[0])
+
+        canvas.addEventListener('mousemove', function (e) {
+            if (!running) {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            }
+        });
+
+        canvas.addEventListener('mouseout', function (e) {
+            window.cancelAnimationFrame(loop);
+            running = false;
+        });
+
+        function loop() {
+            window.requestAnimationFrame(loop);
+            colorStop.applyForce(wind);
+            colorStop.checkEdges();
+            colorStop.update();
+            draw();
+        }
+
+        function moveColorStop() {
+            colorStop.location.x = colorStop.location.x + .01
+
+        }
+
+        function draw() {
+
+            if (canvas.getContext) {
+                let ctx = canvas.getContext('2d');
+                let ctx_background = background.getContext('2d')
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx_background.clearRect(0, 0, background.width, background.height);
+
+                let gradient = ctx.createLinearGradient(0, 0, background.width, background.height);
+
+                gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
+                gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[2]}`);
+                gradient.addColorStop(1, `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientAlpha[3]}`);
+
+                ctx.filter = ``
+
+                // ctx.fillRect(0, 0, 500, 75)
+                ctx.filter = `brightness(100%) opacity(100%)`
+
+                ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
+                ctx.strokeText(title.text, 20, 50)
+
+                ctx.filter = `brightness(100%) opacity(75%)`
+
+                ctx.fillStyle = gradient
+                ctx.lineWidth = title.lineWidth
+
+                ctx.font = `bold 50px ${title.fonts[title.randomFont]}`;
+                ctx.fillText(title.text, 20, 50)
+            }
+        }
+
+
+        raf = window.requestAnimationFrame(loop);
+
+
+    </script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+    
+        canvas {
+            width: 700px;
+            height: 75px;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="700" height="75"></canvas>
+    <canvas id="background" width="300" height="300" hidden></canvas>
+</body>
+
+</html>
