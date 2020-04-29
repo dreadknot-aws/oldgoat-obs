@@ -3,9 +3,11 @@
 
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Galindo&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Faster+One&family=Galindo&family=Holtwood+One+SC&display=swap"
+    rel="stylesheet">
+<meta charset="utf-8" />
     <title>Canvas tutorial</title>
     <script type="module">
         import { GUI } from '../js/dat.gui.module.js';
@@ -98,7 +100,9 @@
                 getRandomIntInclusive(0, 255)
             ],
             lineWidth: getRandomIntInclusive(0, 20),
-            fonts: ['Monoton', 'Black Ops One', 'Press Start 2P']
+            fonts: ['Monoton', 'Galindo', 'Holtwood One SC', 'Faster One'],
+            randomFont: getRandomIntInclusive(0, 3)
+
         }
 
 console.log(title.gradientColor[0])
@@ -156,7 +160,7 @@ console.log(title.gradientColor[0])
                 ctx.fillStyle = gradient
                 ctx.lineWidth = title.lineWidth
 
-                ctx.font = `bold 50px ${title.fonts[1]}`;
+                ctx.font = `bold 50px ${title.fonts[title.randomFont]}`;
                 ctx.fillText('The BeatBunker', 20, 50)
             }
         }
