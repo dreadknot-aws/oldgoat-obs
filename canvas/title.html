@@ -86,8 +86,15 @@
             gradientColor: [
                 getRandomIntInclusive(0, 255),
                 getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
                 getRandomIntInclusive(0, 255)
-            ]
+            ],
+            gradientAlpha: [
+                getRandomIntInclusive(0, 255)
+            ],
+            lineWidth: getRandomIntInclusive(0, 20)
         }
 
 console.log(title.gradientColor[0])
@@ -129,7 +136,7 @@ console.log(title.gradientColor[0])
                 let gradient = ctx.createLinearGradient(0, 0, background.width, background.height);
 
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]}`);
-                gradient.addColorStop(colorStop.location.x, 'black');
+                gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]}`);
                 gradient.addColorStop(1, `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[0]}`);
 
                 ctx.filter = ``
@@ -137,16 +144,16 @@ console.log(title.gradientColor[0])
                 // ctx.fillRect(0, 0, 500, 75)
                 ctx.filter = `brightness(100%) opacity(100%)`
 
-                ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]}`
-                ctx.strokeText('The Beat Bunker', 20, 50)
+                ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
+                ctx.strokeText('The BeatBunker', 20, 50)
 
                 ctx.filter = `brightness(100%) opacity(75%)`
 
                 ctx.fillStyle = gradient
-                ctx.lineWidth = 5
+                ctx.lineWidth = title.lineWidth
 
-                ctx.font = '50px monospace';
-                ctx.fillText('The Beat Bunker', 20, 50)
+                ctx.font = 'bold 50px monospace';
+                ctx.fillText('The BeatBunker', 20, 50)
             }
         }
 
