@@ -162,31 +162,36 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
-                let gradient = ctx.createLinearGradient(0, 0, background.width, background.height);
+                for (let i = 0; i < 6; i++) {
+                    for (var j = 0; j < 6; j++) {
+                        // ctx.save()
+                        ctx.translate(i*100, j*100)
+                        ctx.fillStyle = 'green'
+                        ctx.beginPath();
+                        ctx.moveTo(75, 50);
+                        ctx.lineTo(100, 75);
+                        ctx.lineTo(150, 50);
+                        ctx.lineTo(100, 25);
+                        ctx.fill();
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        // ctx.restore()
+                    }
+                }
 
-                gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
-                gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[2]}`);
-                gradient.addColorStop(1, `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientAlpha[3]}`);
 
-                ctx.filter = ``
 
-                ctx.fillStyle = `rgba(${ title.gradientColor[6] }, ${ title.gradientColor[7] }, ${ title.gradientColor[8] }, ${ title.gradientAlpha[1] }`
 
-                // ctx.fillStyle = 'black'
+                // play with this
+                // ctx.translate(1,0)
 
-                ctx.fillRect(title.box[0], title.box[1], title.box[2], title.box[3])
-                ctx.filter = `brightness(100%) opacity(100%)`
+                // ctx.moveTo(75, 50);
+                // ctx.lineTo(100, 75);
+                // ctx.lineTo(100, 25);   
+                ctx.strokeStyle = 'blue'             
+                ctx.stroke();
+                // ctx.restore();
 
-                ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
-                ctx.strokeText(title.text, 20, 50)
 
-                ctx.filter = `brightness(100%) opacity(75%)`
-
-                ctx.fillStyle = gradient
-                ctx.lineWidth = title.lineWidth
-
-                ctx.font = `bold 50px ${title.fonts[title.randomFont]}`;
-                ctx.fillText(title.text, 20, 50)
             }
         }
 
@@ -204,7 +209,7 @@
 
         canvas {
             width: 700px;
-            height: 75px;
+            height: 750px;
             background-color: rgba(0, 0, 0, 0);
             margin: 0;
         }
@@ -212,7 +217,7 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="700" height="75"></canvas>
+    <canvas id="canvas" width="700" height="750"></canvas>
     <canvas id="background" width="300" height="300" hidden></canvas>
 </body>
 

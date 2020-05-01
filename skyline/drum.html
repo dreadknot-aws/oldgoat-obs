@@ -177,7 +177,7 @@
                 // this.location.y = 500
                 this.velocity.y *= -1;
 
-            } else if (this.location.y < 472) {
+            } else if (this.location.y < 0) {
                 // this.location.y = 500
                 this.velocity.y *= -1;
 
@@ -302,7 +302,7 @@
     gui.remember(spin);
 
     function init() {
-        city.src = './1x/chi.png';
+        // city.src = './sheet/1x/chi.png';
         window.requestAnimationFrame(draw);
     }
 
