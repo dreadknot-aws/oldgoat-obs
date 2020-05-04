@@ -123,8 +123,7 @@
             ],
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
-            randomFont: getRandomIntInclusive(0, 3),
-            gradient: null
+            randomFont: getRandomIntInclusive(0, 3)
         }
 
         console.log(title.gradientColor[0])
@@ -153,29 +152,117 @@
             colorStop.location.x = colorStop.location.x + .01
 
         }
-
         let k = 0;
-
         function draw() {
-            k = k + 1;
+            k = k + .5;
             if (canvas.getContext) {
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
 
-                let gradient = ctx.createRadialGradient(1, 1, 1, canvas.width, canvas.height, 1);
-
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
-                ctx.fillStyle = 'black'
+                for (let i = 0; i < 18; i++) {
+                    // ctx.fillStyle = `rgba(${title.gradientColor[i]},${title.gradientColor[i+1]},${title.gradientColor[i+3]},${title.gradientAlpha[0]}`
+                    ctx.fillStyle = `rgba(${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientColor[6]},${title.gradientAlpha[1]}`
+                    for (var j = 0; j < 10; j++) {
+                        ctx.save()
 
-                gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
-                gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[3]},${title.gradientAlpha[2]}`);
-                gradient.addColorStop(1, `rgba(${title.gradientColor[2]},${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientAlpha[0]}`);
-                ctx.fillStyle = gradient;
+                        ctx.translate(i * 75, j * 75)
 
-                ctx.fillRect(0,0, canvas.width, canvas.height)
+                        // ctx.rotate((i * 90) * Math.PI / 180);
+                        // ctx.scale(i, j);
+                        ctx.translate(-200, -125)
+                        // ctx.fillStyle = 'green'
+                        ctx.translate(0,k)
+                        // ctx.scale(k,k)
+                        ctx.translate(100, 75);
+                        ctx.beginPath();
+                        ctx.moveTo(75, 50);
+                        ctx.lineTo(100, 75);
+                        ctx.lineTo(150, 50);
+                        ctx.lineTo(100, 25);
+                        ctx.fill();
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        // ctx.strokeStyle = `rgba(${title.gradientColor[i+4]},${title.gradientColor[i + 5]},${title.gradientColor[i + 6]},${title.gradientAlpha[1]}`
+                        ctx.stroke();
 
+                        ctx.restore()
+                    }
+                }
+                
+
+                for (let i = 0; i < 18; i++) {
+                    ctx.fillStyle = `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[0]}`
+                    // ctx.fillStyle = 'green'
+                    // ctx.rotate((i * 90) * Math.PI / 180);
+
+                    for (var j = 0; j < 10; j++) {
+                        ctx.save()
+
+                        ctx.translate(i * 75, j * 75)
+                        ctx.rotate((180) * Math.PI / 180);
+
+                        // ctx.rotate((i * 90) * Math.PI / 180);
+                        // ctx.scale(i, j);
+                        ctx.translate(-200, -125)
+                        // ctx.fillStyle = 'green'
+                        ctx.translate(200, 100);
+                        ctx.translate(k, 0)
+                        ctx.beginPath();
+                        ctx.moveTo(75, 50);
+                        ctx.lineTo(100, 75);
+                        ctx.lineTo(150, 50);
+                        ctx.lineTo(100, 25);
+                        ctx.fill();
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        // ctx.strokeStyle = `rgba(${title.gradientColor[i+4]},${title.gradientColor[i + 5]},${title.gradientColor[i + 6]},${title.gradientAlpha[1]}`
+                        ctx.stroke();
+
+                        ctx.restore()
+                    }
+                }                
+
+
+                for (let i = 0; i < 18; i++) {
+                    ctx.fillStyle = `rgba(${title.gradientColor[5]},${title.gradientColor[1]},${title.gradientColor[3]},${title.gradientAlpha[0]}`
+                    // ctx.fillStyle = 'blue'
+                    // ctx.rotate((i * 90) * Math.PI / 180);
+
+                    for (var j = 0; j < 10; j++) {
+                        ctx.save()
+
+                        ctx.translate(i * 75, j * 75)
+                        ctx.rotate((180) * Math.PI / 180);
+
+                        // ctx.rotate((i * 90) * Math.PI / 180);
+                        // ctx.scale(i, j);
+                        ctx.translate(-200, -125)
+                        // ctx.fillStyle = 'green'
+                        ctx.translate(200, 50);
+                        ctx.translate(k,k)
+                        ctx.beginPath();
+                        ctx.moveTo(75, 50);
+                        ctx.lineTo(100, 75);
+                        ctx.lineTo(150, 50);
+                        ctx.lineTo(100, 25);
+                        ctx.fill();
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        // ctx.strokeStyle = `rgba(${title.gradientColor[i+4]},${title.gradientColor[i + 5]},${title.gradientColor[i + 6]},${title.gradientAlpha[1]}`
+                        ctx.stroke();
+
+                        ctx.restore()
+                    }
+                }
+
+
+                // play with this
+                // ctx.translate(1,0)
+
+                // ctx.moveTo(75, 50);
+                // ctx.lineTo(100, 75);
+                // ctx.lineTo(100, 25);   
+                // ctx.restore();
 
 
             }
@@ -189,7 +276,7 @@
     <style type="text/css">
         body {
             margin: 0;
-            background-color: rgba(158, 143, 143, 0);
+            background-color: rgba(0, 0, 0, 0);
             overflow: hidden;
         }
 
