@@ -154,28 +154,39 @@
 
         }
 
+        let line = { x: 0, y: 0}
         let k = 0;
+        let g = 0;
 
         function draw() {
             k = k + 1;
+            g = g + 1;
             if (canvas.getContext) {
                 let ctx = canvas.getContext('2d');
-                let ctx_background = background.getContext('2d')s
-                let gradient = ctx.createRadialGradient(canvas.width, canvas.height, 1, k, 1, 1);
+                let ctx_background = background.getContext('2d')
+                let gradient = ctx.createRadialGradient(line.x, line.y, 1, k, 1, 1);
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
                 ctx.fillStyle = 'black'
 
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
-                gradient.addColorStop(.5, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
-                gradient.addColorStop(1, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
+                gradient.addColorStop(.5, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[1]}`);
+                gradient.addColorStop(1, `rgba(${title.gradientColor[6]},${title.gradientColor[7]},${title.gradientColor[8]},${title.gradientAlpha[1]}`);
                 ctx.fillStyle = gradient;
 
                 ctx.fillRect(0,0, canvas.width, canvas.height)
 
+                let gradient2 = ctx.createRadialGradient(canvas.width, canvas.height, 1, 1, k, 1);
 
+
+                gradient2.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
+                gradient2.addColorStop(.5, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[1]}`);
+                gradient2.addColorStop(1, `rgba(${title.gradientColor[6]},${title.gradientColor[7]},${title.gradientColor[8]},${title.gradientAlpha[1]}`);
+                ctx.fillStyle = gradient2;
+
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
 
             }
         }
