@@ -157,9 +157,13 @@
         let line = { x: 0, y: 0}
         let k = 0;
         let g = 0;
+          var sin = Math.sin(Math.PI / 6);
+            var cos = Math.cos(Math.PI / 6);
 
         function draw() {
-            k = k + 1;
+            if (k < 248) {
+                k = k + 1;
+            }
             g = g + 1;
             if (canvas.getContext) {
                 let ctx = canvas.getContext('2d');
@@ -187,6 +191,16 @@
                 ctx.fillStyle = gradient2;
 
                 ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+
+                ctx.transform(cos, sin, -sin, cos, 0, 0);
+                ctx.font = `bold 80px ${title.fonts[title.randomFont]}`;
+                ctx.fillText(title.text, 300, 100)
+                ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
+
+                ctx.strokeText(title.text, 300, 100)
+
+                ctx.resetTransform();
 
             }
         }
