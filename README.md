@@ -1,3 +1,21 @@
+# canvas playground
+
+./canvas/sweep.html
+./canvas/thread.html
+./canvas/spread.html
+./canvas/currtains.html
+
+## backgrounds
+./city.html
+./bay-bridge.html
+./skyline/sf.html
+./skyline/ord.html
+drum.html
+
+## 3d
+
+cube.html
+
 # oldgoat-obs
 html included as browser source in OBS
 
