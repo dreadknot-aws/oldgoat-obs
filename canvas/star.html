@@ -88,7 +88,7 @@
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
         var tick = 0;
-        var wind = new Vector(0, 0);
+        var wind = new Vector(.0004, .0004);
         var mouse = new Vector(0, 0)
 
         var colorStop = new Boat();
@@ -162,9 +162,9 @@
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
 
-                let gradient = ctx.createRadialGradient(1, 1, 1, canvas.width, canvas.height, 1);
+                let gradient = ctx.createRadialGradient(1 + k, 1, 1, canvas.width - k, canvas.height, 1);
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
                 ctx.fillStyle = 'black'
@@ -176,6 +176,24 @@
 
                 ctx.fillRect(0,0, canvas.width, canvas.height)
 
+
+                // let ctx = canvas.getContext('2d');
+                // let ctx_background = background.getContext('2d')
+
+                let gradient2 = ctx.createRadialGradient(1, 1 + k, 1, canvas.width, canvas.height - k, 1);
+
+                // ctx.rotate((180) * Math.PI / 180);
+                // ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx_background.clearRect(0, 0, background.width, background.height);
+
+                ctx.fillStyle = 'black'
+
+                gradient2.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
+                gradient2.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[3]},${title.gradientAlpha[2]}`);
+                gradient2.addColorStop(1, `rgba(${title.gradientColor[2]},${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientAlpha[0]}`);
+                ctx.fillStyle = gradient2;
+
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
 
 
             }
