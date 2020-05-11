@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>City</title>
+    <style>
+        /* body {
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        } */
+
+        /* canvas {
+            width: 1280px;
+            height: 720px;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- <img src="ring wide center clear.png"> -->
+    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate somerandom to use as input to
+        the draw context.</canvas>
+    <canvas id="tint" width="3617" height="568"></canvas>
+    <canvas id="cloud" width="2140" height="1090"></canvas>
+    <div><input type="button" value="save" id="savecanvas"></div>
+
+</body>
+<script type="module">
+    import { GUI } from '../js/dat.gui.module.js';
+
+
+    document.getElementById("savecanvas").addEventListener("click", savecanvas);
+    function savecanvas() {
+        console.log("Save")
+        var canvas = document.getElementById('canvas');
+
+        canvas.toBlob(function (blob) {
+            var newImg = document.createElement('img'),
+                url = URL.createObjectURL(blob);
+
+            newImg.onload = function () {
+                // no longer need to read the blob so it's revoked
+                URL.revokeObjectURL(url);
+            };
+
+            newImg.src = url;
+            document.body.appendChild(newImg);
+        });
+    }
+
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+    }
+
+
+    class Vector {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        add(vector) {
+            this.x = this.x + vector.x;
+            this.y = this.y + vector.y;
+        }
+        sub(vector) {
+            this.x = this.x - vector.x;
+            this.y = this.y - vector.y;
+        }
+        mult(n) {
+            this.x = this.x * n;
+            this.y = this.y * n;
+        }
+        div(n) {
+            this.x = this.x / n;
+            this.y = this.y / n;
+        }
+        mag() {
+            return Math.sqrt(this.x * this.x + this.y * this.y);
+        }
+        normalize() {
+            let m = this.mag()
+            if (m != 0) {
+                this.div(m);
+            }
+        }
+        limit(max) {
+            if (this.mag() > max) {
+                this.normalize();
+                this.mult(max);
+            }
+
+        }
+        static add(a, b) {
+            let vector = new Vector(a.x + b.x, a.y + b.y)
+            return vector;
+        }
+        static sub(a, b) {
+            let vector = new Vector(a.x - b.x, a.y - b.y)
+            return vector;
+        }
+        static div(a, b) {
+            let vector = new Vector(a.x / b, a.y / b)
+            return vector
+        }
+    }
+
+
+    class cityProperties {
+        constructor() {
+            this.paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439'];
+            this.comps = comps = ['source-over',
+                'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+                'hue', 'saturation', 'color', 'luminosity'];
+        }
+    }
+    class Boat {
+        constructor() {
+            this.location = new Vector(1000, 500);
+            this.velocity = new Vector(0, 0);
+            this.acceleration = new Vector(0, 0);
+            this.size = 10
+            this.width = 0
+            this.mass = 10
+            this.height = this.location.y + 5
+            this.sx = 658
+            this.sy = 350
+            this.sw = 6
+            this.sh = 11
+
+            // Assuming myButton is a button element
+            // canvas.addEventListener('click', this.onClick, false)
+
+
+        }
+
+        // onClick(event) {
+        //     console.log('Boat:', arguments)
+        //     console.log('Boat:', event)
+        //     console.log('Boat:', event.clientY)
+        //     console.log('Boat:', this)
+
+        //     let MouseVector = new Vector(event.clientX, event.clientY);
+        //     Vector.sub(MouseVector, MouseVector)
+        //     //force = arguments.
+        //     //applyForce(force)
+        // }
+        update() {
+            this.velocity.add(this.acceleration)
+            this.velocity.limit(.5)
+            this.location.add(this.velocity)
+            this.acceleration.mult(0)
+        }
+        applyForce(force) {
+            let f = Vector.div(force, this.mass)
+            this.acceleration.add(f)
+        }
+        draw(ctx) {
+            ctx.save()
+            ctx.globalCompositeOperation = 'xor'
+
+            ctx.drawImage(sheet, this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
+            ctx.restore()
+
+            // Draw vector line to mouse
+            ctx.lineWidth = 2;
+            ctx.fillStyle = 'orange';
+            ctx.lineCap = 'round'
+
+            ctx.globalCompositeOperation = 'xor';
+            ctx.beginPath();
+            ctx.moveTo(aBoat.location.x, aBoat.location.y);
+            ctx.lineTo(mouseLocation.x, mouseLocation.y);
+        }
+        checkEdges() {
+            if (this.location.x > 1280) {
+                this.velocity.x *= -1;
+            } else if (this.location.x < 0) {
+                this.velocity.x *= -1;
+            }
+
+            if (this.location.y > 720) {
+                this.velocity.y *= -1;
+
+            } else if (this.location.y < 472) {
+                this.velocity.y *= -1;
+
+            }
+        }
+    }
+
+    let sheet = new Image();
+
+    let mouseLocation = new Vector(0, 0);
+
+    let aBoat = new Boat();
+
+
+    // Assuming myButton is a button element
+    canvas.addEventListener('click', Blow, false)
+    function Blow(event) {
+        // print and have a look at the event object 
+        // always print arguments in case of overlooking any other arguments
+        console.log('Blow:', arguments)
+        mouseLocation = new Vector(event.clientX, event.clientY)
+        // let windFrom = new Vector(-.5, 0)
+        // windFrom.sub(mouseLocation)
+        // windFrom.mag(5)
+        console.log('Blow:', mouseLocation)
+        let windFrom = Vector.sub(mouseLocation, aBoat.location)
+        windFrom.normalize()
+        // windFrom.mult(0.5);
+        aBoat.applyForce(windFrom)
+        console.log('Blow:', windFrom)
+    }
+
+
+    let location = new Vector(0, 0);
+    let velocity = new Vector(.01 * (Math.random() < 0.5 ? -1 : 1), 0);
+
+    let current = new Vector(0.001, .001)
+    let wind = new Vector(-.01, -.01)
+
+    let gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+    let gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+    let gradientPointAMass = 10;
+    let gradientPointBMass = 10;
+    let gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+    let gradientPointAacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+    let gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+    let gradientPointBacceleration = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+
+    let gradientStop = new Vector(Math.random(), Math.random())
+    let gradientStopVelocity = new Vector(Math.random() * (.025 - .001) + .001)
+
+    let aForce = new Vector(0, -.1)
+
+    var paths = ['path1431', 'path1433', 'path1435', 'path1437', 'path1439']
+    var comps = ['source-over',
+        'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+        'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+        'hue', 'saturation', 'color', 'luminosity']
+    var city = new Image();
+
+    let image = new Image();
+
+    var cityy = 0;
+    var cityv = .05 * (Math.random() < 0.5 ? -1 : 1);
+    var gradientv = .05 * (Math.random() < 0.5 ? -1 : 1);
+    var img = new Array(4);
+    // var blur = new Array(4);
+    var hue = new Array(4);
+    var saturate = new Array(4)
+    var brightness = new Array(4)
+    var opacity = new Array(4)
+    var invert = new Array(4)
+    var angle1 = Math.random() * Math.PI * 2;
+    var angle2 = Math.random() * Math.PI * 2;
+    var radius = 1000;
+    var cstop = Math.random()
+    var randomlayer = Math.floor(Math.random() * 4) + 1
+
+    var r0 = Math.floor(Math.random() * 1000)
+    var r1 = Math.floor(Math.random() * 1000)
+
+    var layers = [0, 1]
+
+    var SpinSpeed = function () {
+        this.roty = Math.random() / 100;
+        this.rotx = Math.random() / 100;
+        this.color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+        this.color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+
+        this.x0 = Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1);
+        this.y0 = Math.floor(Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
+        this.x1 = Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1);
+        this.y1 = Math.floor(Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
+        this.blur = new Array(4);
+        for (var i = 0; i <= 4; i++) {
+            img[i] = new Image();
+            img[i].src = paths[i] + '.png';
+            blur[i] = Math.floor(Math.random() * 4)
+            hue[i] = Math.floor(Math.random() * 180)
+            brightness[i] = Math.floor(Math.random() * 50)
+            saturate[i] = Math.floor(Math.random() * 100)
+            opacity[i] = Math.floor(Math.random() * 100)
+            invert[i] = Math.floor(Math.random() * 100)
+        }
+        this.blur1 = blur[1]
+        this.Composite = Math.floor(Math.random() * comps.length)
+
+        this.displayOutline = false;
+    };
+
+    const gui = new GUI({ closed: true });
+    gui.hide()
+    var spin = new SpinSpeed();
+    gui.addColor(spin, 'color2');
+    gui.addColor(spin, 'color3');
+    gui.add(spin, 'x0');
+    gui.add(spin, 'y0');
+    gui.add(spin, 'x1');
+    gui.add(spin, 'y1');
+    gui.remember(spin);
+
+    function init() {
+        // city.src = './city.jpg';
+        sheet.src = 'sheets/1x/sf.png'
+        let ctx = document.getElementById('canvas').getContext('2d');
+
+        let tint_ctx = document.getElementById('tint').getContext('2d');
+        let tint_canvas = document.getElementById('tint')
+        let cloud_ctx = document.getElementById('cloud').getContext('2d');
+        let cloud_canvas = document.getElementById('cloud')
+        sheet.addEventListener('load', function () {
+
+            tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
+            let tint_gradient = tint_ctx.createRadialGradient(0, 0, 1500, 3000, 500, 1000);
+            tint_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 0)`);
+            tint_gradient.addColorStop(.75, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`);
+            tint_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`);
+            tint_ctx.fillStyle = tint_gradient
+
+
+
+            tint_ctx.drawImage(sheet, 0, 0, 3617, 568, 0, 0, 3617, 568)
+            tint_ctx.globalCompositeOperation = 'source-atop'
+
+            tint_ctx.fillRect(0, 0, 3617, 568)
+
+            image.src = tint_canvas.toDataURL();
+            image.addEventListener('load', function () {
+                ctx.drawImage(image, 0, 0)
+            }, false);
+
+            // cloud_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
+
+
+
+            // let cloud_gradient = cloud_ctx.createRadialGradient(0, 0, 1000, 3000, 250, 1000);
+            // cloud_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`);
+            // cloud_gradient.addColorStop(.75, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`);
+            // cloud_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .1)`);
+            // cloud_ctx.fillStyle = cloud_gradient
+            // // cloud_ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // // cloud_ctx.globalAlpha = 0.5;
+            // cloud_ctx.globalCompositeOperation = 'source-over'
+
+            // // cloud_ctx.drawImage(img, 3615 , 318 , 3599 , 1090 , 0, 0, 3599 , 1090 )
+            // // cloud_ctx.globalAlpha = 0.5;
+
+            // cloud_ctx.drawImage(sheet, 6100, 166, 366, 700, 0, 0, 366, 700)
+            // cloud_ctx.globalCompositeOperation = 'source-in'
+            // cloud_ctx.fillRect(0, 0, 3412, 1090)
+            // cloud.src = cloud_canvas.toDataURL();
+            // cloud.addEventListener('load', function () {
+            //     // ctx.drawImage(cloud, 0, 574)
+            // }, false);
+
+            // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
+
+        }, false);
+
+        window.requestAnimationFrame(draw);
+    }
+
+    function draw() {
+
+        if ((location.x > 3) || (location.x < 0)) {
+            velocity.x = velocity.x * -1;
+        }
+        if ((location.y > 0) || (location.y < 0)) {
+            velocity.y = velocity.y * -1;
+        }
+
+
+        if ((gradientPointA.x > canvas.width * 2) || (gradientPointA.x < -canvas.width * 2)) {
+            gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+            console.log("limit new gradient: " + gradientPointA.x + "," + gradientPointA.y)
+
+        }
+        if ((gradientPointA.y > canvas.height * 2) || (gradientPointA.y < -canvas.width * 2)) {
+            gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+            console.log("limit new gradient: " + gradientPointA.x + "," + gradientPointA.y)
+
+        }
+
+
+        if ((gradientPointB.x > canvas.width * 2) || (gradientPointB.x < -canvas.width * 2)) {
+            gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+
+            console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
+
+        }
+        if ((gradientVelocityB.y > canvas.height * 2) || (gradientPointB.y < -canvas.width * 2)) {
+            gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+
+            console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
+
+        }
+
+        if ((gradientStop.x > 1) || (gradientStop.x < 0)) {
+            gradientStopVelocity.x = gradientStopVelocity.x * -1;
+        }
+        gradientVelocityA.add(gradientPointAacceleration)
+        gradientVelocityA.limit(1)
+        gradientPointA.add(gradientVelocityA)
+
+        gradientVelocityB.add(gradientPointBacceleration)
+        gradientVelocityB.limit(1)
+        gradientPointB.add(gradientVelocityB)
+        location.add(velocity);
+
+
+
+        var ctx = document.getElementById('canvas').getContext('2d');
+        // ctx.globalCompositeOperation = comps[spin.Composite]
+        ctx.save();
+        ctx.clearRect(0, 0, 1280, 720); // clear canvas
+
+        var gradient = ctx.createLinearGradient(gradientPointA.x, gradientPointA.y, gradientPointB.x, gradientPointB.y);
+
+        gradient.addColorStop(0, `rgba(${spin.color2[0]}, ${spin.color2[1]}, ${spin.color2[2]}, 255 )`);
+        gradient.addColorStop(gradientStop.x, 'rgba(200, 170, 118, 255)');
+        gradient.addColorStop(1, `rgba(${spin.color3[0]}, ${spin.color3[1]}, ${spin.color3[2]}, 255)`);
+
+
+        ctx.fillStyle = gradient;
+
+        var time = new Date();
+
+        aBoat.checkEdges();
+        aBoat.applyForce(wind)
+        aBoat.applyForce(current);
+        aBoat.update();
+
+
+        ctx.fillRect(0, 0, 1280, 720);
+
+
+        ctx.restore();
+
+        cityy += cityv
+        if (cityy >= 3)
+            cityv = -cityv
+        if (cityy <= 0)
+            cityv = -cityv
+
+
+        spin.x0 += gradientv
+        if (spin.x0 >= 1500.00)
+            gradientv = -gradientv
+        if (spin.x0 <= -1500.00)
+            gradientv = - gradientv
+
+        ctx.save();
+
+        ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+
+        ctx.drawImage(sheet, 0, 576, 3603, 2119, 0, 0, 1280, 720)
+        // ctx.drawImage(sheet, 0, 0,  1280, 720)
+
+        ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
+        // ctx.drawImage(sheet, location.x, 0, 1280, 720)
+
+        ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(0%) invert(0}%`
+        aBoat.draw(ctx);
+        ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
+        
+        ctx.restore();
+        ctx.filter = ``
+
+        ctx.drawImage(image, 0, 0, 3603, 2119, 0, 275, 1280, 720)
+
+
+        // let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
+        // ctx.drawImage(sheet, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
+
+
+        window.requestAnimationFrame(draw);
+    }
+
+    init();
+
+</script>
+
+</html>
