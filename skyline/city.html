@@ -321,12 +321,15 @@
         sheet.addEventListener('load', function () {
 
             tint_ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
-            let tint_gradient = tint_ctx.createRadialGradient(0, 0, 1500, 3000, 500, 1000);
-            tint_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 0)`);
-            tint_gradient.addColorStop(.75, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`);
-            tint_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`);
+            let tint_gradient = tint_ctx.createRadialGradient(0, 0, 1500, 3000, 0, 1000);
+            tint_gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`);
+            tint_gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`);
+            tint_gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .75)`);
             tint_ctx.fillStyle = tint_gradient
 
+
+            let bridge = { x: 6, y: 170, width: 1784, height: 312 }
+            tint_ctx.drawImage(sheet, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
 
 
             tint_ctx.drawImage(sheet, 0, 0, 3617, 568, 0, 0, 3617, 568)
@@ -477,11 +480,11 @@
         ctx.restore();
         ctx.filter = ``
 
+
+
         ctx.drawImage(image, 0, 0, 3603, 2119, 0, 275, 1280, 720)
 
 
-        // let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
-        // ctx.drawImage(sheet, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
 
 
         window.requestAnimationFrame(draw);
