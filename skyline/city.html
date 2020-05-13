@@ -110,6 +110,36 @@
         }
     }
 
+    var title = {
+        gradientColor: [
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255)
+        ],
+        gradientAlpha: [
+            Math.random(),
+            Math.random(),
+            Math.random(),
+            Math.random()
+        ],
+        box: [
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height)
+        ],
+        lineWidth: getRandomIntInclusive(0, 20),
+        fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
+        randomFont: getRandomIntInclusive(0, 3),
+        gradient: null
+    }
+
 
     class cityProperties {
         constructor() {
@@ -445,7 +475,16 @@
         aBoat.update();
 
 
-        ctx.fillRect(0, 0, 1280, 720);
+        ctx.fillRect(0, 0, 1280, 443);
+
+        var waterGradient = ctx.createLinearGradient(gradientPointA.x, gradientPointA.y, gradientPointB.x, gradientPointB.y);
+
+        waterGradient.addColorStop(0, `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1 )`);
+        waterGradient.addColorStop(gradientStop.x, `rgba(${title.gradientColor[6]}, ${title.gradientColor[7]}, ${title.gradientColor[8]}, 1)`);
+        waterGradient.addColorStop(1, `rgba(${title.gradientColor[3]}, ${title.gradientColor[4]}, ${title.gradientColor[5]}, 1)`);
+        ctx.fillStyle = waterGradient;
+
+        ctx.fillRect(0, 443, 1280, 720);
 
 
         ctx.restore();
@@ -476,7 +515,7 @@
         ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(0%) invert(0}%`
         aBoat.draw(ctx);
         ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
-        
+
         ctx.restore();
         ctx.filter = ``
 
