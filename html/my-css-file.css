@@ -1,0 +1,53 @@
+p {
+    color: black;
+    width: 1280px;
+    font-size: 5em;
+    background-color: gold;
+    border: solid;
+font-family: 'introrustg-base2line';
+text-align: center;
+    /* background-blend-mode: difference; */
+    text-shadow: 1px 1px 1px peru;
+
+
+}
+
+h1 {
+       color: black;
+       margin-left: 1em;
+    font-size: 5em;
+    background-color: gold;
+    background-blend-mode: soft-light;
+    border: solid;
+font-family: 'introrustg-base2line';
+}
+
+h2 {
+           color: black;
+                  margin-left: 1em;
+    font-size: 3.5em;
+    background-color: gold;
+    border: solid;
+font-family: 'introrustg-base2line';
+}
+
+
+h3 {
+       color: black;
+       margin-left: 1em;
+    font-size: 5em;
+    background-color: white;
+    border: solid;
+font-family: 'introrustg-base2line';
+}
+
+
+
+h4 {
+           color: black;
+                  margin-left: 1em;
+    font-size: 3.5em;
+    background-color: gold;
+    border: solid;
+font-family: 'Metal Mania', cursive;
+}
