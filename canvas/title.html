@@ -123,7 +123,8 @@
             ],
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
-            randomFont: getRandomIntInclusive(0, 3)
+            randomFont: getRandomIntInclusive(0, 3),
+            fontSize: getRandomIntInclusive(50,250)
         }
 
         console.log(title.gradientColor[0])
@@ -178,15 +179,16 @@
                 ctx.filter = `brightness(100%) opacity(100%)`
 
                 ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
-                ctx.strokeText(title.text, 20, 50)
+                
+                ctx.strokeText(title.text, title.gradientColor[1], title.gradientColor[0])
 
                 ctx.filter = `brightness(100%) opacity(75%)`
 
                 ctx.fillStyle = gradient
                 ctx.lineWidth = title.lineWidth
 
-                ctx.font = `bold 50px ${title.fonts[title.randomFont]}`;
-                ctx.fillText(title.text, 20, 50)
+                ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
+                ctx.fillText(title.text, title.gradientColor[1], title.gradientColor[0])
             }
         }
 
@@ -203,8 +205,8 @@
         }
 
         canvas {
-            width: 700px;
-            height: 75px;
+            width: 1280px;
+            height: 720px;
             background-color: rgba(0, 0, 0, 0);
             margin: 0;
         }
@@ -212,7 +214,7 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="700" height="75"></canvas>
+    <canvas id="canvas" width="1280" height="720"></canvas>
     <canvas id="background" width="300" height="300" hidden></canvas>
 </body>
 
