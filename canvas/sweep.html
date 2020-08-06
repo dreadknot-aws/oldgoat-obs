@@ -133,6 +133,10 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height)                
             ],
+            pos: {
+                x: getRandomIntInclusive(-500, 500),
+                y: getRandomIntInclusive(-500, 500)
+            },
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
             randomFont: getRandomIntInclusive(0, 3),
@@ -204,7 +208,7 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height)
 
 
-                ctx.transform(cos, sin, -sin, cos, 0, 0);
+                ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
                 // ctx.font = `bold 80px ${title.fonts[title.randomFont]}`;
                 ctx.font = `bold 80px silkscreen`;
                 ctx.fillStyle = 'white'
