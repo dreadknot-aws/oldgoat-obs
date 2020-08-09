@@ -183,7 +183,7 @@
             if (canvas.getContext) {
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
-                let gradient = ctx.createRadialGradient(line.x + 100, line.y + 100, 1, k, 1, 1);
+                let gradient = ctx.createRadialGradient(line.x + title.pos.x, line.y + title.pos.y, 1, k, 1, 1);
 
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 // ctx_background.clearRect(0, 0, background.width, background.height);
