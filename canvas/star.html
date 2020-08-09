@@ -121,6 +121,10 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height)                
             ],
+            pos: {
+                x: getRandomIntInclusive(-500, 500),
+                y: getRandomIntInclusive(-500, 500)
+            },
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
             randomFont: getRandomIntInclusive(0, 3),
@@ -162,7 +166,7 @@
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
 
-                let gradient = ctx.createRadialGradient(1 + k, 1, 1, canvas.width - k, canvas.height, 1);
+                let gradient = ctx.createRadialGradient(title.pos.x + k, title.pos.y, 1, canvas.width - k, canvas.height, 1);
 
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
@@ -180,7 +184,7 @@
                 // let ctx = canvas.getContext('2d');
                 // let ctx_background = background.getContext('2d')
 
-                let gradient2 = ctx.createRadialGradient(1, 1 + k, 1, canvas.width, canvas.height - k, 1);
+                let gradient2 = ctx.createRadialGradient(title.pos.x, title.pos.y + k, 1, canvas.width, canvas.height - k, 1);
 
                 // ctx.rotate((180) * Math.PI / 180);
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
