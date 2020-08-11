@@ -220,6 +220,17 @@
                     // fruits[i].y = fruits[i].y - 1 
                 }
 
+                for (var i = 0; i < 90; i++) {
+                    ctx.beginPath();
+                    ctx.fillStyle = 'white';
+                    ctx.lineWidth = 1;
+                    // ctx.strokeStyle = gradient;
+                    ctx.ellipse(fruits[i].y, fruits[i].x, fruits[i].rx, fruits[i].rx, Math.PI / 4, 0, 2 * Math.PI);
+                    ctx.stroke();
+                    ctx.fill();
+                    // fruits[i].y = fruits[i].y - 1 
+                }
+
 
 
                 // ctx.fillRect(0,0, canvas.width, canvas.height)
