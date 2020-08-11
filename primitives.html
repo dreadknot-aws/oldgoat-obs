@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
 
 <style>
     html,
@@ -235,7 +235,8 @@
             }
 
             async function doit() {
-                const font = await loadFont('https://threejsfundamentals.org/threejs/resources/threejs/fonts/helvetiker_regular.typeface.json');
+                const font = await loadFont('/fonts/Orbitron_Regular.json');
+                // const font = 'Orbitron';
                 const geometry = new THREE.TextBufferGeometry('WildBoys', {
                     font: font,
                     size: 3.0,
