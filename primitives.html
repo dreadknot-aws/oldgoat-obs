@@ -66,6 +66,13 @@
                 console.log("Cam1")
                 return;
             }
+            if (e.code === 'Digit2') {
+                camera.position.z = getRandomIntInclusive(0, 20);
+                camera.position.x = getRandomIntInclusive(-40, 40);  // -40, 40
+                camera.position.y = getRandomIntInclusive(-20, 20); // -20. 20
+                console.log("Cam1")
+                return;
+            }
         }
 
         function createMaterial() {
