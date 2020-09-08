@@ -1,23 +1,23 @@
 # canvas playground
 
 [Sweep](./canvas/sweep.html)
-
-./canvas/thread.html
-./canvas/spread.html
-./canvas/currtains.html
+[Thread](./canvas/thread.html)
+[Spread](./canvas/spread.html)
+[Currtians](./canvas/currtains.html)
+[Sweep](./canvas/sweep.html)
 
 ## backgrounds
 [City](./city.html)
-
-./bay-bridge.html
-./skyline/sf.html
-./skyline/ord.html
+[Bay Bridge](./bay-bridge.html)
+[Skyline SFO](./skyline/sf.html)
+[Skyline ORD](./skyline/ord.html)
 drum.html
 
 ## 3d
 
 [Cube](./cube.html)
-cube.html?color=ffffff&ogcolor=ffffff
+[Cube](./cube.html?color=ffffff&ogcolor=ffffff)
+
 cube.html?color=aaaaaa&ogcolor=ffffff
 cube.html?color=aaaaaa&ogcolor=000000
 cube.html?color=aaaaaa&ogcolor=aaaaaa
