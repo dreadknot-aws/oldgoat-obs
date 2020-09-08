@@ -1,12 +1,14 @@
 # canvas playground
 
-./canvas/sweep.html
+[Sweep](./canvas/sweep.html)
+
 ./canvas/thread.html
 ./canvas/spread.html
 ./canvas/currtains.html
 
 ## backgrounds
-./city.html
+[City](./city.html)
+
 ./bay-bridge.html
 ./skyline/sf.html
 ./skyline/ord.html
@@ -14,7 +16,11 @@ drum.html
 
 ## 3d
 
-cube.html
+[Cube](./cube.html)
+cube.html?color=ffffff&ogcolor=ffffff
+cube.html?color=aaaaaa&ogcolor=ffffff
+cube.html?color=aaaaaa&ogcolor=000000
+cube.html?color=aaaaaa&ogcolor=aaaaaa
 
 # oldgoat-obs
 html included as browser source in OBS
@@ -28,10 +34,10 @@ https://threejsfundamentals.org/
 
 Run local and add to OBS as a Browser source
 
+PowerShell
+
+http-server.cmd
+
 https://jasonwatmore.com/posthttp/2016/06/22/nodejs-setup-simple-http-server-local-web-server
 
 
-cube.html?color=ffffff&ogcolor=ffffff
-cube.html?color=aaaaaa&ogcolor=ffffff
-cube.html?color=aaaaaa&ogcolor=000000
-cube.html?color=aaaaaa&ogcolor=aaaaaa
