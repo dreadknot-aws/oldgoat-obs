@@ -20,6 +20,10 @@
 <script type="module">
     import * as THREE from './js/three.module.js';
 
+
+
+
+
             function getRandomIntInclusive(min, max) {
                 min = Math.ceil(min);
                 max = Math.floor(max);
@@ -51,6 +55,18 @@
             scene.add(light);
         }
 
+        document.addEventListener('keydown', logKey);
+
+        function logKey(e) {
+            console.log(`${e.code}`);
+            if (e.code === 'Digit1') {
+                camera.position.z = getRandomIntInclusive(0, 40);
+                camera.position.x = getRandomIntInclusive(-40, 40);  // -40, 40
+                camera.position.y = getRandomIntInclusive(-20, 20); // -20. 20
+                console.log("Cam1")
+                return;
+            }
+        }
 
         function createMaterial() {
             const material = new THREE.MeshPhongMaterial({
