@@ -14,6 +14,17 @@
         import { GUI } from '../js/dat.gui.module.js';
         import { Vector } from '../js/mr.vector.js';
 
+        async function loadFonts() {
+            const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
+            // wait for font to be loaded
+            await font.load();
+            // add font to document
+            document.fonts.add(font);
+            // enable font with CSS class
+            document.body.classList.add('fonts-loaded');
+        }
+
+
         class Boat {
             constructor() {
                 this.location = new Vector(0, 0);
@@ -121,8 +132,12 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height)                
             ],
+            pos: {
+                x: getRandomIntInclusive(-500, 500),
+                y: getRandomIntInclusive(-500, 500)
+            },
             lineWidth: getRandomIntInclusive(0, 20),
-            fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
+            fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
             randomFont: getRandomIntInclusive(0, 3),
             fontSize: getRandomIntInclusive(50,250)
         }
@@ -154,16 +169,83 @@
 
         }
 
+            document.addEventListener('keydown', logKey);
+
+            function logKey(e) {
+                console.log(`${e.code}`);
+                if (e.code === 'Digit1') {
+                    title.pos.x = 0;
+                    title.pos.y = 0;
+                    console.log("Cam1")
+                    return;
+                }
+                if (e.code === 'Digit2') {
+                    title.pos.x = 100;
+                    title.pos.y = 100;
+                    console.log("Cam1")
+                    return;
+                }
+                if (e.code === 'ArrowLeft') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x - 1;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.x)
+                    return;
+                }
+                if (e.code === 'ArrowRight') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x + 1;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.x)
+                    return;
+                }
+                if (e.code === 'ArrowUp') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y + 1; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+                if (e.code === 'ArrowDown') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y - 1; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+                if (e.code === 'KeyZ') {
+                    camera.position.z = camera.position.z + 1;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+                if (e.code === 'KeyX') {
+                    camera.position.z = camera.position.z - 1;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+            }
+
+
+            var sin = Math.sin(Math.PI / 60);
+            var cos = Math.cos(Math.PI / 60);
+
         function draw() {
 
             if (canvas.getContext) {
+                
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
+
+
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
-                let gradient = ctx.createLinearGradient(0, 0, background.width, background.height);
+                let gradient = ctx.createLinearGradient(title.box[0], title.box[1], title.box[2],  title.box[3]);
 
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
                 gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[2]}`);
@@ -180,15 +262,20 @@
 
                 ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
                 
-                ctx.strokeText(title.text, title.gradientColor[1], title.gradientColor[0])
-
+                
+                ctx.save();
                 ctx.filter = `brightness(100%) opacity(75%)`
-
                 ctx.fillStyle = gradient
                 ctx.lineWidth = title.lineWidth
-
                 ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
+
+
+                ctx.strokeText(title.text, title.gradientColor[1], title.gradientColor[0])
+
                 ctx.fillText(title.text, title.gradientColor[1], title.gradientColor[0])
+                ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
+
+                ctx.restore();
             }
         }
 
