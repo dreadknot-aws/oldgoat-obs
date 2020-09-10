@@ -133,13 +133,15 @@
                 getRandomIntInclusive(0, canvas.height)                
             ],
             pos: {
-                x: getRandomIntInclusive(-500, 500),
-                y: getRandomIntInclusive(-500, 500)
+                x: getRandomIntInclusive(0, 100),
+                y: getRandomIntInclusive(0, 400)
             },
+            angle: getRandomIntInclusive(0, 90),
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
             randomFont: getRandomIntInclusive(0, 3),
-            fontSize: getRandomIntInclusive(50,250)
+            fontSize: getRandomIntInclusive(50,150),
+            count: 5
         }
 
         console.log(title.gradientColor[0])
@@ -263,17 +265,30 @@
                 ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
                 
                 
-                ctx.save();
+
                 ctx.filter = `brightness(100%) opacity(75%)`
                 ctx.fillStyle = gradient
                 ctx.lineWidth = title.lineWidth
                 ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
 
+                ctx.save();
 
+                ctx.translate(title.pos.x, title.pos.y);
+                // ctx.rotate(title.angle * Math.PI / 180);
                 ctx.strokeText(title.text, title.gradientColor[1], title.gradientColor[0])
-
                 ctx.fillText(title.text, title.gradientColor[1], title.gradientColor[0])
-                ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
+
+                for (var i=0; i < title.count; i++)
+                {
+                    ctx.translate(title.pos.x, title.pos.y + 50);
+                    ctx.rotate(title.angle * Math.PI / 180);
+                    ctx.strokeText(title.text, title.gradientColor[1], title.gradientColor[0])
+                    ctx.fillText(title.text, title.gradientColor[1], title.gradientColor[0])
+                }
+
+                
+                // console.log(title.angle)
+                // ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
 
                 ctx.restore();
             }
