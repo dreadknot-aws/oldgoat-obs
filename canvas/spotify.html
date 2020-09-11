@@ -37,7 +37,7 @@
     </div>
 
     <script id="user-profile-template" type="text/x-handlebars-template">
-      <h1>Logged in as {{display_name}}</h1>
+      <h1>Logged in as {{display_name}} {{ timestamp }} </h1>
       <div class="media">
         <div class="pull-left">
           <img class="media-object" width="150" src="{{images.0.url}}" />
@@ -51,6 +51,9 @@
             <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
             <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
             <dt>Country</dt><dd>{{country}}</dd>
+            <dt>Artist Playing</dt><dd>{{item.album.artists.0.name}}</dd>
+            <dt>Song Playing</dt><dd>{{item.album.name}}</dd>
+            <dt>Is Playing</dt><dd>{{is_playing}}</dd>
           </dl>
         </div>
       </div>
@@ -119,13 +122,13 @@
                 localStorage.removeItem(stateKey);
                 if (access_token) {
                     $.ajax({
-                        url: 'https://api.spotify.com/v1/me',
+                        url: 'https://api.spotify.com/v1/me/player/currently-playing?market=US',
                         headers: {
                             'Authorization': 'Bearer ' + access_token
                         },
                         success: function (response) {
                             userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-
+                            // console.log(response)
                             $('#login').hide();
                             $('#loggedin').show();
                         }
@@ -143,7 +146,7 @@
                     var state = generateRandomString(16);
 
                     localStorage.setItem(stateKey, state);
-                    var scope = 'user-read-private user-read-email';
+                    var scope = 'user-read-private user-read-email user-read-currently-playing';
 
                     var url = 'https://accounts.spotify.com/authorize';
                     url += '?response_type=token';
