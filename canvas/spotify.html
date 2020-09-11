@@ -129,6 +129,7 @@
                         success: function (response) {
                             userProfilePlaceholder.innerHTML = userProfileTemplate(response);
                             // console.log(response)
+
                             $('#login').hide();
                             $('#loggedin').show();
                         }
@@ -249,6 +250,7 @@
             return num;
         }
 
+        // let song = document.getElementById('user-profile-template').
         let params = (new URL(document.location)).searchParams;
         let param_title = params.get('title');
         let og_bg_color = params.get('ogcolor')
@@ -321,6 +323,8 @@
         });
 
         function loop() {
+            // title.text = document.querySelector(".dl-horizontal > dd:nth-child(16)").innerHTML
+
             window.requestAnimationFrame(loop);
             colorStop.applyForce(wind);
             colorStop.checkEdges();
@@ -338,6 +342,7 @@
             function logKey(e) {
                 console.log(`${e.code}`);
                 if (e.code === 'Digit1') {
+                    title.text = document.querySelector(".dl-horizontal > dd:nth-child(16)").innerHTML
                     title.pos.x = 0;
                     title.pos.y = 0;
                     console.log("Cam1")
