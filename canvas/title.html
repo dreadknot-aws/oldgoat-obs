@@ -121,10 +121,10 @@
                 getRandomIntInclusive(0, 255)
             ],
             gradientAlpha: [
-                Math.random(),
-                Math.random(),
-                Math.random(),
-                Math.random()
+                randn_bm(.75,1,1),
+                randn_bm(.75, 1, 1),
+                randn_bm(.75, 1, 1),
+                randn_bm(.75, 1, 1)
             ],
             box: [
                 getRandomIntInclusive(0, canvas.width),
@@ -266,7 +266,7 @@
                 
                 
 
-                ctx.filter = `brightness(100%) opacity(75%)`
+                ctx.filter = `brightness(100%) opacity(100%)`
                 ctx.fillStyle = gradient
                 ctx.lineWidth = title.lineWidth
                 ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
