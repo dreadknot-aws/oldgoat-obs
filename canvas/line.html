@@ -32,10 +32,12 @@
                     ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`;
                     ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()})`;
                     
+                    ctx.filter = `blur(${getRandomIntInclusive(0, 255)}px)`
+
                     ctx.stroke();
                     ctx.fill();
+ 
                 }
-
 
             }
         }
