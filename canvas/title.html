@@ -278,7 +278,8 @@
 
                 for (var i=0; i < title.count; i++)
                 {
-                    ctx.translate(0, 0);
+                    // ctx.translate(title.box[0], title.box[1]);
+                    ctx.translate(getRandomIntInclusive(0, 90), getRandomIntInclusive(0, 90));
                     ctx.rotate(title.angle * Math.PI / 180);
                     ctx.strokeText(title.text, title.pos.x, title.pos.y)
                     ctx.fillText(title.text, title.pos.x, title.pos.y)
