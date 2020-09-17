@@ -24,13 +24,16 @@
                 let controlpointy = getRandomIntInclusive(0, canvas.height)
 
                 // Quadratric curves example
-                for (var i = 0; i < 50; i++) {
+                for (var i = 0; i < getRandomIntInclusive(0, 50); i++) {
                     ctx.beginPath();
                     ctx.moveTo(randomx, randomy);
                     ctx.quadraticCurveTo(controlpointx, controlpointy, getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
                     
                     ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`;
+                    ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()})`;
+                    
                     ctx.stroke();
+                    ctx.fill();
                 }
 
 
