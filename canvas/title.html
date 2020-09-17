@@ -136,7 +136,7 @@
                 x: getRandomIntInclusive(0, canvas.width),
                 y: getRandomIntInclusive(0, canvas.height)
             },
-            angle: getRandomIntInclusive(0, 90),
+            angle: getRandomIntInclusive(0, 45),
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
             randomFont: getRandomIntInclusive(0, 3),
@@ -278,8 +278,8 @@
 
                 for (var i=0; i < title.count; i++)
                 {
-                    // ctx.translate(title.box[0], title.box[1]);
-                    ctx.translate(getRandomIntInclusive(0, 90), getRandomIntInclusive(0, 90));
+                    ctx.translate(title.box[i], title.box[i + 1]);
+                    // ctx.translate(getRandomIntInclusive(0, 90), getRandomIntInclusive(0, 90));
                     ctx.rotate(title.angle * Math.PI / 180);
                     ctx.strokeText(title.text, title.pos.x, title.pos.y)
                     ctx.fillText(title.text, title.pos.x, title.pos.y)
