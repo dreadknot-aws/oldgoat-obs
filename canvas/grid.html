@@ -15,16 +15,16 @@
         import { Vector } from '../js/mr.vector.js';
 
 
-    async function loadFonts() {
-        const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
-        // wait for font to be loaded
-        await font.load();
-        // add font to document
-        document.fonts.add(font);
-        // enable font with CSS class
-        document.body.classList.add('fonts-loaded');
-    }
-    // loadFonts();
+        async function loadFonts() {
+            const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
+            // wait for font to be loaded
+            await font.load();
+            // add font to document
+            document.fonts.add(font);
+            // enable font with CSS class
+            document.body.classList.add('fonts-loaded');
+        }
+        // loadFonts();
 
         class Boat {
             constructor() {
@@ -92,10 +92,10 @@
         let param_title = params.get('title');
         let og_bg_color = params.get('ogcolor')
 
-    if (param_title == null) {
-        // some_variable is either null or undefined
-        param_title = 'The BeatBunker'
-    }
+        if (param_title == null) {
+            // some_variable is either null or undefined
+            param_title = 'The BeatBunker'
+        }
 
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
@@ -131,7 +131,7 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height),
                 getRandomIntInclusive(0, canvas.width),
-                getRandomIntInclusive(0, canvas.height)                
+                getRandomIntInclusive(0, canvas.height)
             ],
             pos: {
                 x: getRandomIntInclusive(-500, 500),
@@ -169,11 +169,11 @@
             colorStop.location.x = colorStop.location.x + .01
         }
 
-        let line = { x: 0, y: 0}
+        let line = { x: 0, y: 0 }
         let k = 0;
         let g = 0;
-          var sin = Math.sin(Math.PI / 6);
-            var cos = Math.cos(Math.PI / 6);
+        var sin = Math.sin(Math.PI / getRandomIntInclusive(5, 6));
+        var cos = Math.cos(Math.PI / getRandomIntInclusive(5, 6));
 
         function draw() {
             if (k < 1500) {
@@ -195,7 +195,7 @@
                 gradient.addColorStop(1, `rgba(${title.gradientColor[6]},${title.gradientColor[7]},${title.gradientColor[8]},${title.gradientAlpha[1]}`);
                 ctx.fillStyle = gradient;
 
-                ctx.fillRect(0,0, canvas.width, canvas.height)
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
 
                 // let gradient2 = ctx.createRadialGradient(canvas.width, canvas.height, 1, 1, k, 1);
 

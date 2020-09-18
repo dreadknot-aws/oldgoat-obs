@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Canvas tutorial</title>
+    <script type="text/javascript">
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        }
+
+        function draw() {
+            var canvas = document.getElementById('canvas');
+            if (canvas.getContext) {
+                var ctx = canvas.getContext('2d');
+
+
+
+                let randomx = getRandomIntInclusive(0, canvas.width)
+                let randomy = getRandomIntInclusive(0, canvas.height)
+
+                let controlpointx = getRandomIntInclusive(0, canvas.width)
+                let controlpointy = getRandomIntInclusive(0, canvas.height)
+
+
+                let gradient = ctx.createRadialGradient(randomx, randomy, canvas.width, controlpointx, controlpointy, canvas.height);
+                gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1`);
+                gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1`);
+                gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1`);
+                
+
+                // ctx.globalCompositeOperation = 'source-out';
+                // Quadratric curves example
+                for (var i = 0; i < getRandomIntInclusive(0, 50); i++) {
+                    for (var j = 0; j < getRandomIntInclusive(0, 50); j++) {
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.lineWidth = getRandomIntInclusive(1, 25);
+                        ctx.setLineDash([getRandomIntInclusive(0, 25), getRandomIntInclusive(0, 25)]);
+                        // ctx.lineCap = 'round';
+                        // ctx.translate(10 + j * 50, 10 + i * 50);
+                        ctx.translate(getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
+                        ctx.moveTo(randomx, randomy);
+                        ctx.lineTo(controlpointx, controlpointy);
+                        // ctx.moveTo(randomx, randomy);
+                        // ctx.quadraticCurveTo(controlpointx, controlpointy, getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
+
+                        // ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`;
+                        // ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()})`;
+
+                        // ctx.filter = `blur(${getRandomIntInclusive(0, 255)}px)`
+
+                        ctx.strokeStyle = gradient;
+                        ctx.stroke();
+                        // ctx.fill();
+                        ctx.restore();
+                    }
+
+                }
+
+            }
+        }
+    </script>
+    <style type="text/css">
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body onload="draw();">
+    <canvas id="canvas" width="1280" height="720"></canvas>
+</body>
+
+</html>

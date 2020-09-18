@@ -137,7 +137,7 @@
                 getRandomIntInclusive(0, canvas.height)                 
             ],
             pos: {
-                x: getRandomIntInclusive(0, 0),
+                x: getRandomIntInclusive(0, 50),
                 y: getRandomIntInclusive(100, canvas.height)
             },
             angle: getRandomIntInclusive(90, 90),
@@ -145,7 +145,7 @@
             fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
             randomFont: getRandomIntInclusive(0, 3),
             fontSize: getRandomIntInclusive(95,105),
-            count: 1
+            count: 0
         }
 
         console.log(title.gradientColor[0])
@@ -277,8 +277,8 @@
 
                 // ctx.translate(0, 0);
                 // ctx.rotate(title.angle * Math.PI / 180);
-                ctx.strokeText(title.text, title.pos.x, title.pos.y)
-                ctx.fillText(title.text, title.pos.x, title.pos.y)
+                ctx.strokeText(title.text, title.pos.x, title.pos.y, 1200)
+                ctx.fillText(title.text, title.pos.x, title.pos.y, 1200)
 
                 ctx.save();
                 for (var i=0; i < title.count; i++)
