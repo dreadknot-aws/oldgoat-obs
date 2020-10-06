@@ -183,7 +183,9 @@
             if (canvas.getContext) {
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
-                let gradient = ctx.createRadialGradient(line.x + title.pos.x, line.y + title.pos.y, 1, k, 1, 1);
+                // let gradient = ctx.createRadialGradient(line.x + title.pos.x, line.y + title.pos.y, 1, k, 1, 1);
+
+                let gradient = ctx.createRadialGradient(title.pos.x,title.pos.y, 1, k, 1, 1);
 
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 // ctx_background.clearRect(0, 0, background.width, background.height);
@@ -207,9 +209,10 @@
 
                 // ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-                // ctx.transform(cos, sin, -sin, cos, 0, 0);
+                ctx.transform(cos, sin, -sin, cos, 0, 0);
 
-                ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
+                // ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
+                // translate(title.pos.x, title.pos.y)
                 // // ctx.font = `bold 80px ${title.fonts[title.randomFont]}`;
                 // ctx.font = `bold 80px silkscreen`;
                 // ctx.fillStyle = 'white'
