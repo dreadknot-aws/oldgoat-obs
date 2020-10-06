@@ -133,6 +133,7 @@
         }
 
         var colorStop = new Boat();
+                var wind = new Vector(0, 0);
         var raf;
         function draw() {
             var canvas = document.getElementById('canvas');
@@ -146,9 +147,11 @@
                 // let controlpointy = getRandomIntInclusive(0, canvas.height)
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+                // let gradient = ctx.createRadialGradient(title.randomx, title.randomy, title.randomRadius, title.controlpointx, title.controlpointy, title.randomControlRadius);
                 let gradient = ctx.createRadialGradient(title.randomx, title.randomy, title.randomRadius, title.controlpointx, title.controlpointy, title.randomControlRadius);
+
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1`);
-                gradient.addColorStop(.5, `rgba(${title.gradientColor[3]}, ${title.gradientColor[4]}, ${title.gradientColor[5]}, 1`);
+                gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]}, ${title.gradientColor[4]}, ${title.gradientColor[5]}, 1`);
                 gradient.addColorStop(1, `rgba(${title.gradientColor[6]}, ${title.gradientColor[6]}, ${title.gradientColor[7]}, 1`);
 
 
@@ -165,14 +168,15 @@
                         // ctx.translate(10 + j * 50, 10 + i * 50);
                         ctx.translate(title.translateOffset[i], title.translateOffset[j]);
                         ctx.moveTo(title.randomx, title.randomy);
-                        ctx.lineTo(title.controlpointx, title.controlpointy);
+                        // ctx.lineTo(title.controlpointx, title.controlpointy);
+                        ctx.quadraticCurveTo(title.controlpointx, title.controlpointy, title.translateOffset[i], title.translateOffset[j]);
                         // ctx.moveTo(randomx, randomy);
                         // ctx.quadraticCurveTo(controlpointx, controlpointy, getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
 
                         // ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 1)`;
                         // ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()})`;
 
-                        // ctx.filter = `blur(${getRandomIntInclusive(0, 255)}px)`
+                        // ctx.filter = `blur(${title.gradientColor[i]}px)`
 
                         ctx.strokeStyle = gradient;
                         ctx.stroke();
@@ -189,9 +193,9 @@
 
         function loop() {
             window.requestAnimationFrame(loop);
-            // colorStop.applyForce(wind);
-            // colorStop.checkEdges();
-            // colorStop.update();
+            colorStop.applyForce(wind);
+            colorStop.checkEdges();
+            colorStop.update();
             draw();
         }
 
