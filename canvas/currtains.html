@@ -121,6 +121,16 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height)                
             ],
+            shape: [
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255)
+            ],
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
             randomFont: getRandomIntInclusive(0, 3)
@@ -178,10 +188,10 @@
                         // ctx.scale(k,k)
                         ctx.translate(100, 75);
                         ctx.beginPath();
-                        ctx.moveTo(75, 50);
-                        ctx.lineTo(100, 75);
-                        ctx.lineTo(150, 50);
-                        ctx.lineTo(100, 25);
+                        ctx.moveTo(title.shape[0], title.shape[1]);
+                        ctx.lineTo(title.shape[2], title.shape[3]);
+                        ctx.lineTo(title.shape[4], title.shape[5]);
+                        ctx.lineTo(title.shape[6], title.shape[7]);
                         ctx.fill();
                         ctx.setTransform(1, 0, 0, 1, 0, 0);
                         // ctx.strokeStyle = `rgba(${title.gradientColor[i+4]},${title.gradientColor[i + 5]},${title.gradientColor[i + 6]},${title.gradientAlpha[1]}`
@@ -210,10 +220,10 @@
                         ctx.translate(200, 100);
                         ctx.translate(k, 0)
                         ctx.beginPath();
-                        ctx.moveTo(75, 50);
-                        ctx.lineTo(100, 75);
-                        ctx.lineTo(150, 50);
-                        ctx.lineTo(100, 25);
+                        ctx.moveTo(title.shape[0], title.shape[1]);
+                        ctx.lineTo(title.shape[2], title.shape[3]);
+                        ctx.lineTo(title.shape[4], title.shape[5]);
+                        ctx.lineTo(title.shape[6], title.shape[7]);
                         ctx.fill();
                         ctx.setTransform(1, 0, 0, 1, 0, 0);
                         // ctx.strokeStyle = `rgba(${title.gradientColor[i+4]},${title.gradientColor[i + 5]},${title.gradientColor[i + 6]},${title.gradientAlpha[1]}`
@@ -242,10 +252,10 @@
                         ctx.translate(200, 50);
                         ctx.translate(k,k)
                         ctx.beginPath();
-                        ctx.moveTo(75, 50);
-                        ctx.lineTo(100, 75);
-                        ctx.lineTo(150, 50);
-                        ctx.lineTo(100, 25);
+                        ctx.moveTo(title.shape[0], title.shape[1]);
+                        ctx.lineTo(title.shape[2], title.shape[3]);
+                        ctx.lineTo(title.shape[4], title.shape[5]);
+                        ctx.lineTo(title.shape[6], title.shape[7]);
                         ctx.fill();
                         ctx.setTransform(1, 0, 0, 1, 0, 0);
                         // ctx.strokeStyle = `rgba(${title.gradientColor[i+4]},${title.gradientColor[i + 5]},${title.gradientColor[i + 6]},${title.gradientAlpha[1]}`
