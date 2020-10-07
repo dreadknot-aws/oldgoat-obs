@@ -83,7 +83,8 @@
     function drawPaintBrush(ctx, screenX, screenY, radius = 1280, redShift = -50, blueShift = 100, greenShift = -50,
         redMax = 100, blueMax = 255, greenMax = 255,
         redStartMax = 0, blueStartMax = 100, greenStartMax = 50
-    ) {
+    ) 
+    {
 
         let pwidth = Math.floor(Math.random() * 25)
         let pheight = Math.floor(Math.random() * 25)
@@ -137,6 +138,130 @@
             ctx.fillRect(cx, cy, pwidth, pheight);
         }
     }
+
+        class Boat {
+            constructor() {
+                this.location = new Vector(1000, 500);
+                this.velocity = new Vector(5, 5);
+                this.acceleration = new Vector(0, 0);
+                this.size = 10
+                this.width = 0
+                this.mass = 10
+                this.height = this.location.y + 5
+                this.sx = 658
+                this.sy = 350
+                this.sw = 6
+                this.sh = 11
+
+                // Assuming myButton is a button element
+                // canvas.addEventListener('click', this.onClick, false)
+
+
+            }
+
+            // onClick(event) {
+            //     console.log('Boat:', arguments)
+            //     console.log('Boat:', event)
+            //     console.log('Boat:', event.clientY)
+            //     console.log('Boat:', this)
+
+            //     let MouseVector = new Vector(event.clientX, event.clientY);
+            //     Vector.sub(MouseVector, MouseVector)
+            //     //force = arguments.
+            //     //applyForce(force)
+            // }
+            update() {
+                this.velocity.add(this.acceleration)
+                this.velocity.limit(.5)
+                this.location.add(this.velocity)
+                this.acceleration.mult(0)
+            }
+            applyForce(force) {
+                let f = Vector.div(force, this.mass)
+                this.acceleration.add(f)
+            }
+            draw(ctx) {
+                ctx.save()
+                // // ctx.globalCompositeOperation = comps[spin.Composite]
+                // ctx.globalCompositeOperation = 'xor'
+                // // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
+                // // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+
+                // // ctx.fillStyle = "black";
+                // ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
+                // // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
+                // ctx.restore()
+
+                // // Draw vector line to mouse
+                // ctx.lineWidth = 2;
+                // ctx.fillStyle = 'orange';
+                // ctx.lineCap = 'round'
+
+                // ctx.globalCompositeOperation = 'xor';
+                // ctx.beginPath();
+                // ctx.moveTo(aBoat.location.x, aBoat.location.y);
+                // ctx.lineTo(mouseLocation.x, mouseLocation.y);
+                // //ctx.rect(40, 40, 70, 70);
+                // // ctx.stroke();
+
+                // Quadratric curves example
+                ctx.translate(this.location.x, this.location.y);
+                ctx.beginPath();
+                ctx.moveTo(75, 25);
+                ctx.quadraticCurveTo(25, 25, 25, 62.5);
+                ctx.quadraticCurveTo(25, 100, 50, 100);
+                ctx.quadraticCurveTo(50, 120, 30, 125);
+                ctx.quadraticCurveTo(60, 120, 65, 100);
+                ctx.quadraticCurveTo(125, 100, 125, 62.5);
+                ctx.quadraticCurveTo(125, 25, 75, 25);
+                ctx.stroke();
+                ctx.restore();
+
+            }
+            checkEdges() {
+                if (this.location.x > 1280) {
+                    this.velocity.x *= -1;
+                    // this.location.x = 1000
+                } else if (this.location.x < 0) {
+                    // this.location.x = 1000
+                    this.velocity.x *= -1;
+                }
+
+                if (this.location.y > 720) {
+                    // this.location.y = 500
+                    this.velocity.y *= -1;
+
+                } else if (this.location.y < 472) {
+                    // this.location.y = 500
+                    this.velocity.y *= -1;
+
+                }
+            }
+        }
+
+
+        let mouseLocation = new Vector(0, 0);
+
+        let aBoat = new Boat();
+
+        // Assuming myButton is a button element
+        frame.addEventListener('click', Blow, false)
+        function Blow(event) {
+            // print and have a look at the event object 
+            // always print arguments in case of overlooking any other arguments
+            console.log('Blow:', arguments)
+            mouseLocation = new Vector(event.clientX, event.clientY)
+            // let windFrom = new Vector(-.5, 0)
+            // windFrom.sub(mouseLocation)
+            // windFrom.mag(5)
+            console.log('Blow:', mouseLocation)
+            let windFrom = Vector.sub(mouseLocation, aBoat.location)
+            windFrom.normalize()
+            // windFrom.mult(0.5);
+            aBoat.applyForce(windFrom)
+            console.log('Blow:', windFrom)
+        }
+
 
     function init() {
         // img.src = 'sheets/path1459.png';
@@ -295,6 +420,9 @@
 
 
     function draw() {
+            let wind = new Vector(-.01, -.01)
+        let current = new Vector(0.001, .001)
+
         let ctx = document.getElementById('canvas').getContext('2d');
         let tint_ctx = document.getElementById('tint').getContext('2d');
 
@@ -304,6 +432,11 @@
         let ctx2 = canvas2.getContext("2d");
 
         ctx.save();
+        // aBoat.draw(ctx)
+        aBoat.checkEdges();
+        aBoat.applyForce(wind)
+        aBoat.applyForce(current);
+        aBoat.update();
         // clear background. Get the paint on effect by commenting it out
         // ctx.clearRect(0, 0, canvas.width, canvas.height);
         // for (let i = 0; i < 50; i++) {

@@ -1,16 +1,23 @@
 p {
     color: black;
-    width: 1280px;
+    /* width: 1280px; */
+    width: calc(1280px - 30%);
     font-size: 5em;
-    background-color: gold;
+    /* background-color: gold; */
+    background: gold 10px 10px repeat-x fixed;
     border: solid;
 font-family: 'introrustg-base2line';
 text-align: center;
     /* background-blend-mode: difference; */
     text-shadow: 1px 1px 1px peru;
-
+    padding: 10px 15px 15px 5px;
 
 }
+
+body { background-color: rgba(0, 0, 0, 0);
+     margin: 0px auto; 
+     overflow: hidden; 
+    }
 
 h1 {
        color: black;
