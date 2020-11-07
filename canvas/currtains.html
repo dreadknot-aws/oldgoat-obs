@@ -91,10 +91,11 @@
         var wind = new Vector(0, 0);
         var mouse = new Vector(0, 0)
 
+        var curtainsize = getRandomIntInclusive(0, canvas.width);
+
         var colorStop = new Boat();
         var running = false;
         var raf;
-
 
         var title = {
             text: param_title,
@@ -122,11 +123,12 @@
                 getRandomIntInclusive(0, canvas.height)                
             ],
             shape: [
-                (1* Math.cos(60), 1 * Math.sin(60)),
-                (1 * Math.cos(120), 1 * Math.sin(120)),
-                (1 * Math.cos(240), 1 * Math.sin(240)),
-                (1 * Math.cos(300), 1 * Math.sin(300)),
-                // getRandomIntInclusive(0, 255),
+                (curtainsize , 0),
+                (curtainsize * Math.cos(60)), (curtainsize * Math.sin(60)),
+                (curtainsize * Math.cos(120)), (curtainsize * Math.sin(120)),
+                (curtainsize * Math.cos(240)), (curtainsize * Math.sin(240)),
+                (curtainsize * Math.cos(300)), (curtainsize * Math.sin(300)),
+                (-curtainsize, 0),
                 // getRandomIntInclusive(0, 255),
                 // getRandomIntInclusive(0, 255),
                 // getRandomIntInclusive(0, 255),
@@ -188,7 +190,7 @@
                         // ctx.fillStyle = 'green'
                         ctx.translate(0,k)
                         // ctx.scale(k,k)
-                        ctx.translate(100, 75);
+                        // ctx.translate(100, 75);
                         ctx.beginPath();
                         ctx.moveTo(title.shape[0], title.shape[1]);
                         ctx.lineTo(title.shape[2], title.shape[3]);
