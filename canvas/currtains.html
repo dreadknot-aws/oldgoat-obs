@@ -91,7 +91,7 @@
         var wind = new Vector(0, 0);
         var mouse = new Vector(0, 0)
 
-        var curtainsize = getRandomIntInclusive(0, canvas.width);
+        var curtainsize = getRandomIntInclusive(40, 400);
 
         var colorStop = new Boat();
         var running = false;
@@ -123,12 +123,17 @@
                 getRandomIntInclusive(0, canvas.height)                
             ],
             shape: [
-                (curtainsize , 0),
-                (curtainsize * Math.cos(60)), (curtainsize * Math.sin(60)),
-                (curtainsize * Math.cos(120)), (curtainsize * Math.sin(120)),
-                (curtainsize * Math.cos(240)), (curtainsize * Math.sin(240)),
-                (curtainsize * Math.cos(300)), (curtainsize * Math.sin(300)),
-                (-curtainsize, 0),
+                0, 0,
+                100, 100,
+                100, 0,
+                0, 0
+                // curtainsize , 0,
+                // (curtainsize * Math.cos(60)), (curtainsize * Math.sin(60)),
+                // (curtainsize * Math.cos(120)), (curtainsize * Math.sin(120)),
+                // (-curtainsize, 0),
+                // (curtainsize * Math.cos(240)), (curtainsize * Math.sin(240)),
+                // (curtainsize * Math.cos(300)), (curtainsize * Math.sin(300)),
+                // curtainsize, 0
                 // getRandomIntInclusive(0, 255),
                 // getRandomIntInclusive(0, 255),
                 // getRandomIntInclusive(0, 255),
@@ -176,7 +181,7 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
-                for (let i = 0; i < 18; i++) {
+                for (let i = 0; i < 10; i++) {
                     // ctx.fillStyle = `rgba(${title.gradientColor[i]},${title.gradientColor[i+1]},${title.gradientColor[i+3]},${title.gradientAlpha[0]}`
                     ctx.fillStyle = `rgba(${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientColor[6]},${title.gradientAlpha[1]}`
                     for (var j = 0; j < 10; j++) {
@@ -184,22 +189,24 @@
 
                         ctx.translate(i * 75, j * 75)
 
-                        // ctx.rotate((i * 90) * Math.PI / 180);
+                        ctx.rotate((i * 90) * Math.PI / 180);
                         // ctx.scale(i, j);
-                        ctx.translate(-200, -125)
+                        // ctx.translate(-200, -125)
                         // ctx.fillStyle = 'green'
-                        ctx.translate(0,k)
+                        // ctx.translate(0,k)
                         // ctx.scale(k,k)
-                        // ctx.translate(100, 75);
+                        ctx.translate(100, 100);
                         ctx.beginPath();
                         ctx.moveTo(title.shape[0], title.shape[1]);
                         ctx.lineTo(title.shape[2], title.shape[3]);
                         ctx.lineTo(title.shape[4], title.shape[5]);
                         ctx.lineTo(title.shape[6], title.shape[7]);
-                        ctx.lineTo(title.shape[0], title.shape[1]);
+                        // ctx.lineTo(title.shape[8], title.shape[9]);
+                        // ctx.lineTo(title.shape[10], title.shape[11]);
+                        // ctx.lineTo(title.shape[0], title.shape[1]);
 
                         ctx.fill();
-                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        // ctx.setTransform(1, 0, 0, 1, 0, 0);
                         ctx.strokeStyle = `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`
                         ctx.stroke();
 
@@ -208,70 +215,70 @@
                 }
                 
 
-                for (let i = 0; i < 18; i++) {
-                    ctx.fillStyle = `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[0]}`
-                    // ctx.fillStyle = 'green'
-                    // ctx.rotate((i * 90) * Math.PI / 180);
+                // for (let i = 0; i < 18; i++) {
+                //     ctx.fillStyle = `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[0]}`
+                //     // ctx.fillStyle = 'green'
+                //     // ctx.rotate((i * 90) * Math.PI / 180);
 
-                    for (var j = 0; j < 10; j++) {
-                        ctx.save()
+                //     for (var j = 0; j < 10; j++) {
+                //         ctx.save()
 
-                        ctx.translate(i * 75, j * 75)
-                        ctx.rotate((180) * Math.PI / 180);
+                //         ctx.translate(i * 75, j * 75)
+                //         ctx.rotate((180) * Math.PI / 180);
 
-                        // ctx.rotate((i * 90) * Math.PI / 180);
-                        // ctx.scale(i, j);
-                        ctx.translate(-200, -125)
-                        // ctx.fillStyle = 'green'
-                        ctx.translate(200, 100);
-                        ctx.translate(k, 0)
-                        ctx.beginPath();
-                        ctx.moveTo(title.shape[0], title.shape[1]);
-                        ctx.lineTo(title.shape[2], title.shape[3]);
-                        ctx.lineTo(title.shape[4], title.shape[5]);
-                        ctx.lineTo(title.shape[6], title.shape[7]);
-                        ctx.lineTo(title.shape[0], title.shape[1]);
-                        ctx.fill();
-                        ctx.setTransform(1, 0, 0, 1, 0, 0);
-                        ctx.strokeStyle = `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[3]},${title.gradientAlpha[1]}`
-                        ctx.stroke();
+                //         // ctx.rotate((i * 90) * Math.PI / 180);
+                //         // ctx.scale(i, j);
+                //         ctx.translate(-200, -125)
+                //         // ctx.fillStyle = 'green'
+                //         ctx.translate(200, 100);
+                //         ctx.translate(k, 0)
+                //         ctx.beginPath();
+                //         ctx.moveTo(title.shape[0], title.shape[1]);
+                //         ctx.lineTo(title.shape[2], title.shape[3]);
+                //         ctx.lineTo(title.shape[4], title.shape[5]);
+                //         ctx.lineTo(title.shape[6], title.shape[7]);
+                //         ctx.lineTo(title.shape[0], title.shape[1]);
+                //         ctx.fill();
+                //         ctx.setTransform(1, 0, 0, 1, 0, 0);
+                //         ctx.strokeStyle = `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[3]},${title.gradientAlpha[1]}`
+                //         ctx.stroke();
 
-                        ctx.restore()
-                    }
-                }                
+                //         ctx.restore()
+                //     }
+                // }                
 
 
-                for (let i = 0; i < 18; i++) {
-                    ctx.fillStyle = `rgba(${title.gradientColor[5]},${title.gradientColor[1]},${title.gradientColor[3]},${title.gradientAlpha[0]}`
-                    // ctx.fillStyle = 'blue'
-                    // ctx.rotate((i * 90) * Math.PI / 180);
+                // for (let i = 0; i < 18; i++) {
+                //     ctx.fillStyle = `rgba(${title.gradientColor[5]},${title.gradientColor[1]},${title.gradientColor[3]},${title.gradientAlpha[0]}`
+                //     // ctx.fillStyle = 'blue'
+                //     // ctx.rotate((i * 90) * Math.PI / 180);
 
-                    for (var j = 0; j < 10; j++) {
-                        ctx.save()
+                //     for (var j = 0; j < 10; j++) {
+                //         ctx.save()
 
-                        ctx.translate(i * 75, j * 75)
-                        ctx.rotate((180) * Math.PI / 180);
+                //         ctx.translate(i * 75, j * 75)
+                //         ctx.rotate((180) * Math.PI / 180);
 
-                        // ctx.rotate((i * 90) * Math.PI / 180);
-                        // ctx.scale(i, j);
-                        ctx.translate(-200, -125)
-                        // ctx.fillStyle = 'green'
-                        ctx.translate(200, 50);
-                        ctx.translate(k,k)
-                        ctx.beginPath();
-                        ctx.moveTo(title.shape[0], title.shape[1]);
-                        ctx.lineTo(title.shape[2], title.shape[3]);
-                        ctx.lineTo(title.shape[4], title.shape[5]);
-                        ctx.lineTo(title.shape[6], title.shape[7]);
-                        ctx.lineTo(title.shape[0], title.shape[1]);
-                        ctx.fill();
-                        ctx.setTransform(1, 0, 0, 1, 0, 0);
-                        ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[1]},${title.gradientColor[0]},${title.gradientAlpha[2]}`
-                        ctx.stroke();
+                //         // ctx.rotate((i * 90) * Math.PI / 180);
+                //         // ctx.scale(i, j);
+                //         ctx.translate(-200, -125)
+                //         // ctx.fillStyle = 'green'
+                //         ctx.translate(200, 50);
+                //         ctx.translate(k,k)
+                //         ctx.beginPath();
+                //         ctx.moveTo(title.shape[0], title.shape[1]);
+                //         ctx.lineTo(title.shape[2], title.shape[3]);
+                //         ctx.lineTo(title.shape[4], title.shape[5]);
+                //         ctx.lineTo(title.shape[6], title.shape[7]);
+                //         ctx.lineTo(title.shape[0], title.shape[1]);
+                //         ctx.fill();
+                //         ctx.setTransform(1, 0, 0, 1, 0, 0);
+                //         ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[1]},${title.gradientColor[0]},${title.gradientAlpha[2]}`
+                //         ctx.stroke();
 
-                        ctx.restore()
-                    }
-                }
+                //         ctx.restore()
+                //     }
+                // }
 
 
                 // play with this
