@@ -11,12 +11,23 @@
             var ctx = canvas.getContext('2d');
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(canvas.width, canvas.height);
-            ctx.lineTo(0,canvas.height);
-            ctx.lineTo(0,0)
+            ctx.moveTo(0,0);
+            ctx.lineTo(100, 0);
+            ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
+            ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
+            ctx.lineTo(-100, 0);
+            ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
+            ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
+            ctx.lineTo(100, 0);
+
+            // ctx.lineTo(canvas.width, canvas.height);
+            // ctx.lineTo(0,canvas.height);
+            // ctx.lineTo(0,0)
             ctx.stroke();
-            ctx.fill();
+
+            // ctx.moveTo(0, 0);
+
+            // ctx.fill();
         }
     }
     </script>
