@@ -4,32 +4,60 @@
 <head>
     <meta charset="utf-8" />
     <title>Canvas tutorial</title>
-    <script type="text/javascript">
-    function draw() {
-        var canvas = document.getElementById('canvas');
-        if (canvas.getContext) {
-            var ctx = canvas.getContext('2d');
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.beginPath();
-            ctx.moveTo(0,0);
-            ctx.lineTo(100, 0);
-            ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-            ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-            ctx.lineTo(-100, 0);
-            ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-            ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
-            ctx.lineTo(100, 0);
-
-            // ctx.lineTo(canvas.width, canvas.height);
-            // ctx.lineTo(0,canvas.height);
-            // ctx.lineTo(0,0)
-            ctx.stroke();
-
-            // ctx.moveTo(0, 0);
-
-            // ctx.fill();
+    <script type="module">
+        var raf;
+        function loop() {
+            window.requestAnimationFrame(loop);
+            draw();
         }
-    }
+        function draw() {
+            var canvas = document.getElementById('canvas');
+
+            if (canvas.getContext) {
+                var ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.save()
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+
+                var time = new Date();
+                ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+
+                // ctx.rotate(2 * Math.PI / 180);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(100, 0);
+                ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
+                // ctx.fill();
+
+                ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
+                ctx.lineTo(0, 0);
+                ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
+
+                ctx.lineTo(-100, 0);
+                ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
+                ctx.lineTo(0, 0);
+                ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
+
+                ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
+                ctx.lineTo(100, 0);
+
+                // ctx.lineTo(canvas.width, canvas.height);
+                // ctx.lineTo(0,canvas.height);
+                // ctx.lineTo(0,0)
+                ctx.stroke();
+
+                // ctx.moveTo(0, 0);
+
+                // ctx.fill();
+                ctx.restore()
+
+            }
+        }
+
+        raf = window.requestAnimationFrame(loop);
+
+
     </script>
     <style type="text/css">
         canvas {
@@ -38,8 +66,8 @@
     </style>
 </head>
 
-<body onload="draw();">
+<body">
     <canvas id="canvas" width="300" height="300"></canvas>
-</body>
+    </body>
 
 </html>
