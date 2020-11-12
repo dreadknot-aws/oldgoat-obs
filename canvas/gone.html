@@ -28,15 +28,28 @@
                 ctx.moveTo(0, 0);
                 ctx.lineTo(100, 0);
                 ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-                // ctx.fill();
-
                 ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
+                // ctx.fillStyle = 'red';
+                // if (time * .25 % 2 | 0)
+                    ctx.fill();
+                ctx.stroke();
+
+                ctx.beginPath();
+                // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
                 ctx.lineTo(0, 0);
                 ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
 
+                
                 ctx.lineTo(-100, 0);
                 ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
                 ctx.lineTo(0, 0);
+                ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
+
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.beginPath();
                 ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
 
                 ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
