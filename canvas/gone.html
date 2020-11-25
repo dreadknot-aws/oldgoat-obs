@@ -6,10 +6,37 @@
     <title>Hexa</title>
     <script type="module">
         var raf;
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        }
+
+
+
         function loop() {
             window.requestAnimationFrame(loop);
             draw();
         }
+
+        var randomx = getRandomIntInclusive(0, canvas.width)
+        var randomy = getRandomIntInclusive(0, canvas.height)
+
+        var controlpointx = getRandomIntInclusive(0, canvas.width)
+        var controlpointy = getRandomIntInclusive(0, canvas.height)
+
+        var radius0 = getRandomIntInclusive(0, canvas.width)
+        var radius1 = getRandomIntInclusive(0, canvas.height)
+
+        var color1 = getRandomIntInclusive(0, 255)
+        var color2 = getRandomIntInclusive(0, 255)
+        var color3 = getRandomIntInclusive(0, 255)
+
+        var alpha1 = Math.random();
+        var alpha2 = Math.random();
+        var alpha3 = Math.random();
+
         function draw() {
             var canvas = document.getElementById('canvas');
 
@@ -276,11 +303,22 @@
                 // // ctx.fill();
                 // ctx.restore()
 
+                // var gradient = ctx.createRadialGradient(randomx, randomy, radius0, controlpointx, controlpointy, radius1);
+                // gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()}`);
+                // gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()}`);
+                // gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()}`);
+
+                var gradient = ctx.createRadialGradient(randomx, randomy, radius0, controlpointx, controlpointy, radius1);
+                gradient.addColorStop(0, `rgba(${color1}, ${color2}, ${color3}, ${alpha1}`);
+                gradient.addColorStop(.5, `rgba(${color2}, ${color3}, ${color1}, ${alpha2}`);
+                gradient.addColorStop(1, `rgba(${color3}, ${color1}, ${color2}, ${alpha3}`);
+
+
                 for (var i = 0; i < 10; i++) {
                     for (var j = 0; j < 5; j++) {
                         ctx.save()
                         ctx.translate(i * 174, j * 174);
-                    ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+                        ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
 
 
 
@@ -305,7 +343,8 @@
                         ctx.lineTo(0, 0);
                         ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
 
-                        ctx.fillStyle = 'red';
+                        // ctx.fillStyle = 'red';
+                        ctx.fillStyle = gradient;
                         ctx.fill();
                         ctx.stroke();
 
@@ -317,7 +356,7 @@
 
                         // ctx.lineTo(canvas.width, canvas.height);
                         // ctx.lineTo(0,canvas.height);
-                        ctx.lineTo(0,0)
+                        ctx.lineTo(0, 0)
                         ctx.fillStyle = 'white'
                         ctx.fill();
                         ctx.stroke();
