@@ -211,6 +211,8 @@
                 ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
                 // ctx.font = `bold 80px ${title.fonts[title.randomFont]}`;
                 ctx.font = `bold 150px silkscreen`;
+                ctx.globalCompositeOperation = 'destination-over';
+
                 ctx.fillStyle = 'white'
 
                 // ctx.fillText(title.text, title.pos.x, title.pos.y)
