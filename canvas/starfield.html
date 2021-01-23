@@ -15,16 +15,16 @@
         import { Vector } from '../js/mr.vector.js';
 
 
-    async function loadFonts() {
-        const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
-        // wait for font to be loaded
-        await font.load();
-        // add font to document
-        document.fonts.add(font);
-        // enable font with CSS class
-        document.body.classList.add('fonts-loaded');
-    }
-    // loadFonts();
+        async function loadFonts() {
+            const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
+            // wait for font to be loaded
+            await font.load();
+            // add font to document
+            document.fonts.add(font);
+            // enable font with CSS class
+            document.body.classList.add('fonts-loaded');
+        }
+        // loadFonts();
 
         class Boat {
             constructor() {
@@ -92,10 +92,13 @@
         let param_title = params.get('title');
         let og_bg_color = params.get('ogcolor')
 
-    if (param_title == null) {
-        // some_variable is either null or undefined
-        param_title = 'The BeatBunker'
-    }
+        if (param_title == null) {
+            // some_variable is either null or undefined
+            param_title = 'The BeatBunker'
+        }
+
+
+
 
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
@@ -106,6 +109,7 @@
         var colorStop = new Boat();
         var running = false;
         var raf;
+
 
 
         var title = {
@@ -131,7 +135,7 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height),
                 getRandomIntInclusive(0, canvas.width),
-                getRandomIntInclusive(0, canvas.height)                
+                getRandomIntInclusive(0, canvas.height)
             ],
             pos: {
                 x: getRandomIntInclusive(-500, 500),
@@ -169,19 +173,20 @@
             colorStop.location.x = colorStop.location.x + .01
         }
 
-        let line = { x: 0, y: 0}
+        let line = { x: 0, y: 0 }
         let k = 0;
         let g = 0;
 
 
         let fruits = []
         for (var i = 0; i < 90; i++) {
-                fruits.push({ x: getRandomIntInclusive(0, canvas.width) , y: getRandomIntInclusive(0, canvas.height), rx: getRandomIntInclusive(1, 5), ry: getRandomIntInclusive(1, 5)})
-            }
+            fruits.push({ x: getRandomIntInclusive(0, canvas.width), y: getRandomIntInclusive(0, canvas.height), rx: getRandomIntInclusive(1, 5), ry: getRandomIntInclusive(1, 5) })
+        }
 
         var sin = Math.sin(Math.PI / 6);
         var cos = Math.cos(Math.PI / 6);
 
+        var rgswitch = 'x';
 
         function draw() {
             if (k < 1500) {
@@ -191,8 +196,30 @@
             if (canvas.getContext) {
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
-                let gradient = ctx.createRadialGradient(line.x + title.pos.x, line.y + title.pos.y, 1, k, 1, 1);
 
+                switch (rgswitch) {
+
+                    case 'x':
+                        var gradient = ctx.createRadialGradient(line.x + title.box[0], title.box[1], k, 1, 1, 1);
+                        break;
+                    case 'y':
+                        var gradient = ctx.createRadialGradient(title.pos.x, line.y + title.pos.y, k, 1, 1, 1);
+                        break;
+                    case 'r':
+                        var gradient = ctx.createRadialGradient(title.pos.x, title.pos.y, k, 1, 1, 1);
+                        break;
+                    case 'x1':
+                        var gradient = ctx.createRadialGradient(1, 1, 1, title.pos.x + line.x, title.pos.y, k);
+                        break;
+                    case 'y1':
+                        var gradient = ctx.createRadialGradient(1, 1, 1, title.pos.x, title.pos.y + line.y, k);
+                        break;
+                    case 'r1':
+                        var gradient = ctx.createRadialGradient(1, 1, 1, title.pos.x, title.pos.y, k);
+                        break;
+                    default:
+                        var gradient = ctx.createRadialGradient(title.pos.x, title.pos.y, 1, k, 1, 1);
+                }
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
@@ -215,6 +242,8 @@
                     ctx.lineWidth = 10;
                     ctx.strokeStyle = gradient;
                     ctx.ellipse(fruits[i].x, fruits[i].y, fruits[i].rx, fruits[i].ry, Math.PI / 4, 0, 2 * Math.PI);
+                    
+                    
                     ctx.stroke();
                     ctx.fill();
                     // fruits[i].y = fruits[i].y - 1 
@@ -222,11 +251,11 @@
 
                 for (var i = 0; i < 90; i++) {
                     ctx.beginPath();
-                    ctx.fillStyle = 'white';
+                    ctx.fillStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[3]},${title.gradientAlpha[1]}`
                     ctx.lineWidth = 1;
                     // ctx.strokeStyle = gradient;
                     ctx.ellipse(fruits[i].y, fruits[i].x, fruits[i].rx, fruits[i].rx, Math.PI / 4, 0, 2 * Math.PI);
-                    ctx.stroke();
+                    // ctx.stroke();
                     ctx.fill();
                     // fruits[i].y = fruits[i].y - 1 
                 }

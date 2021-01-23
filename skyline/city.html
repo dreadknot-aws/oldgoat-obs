@@ -417,7 +417,6 @@
         if ((gradientPointA.x > canvas.width * 2) || (gradientPointA.x < -canvas.width * 2)) {
             gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
             console.log("limit new gradient: " + gradientPointA.x + "," + gradientPointA.y)
-
         }
         if ((gradientPointA.y > canvas.height * 2) || (gradientPointA.y < -canvas.width * 2)) {
             gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
@@ -428,13 +427,11 @@
 
         if ((gradientPointB.x > canvas.width * 2) || (gradientPointB.x < -canvas.width * 2)) {
             gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
-
             console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
 
         }
         if ((gradientVelocityB.y > canvas.height * 2) || (gradientPointB.y < -canvas.width * 2)) {
             gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
-
             console.log("limit new gradient: " + gradientPointB.x + "," + gradientPointB.y)
 
         }

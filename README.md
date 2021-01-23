@@ -38,6 +38,6 @@ PowerShell
 
 `http-server.cmd`
 
-https://jasonwatmore.com/posthttp/2016/06/22/nodejs-setup-simple-http-server-local-web-server
+ npm install --global http-server
 
-
+ http-server.cmd

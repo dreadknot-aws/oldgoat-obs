@@ -123,11 +123,11 @@
                 getRandomIntInclusive(0, canvas.height)                
             ],
             shape: [
-                0, 0,
-                0, 100,
-                100, 100,
                 100, 0,
-                0, 0
+                100* Math.cos(60), 100*Math.sin(60),
+                100 * Math.cos(120), 100 * Math.sin(120),
+                -100, 0,
+                100* Math.cos(240), 100* Math.sin(240),
                 // curtainsize , 0,
                 // (curtainsize * Math.cos(60)), (curtainsize * Math.sin(60)),
                 // (curtainsize * Math.cos(120)), (curtainsize * Math.sin(120)),
@@ -201,9 +201,10 @@
                         ctx.moveTo(title.shape[0], title.shape[1]);
                         ctx.lineTo(title.shape[2], title.shape[3]);
                         ctx.lineTo(title.shape[4], title.shape[5]);
+                        ctx.moveTo(title.shape[4], title.shape[5]);
                         ctx.lineTo(title.shape[6], title.shape[7]);
-                        // ctx.lineTo(title.shape[8], title.shape[9]);
-                        // ctx.lineTo(title.shape[10], title.shape[11]);
+                        ctx.lineTo(title.shape[8], title.shape[9]);
+                        ctx.lineTo(title.shape[10], title.shape[11]);
                         // ctx.lineTo(title.shape[0], title.shape[1]);
 
                         ctx.fill();
