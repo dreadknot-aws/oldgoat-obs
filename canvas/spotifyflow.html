@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+
+<!doctype html>
+<html>
+
+<head>
+    <title>Example of the Implicit Grant flow with Spotify</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style type="text/css">
+        #login,
+        #loggedin {
+            display: none;
+        }
+
+        .text-overflow {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="login">
+            <h1>This is an example of the Implicit Grant flow</h1>
+            <button id="login-button" class="btn btn-primary">Log in with Spotify</button>
+        </div>
+        <div id="loggedin">
+            <div id="user-profile">
+            </div>
+            <div id="oauth">
+            </div>
+        </div>
+    </div>
+
+    <script id="user-profile-template" type="text/x-handlebars-template">
+      <h1>Logged in as {{display_name}} {{ timestamp }} </h1>
+      <div class="media">
+        <div class="pull-left">
+          <img class="media-object" width="150" src="{{images.0.url}}" />
+        </div>
+        <div class="media-body">
+          <dl class="dl-horizontal">
+            <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
+            <dt>Id</dt><dd>{{id}}</dd>
+            <dt>Email</dt><dd>{{email}}</dd>
+            <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
+            <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
+            <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
+            <dt>Country</dt><dd>{{country}}</dd>
+            <dt>Artist Playing</dt><dd>{{item.album.artists.0.name}}</dd>
+            <dt>Song Playing</dt><dd>{{item.album.name}}</dd>
+            <dt>Is Playing</dt><dd>{{is_playing}}</dd>
+          </dl>
+          <canvas id="background" width="300" height="300"></canvas>
+        </div>
+      </div>
+    </script>
+
+    <script id="oauth-template" type="text/x-handlebars-template">
+      <h2>oAuth info</h2>
+      <dl class="dl-horizontal">
+        <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
+      </dl>
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script>
+        (function () {
+
+            var stateKey = 'spotify_auth_state';
+
+            /**
+             * Obtains parameters from the hash of the URL
+             * @return Object
+             */
+            function getHashParams() {
+                var hashParams = {};
+                var e, r = /([^&;=]+)=?([^&;]*)/g,
+                    q = window.location.hash.substring(1);
+                while (e = r.exec(q)) {
+                    hashParams[e[1]] = decodeURIComponent(e[2]);
+                }
+                return hashParams;
+            }
+
+            /**
+             * Generates a random string containing numbers and letters
+             * @param  {number} length The length of the string
+             * @return {string} The generated string
+             */
+            function generateRandomString(length) {
+                var text = '';
+                var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+                for (var i = 0; i < length; i++) {
+                    text += possible.charAt(Math.floor(Math.random() * possible.length));
+                }
+                return text;
+            };
+
+            var userProfileSource = document.getElementById('user-profile-template').innerHTML,
+                userProfileTemplate = Handlebars.compile(userProfileSource),
+                userProfilePlaceholder = document.getElementById('user-profile');
+
+            oauthSource = document.getElementById('oauth-template').innerHTML,
+                oauthTemplate = Handlebars.compile(oauthSource),
+                oauthPlaceholder = document.getElementById('oauth');
+
+            var params = getHashParams();
+
+            var access_token = params.access_token,
+                state = params.state,
+                storedState = localStorage.getItem(stateKey);
+
+            if (access_token && (state == null || state !== storedState)) {
+                alert('There was an error during the authentication');
+            } else {
+                localStorage.removeItem(stateKey);
+                if (access_token) {
+                    $.ajax({
+                        url: 'https://api.spotify.com/v1/me/player/currently-playing?market=US',
+                        headers: {
+                            'Authorization': 'Bearer ' + access_token
+                        },
+                        success: function (response) {
+                            userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+                            // console.log(response)
+
+                            $('#login').hide();
+                            $('#loggedin').show();
+                        }
+                    });
+                } else {
+                    $('#login').show();
+                    $('#loggedin').hide();
+                }
+
+                document.getElementById('login-button').addEventListener('click', function () {
+
+                    var client_id = 'db54e72b228f454ea10b25920c4d6832'; // Your client id
+                    var redirect_uri = 'http://127.0.0.1:8080/canvas/spotify.html'; // Your redirect uri
+
+                    var state = generateRandomString(16);
+
+                    localStorage.setItem(stateKey, state);
+                    var scope = 'user-read-private user-read-email user-read-currently-playing';
+
+                    var url = 'https://accounts.spotify.com/authorize';
+                    url += '?response_type=token';
+                    url += '&client_id=' + encodeURIComponent(client_id);
+                    url += '&scope=' + encodeURIComponent(scope);
+                    url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+                    url += '&state=' + encodeURIComponent(state);
+
+                    window.location = url;
+                }, false);
+            }
+        })();
+    </script>
+
+</html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Galindo&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Faster+One&family=Galindo&family=Holtwood+One+SC&display=swap"
+        rel="stylesheet">
+    <meta charset="utf-8" />
+    <title>Canvas tutorial</title>
+    <script type="module">
+        import { GUI } from '../js/dat.gui.module.js';
+        import { Vector } from '../js/mr.vector.js';
+
+        async function loadFonts() {
+            const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
+            // wait for font to be loaded
+            await font.load();
+            // add font to document
+            document.fonts.add(font);
+            // enable font with CSS class
+            document.body.classList.add('fonts-loaded');
+        }
+
+
+        class Boat {
+            constructor() {
+                this.location = new Vector(0, 0);
+                this.velocity = new Vector(0, 0);
+                this.acceleration = new Vector(.01, 0);
+                this.size = 10
+                this.width = 0
+                this.mass = 10
+                this.limit = .9
+
+            }
+
+            update() {
+                this.velocity.add(this.acceleration)
+                // this.velocity.limit(this.limit)
+                this.location.add(this.velocity)
+                this.acceleration.mult(0)
+            }
+
+            applyForce(force) {
+                let f = Vector.div(force, this.mass)
+                this.acceleration.add(f)
+            }
+
+            draw(ctx) {
+
+            }
+
+            checkEdges() {
+                // console.log('checkEdges:', this.location.x)
+
+                if (this.location.x > .99) {
+                    this.velocity.x = -.01;
+                    this.location.x = .99
+                } else if (this.location.x < .01) {
+                    this.location.x = .01
+                    this.velocity.x = .01;
+                }
+
+            }
+        }
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        }
+
+        function randn_bm(min, max, skew) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+            while (v === 0) v = Math.random();
+            let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+            num = num / 10.0 + 0.5; // Translate to 0 -> 1
+            if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+            num = Math.pow(num, skew); // Skew
+            num *= max - min; // Stretch to fill range
+            num += min; // offset to min
+            return num;
+        }
+
+        // let song = document.getElementById('user-profile-template').
+        let params = (new URL(document.location)).searchParams;
+        let param_title = params.get('title');
+        let og_bg_color = params.get('ogcolor')
+
+    if (param_title == null) {
+        // some_variable is either null or undefined
+        param_title = 'The BeatBunker'
+    }
+
+        var canvas = document.getElementById('canvas');
+        var background = document.getElementById('background');
+        var tick = 0;
+        var wind = new Vector(0, 0);
+        var mouse = new Vector(0, 0)
+
+        var colorStop = new Boat();
+        var running = false;
+        var raf;
+
+
+        var title = {
+            text: param_title,
+            gradientColor: [
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255)
+            ],
+            gradientAlpha: [
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random()
+            ],
+            box: [
+                getRandomIntInclusive(0, canvas.width),
+                getRandomIntInclusive(0, canvas.height),
+                getRandomIntInclusive(0, canvas.width),
+                getRandomIntInclusive(0, canvas.height)                
+            ],
+            pos: {
+                x: getRandomIntInclusive(0, 100),
+                y: getRandomIntInclusive(0, 400)
+            },
+            angle: getRandomIntInclusive(0, 90),
+            lineWidth: getRandomIntInclusive(0, 20),
+            fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
+            randomFont: getRandomIntInclusive(0, 3),
+            fontSize: getRandomIntInclusive(50,150),
+            count: 5
+        }
+
+        console.log(title.gradientColor[0])
+
+        canvas.addEventListener('mousemove', function (e) {
+            if (!running) {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            }
+        });
+
+        canvas.addEventListener('mouseout', function (e) {
+            window.cancelAnimationFrame(loop);
+            running = false;
+        });
+
+        function loop() {
+            // title.text = document.querySelector(".dl-horizontal > dd:nth-child(16)").innerHTML
+
+            window.requestAnimationFrame(loop);
+            colorStop.applyForce(wind);
+            colorStop.checkEdges();
+            colorStop.update();
+            draw();
+        }
+
+        function moveColorStop() {
+            colorStop.location.x = colorStop.location.x + .01
+
+        }
+
+            document.addEventListener('keydown', logKey);
+
+            function logKey(e) {
+                console.log(`${e.code}`);
+                if (e.code === 'Digit1') {
+                    title.text = document.querySelector(".dl-horizontal > dd:nth-child(16)").innerHTML
+                    title.pos.x = 0;
+                    title.pos.y = 0;
+                    console.log("Cam1")
+                    return;
+                }
+                if (e.code === 'Digit2') {
+                    title.pos.x = 100;
+                    title.pos.y = 100;
+                    console.log("Cam1")
+                    return;
+                }
+                if (e.code === 'ArrowLeft') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x - 1;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.x)
+                    return;
+                }
+                if (e.code === 'ArrowRight') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x + 1;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.x)
+                    return;
+                }
+                if (e.code === 'ArrowUp') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y + 1; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+                if (e.code === 'ArrowDown') {
+                    camera.position.z = camera.position.z;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y - 1; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+                if (e.code === 'KeyZ') {
+                    camera.position.z = camera.position.z + 1;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+                if (e.code === 'KeyX') {
+                    camera.position.z = camera.position.z - 1;
+                    camera.position.x = camera.position.x;  // -40, 40
+                    camera.position.y = camera.position.y; // -20. 20
+                    console.log(camera.position.y)
+                    return;
+                }
+            }
+
+
+            var sin = Math.sin(Math.PI / 60);
+            var cos = Math.cos(Math.PI / 60);
+
+        function draw() {
+
+            if (canvas.getContext) {
+                
+                let ctx = canvas.getContext('2d');
+                let ctx_background = background.getContext('2d')
+
+
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx_background.clearRect(0, 0, background.width, background.height);
+
+                let gradient = ctx.createLinearGradient(title.box[0], title.box[1], title.box[2],  title.box[3]);
+
+                gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
+                gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[2]}`);
+                gradient.addColorStop(1, `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientAlpha[3]}`);
+
+                ctx.filter = ``
+
+                ctx.fillStyle = `rgba(${ title.gradientColor[6] }, ${ title.gradientColor[7] }, ${ title.gradientColor[8] }, ${ title.gradientAlpha[1] }`
+
+                // ctx.fillStyle = 'black'
+
+                ctx.fillRect(title.box[0], title.box[1], title.box[2], title.box[3])
+                ctx.filter = `brightness(100%) opacity(100%)`
+
+                ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
+                
+                
+
+                ctx.filter = `brightness(100%) opacity(75%)`
+                ctx.fillStyle = gradient
+                ctx.lineWidth = title.lineWidth
+                ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
+
+                ctx.save();
+
+                ctx.translate(title.pos.x, title.pos.y);
+                // ctx.rotate(title.angle * Math.PI / 180);
+                ctx.strokeText(title.text, title.gradientColor[1], title.gradientColor[0])
+                ctx.fillText(title.text, title.gradientColor[1], title.gradientColor[0])
+
+                for (var i=0; i < title.count; i++)
+                {
+                    ctx.translate(title.pos.x, title.pos.y + 50);
+                    ctx.rotate(title.angle * Math.PI / 180);
+                    ctx.strokeText(title.text, title.gradientColor[1], title.gradientColor[0])
+                    ctx.fillText(title.text, title.gradientColor[1], title.gradientColor[0])
+                }
+
+                
+                // console.log(title.angle)
+                // ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
+
+                ctx.restore();
+            }
+        }
+
+
+        raf = window.requestAnimationFrame(loop);
+
+
+    </script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 1280px;
+            height: 720px;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+
+</html>
