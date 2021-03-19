@@ -20,6 +20,9 @@
                 this.location = new Vector(0, 0);
                 this.velocity = new Vector(0, 0);
                 this.acceleration = new Vector(.01, 0);
+                this.angle = 0;
+                this.aVelocity = 0;
+                this.aAcceleration = Math.random();
                 this.size = 10
                 this.width = 0
                 this.mass = 10
@@ -31,6 +34,9 @@
                 this.velocity.add(this.acceleration)
                 // this.velocity.limit(this.limit)
                 this.location.add(this.velocity)
+                this.aAcceleration = this.acceleration.x / 10.0;
+                this.aVelocity += this.aAcceleration
+                this.angle += this.aVelocity
                 this.acceleration.mult(0)
             }
 
@@ -154,12 +160,15 @@
                 gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]}, ${title.gradientColor[4]}, ${title.gradientColor[5]}, 1`);
                 gradient.addColorStop(1, `rgba(${title.gradientColor[6]}, ${title.gradientColor[6]}, ${title.gradientColor[7]}, 1`);
 
+                ctx.save();
+                // ctx.rotate(colorStop.angle)
 
                 // ctx.globalCompositeOperation = 'source-out';
                 // Quadratric curves example
                 for (var i = 0; i < title.columns; i++) {
                     for (var j = 0; j < title.rows; j++) {
                         ctx.save();
+                        // ctx.rotate(colorStop.angle)
                         ctx.beginPath();
                         // add some different lineWidths
                         ctx.lineWidth = title.lineWidth[j];
@@ -167,6 +176,7 @@
                         // ctx.lineCap = 'round';
                         // ctx.translate(10 + j * 50, 10 + i * 50);
                         ctx.translate(title.translateOffset[i], title.translateOffset[j]);
+                        ctx.rotate(colorStop.angle)
                         ctx.moveTo(title.randomx, title.randomy);
                         // ctx.lineTo(title.controlpointx, title.controlpointy);
                         ctx.quadraticCurveTo(title.controlpointx, title.controlpointy, title.translateOffset[i], title.translateOffset[j]);
@@ -179,6 +189,9 @@
                         // ctx.filter = `blur(${title.gradientColor[i]}px)`
 
                         ctx.strokeStyle = gradient;
+  
+
+
                         ctx.stroke();
                         // ctx.fill();
                         ctx.restore();
@@ -188,6 +201,7 @@
 
             }
 
+            ctx.restore();
             // window.requestAnimationFrame(draw);
         }
 

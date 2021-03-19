@@ -31,6 +31,9 @@
                 this.location = new Vector(0, 0);
                 this.velocity = new Vector(0, 0);
                 this.acceleration = new Vector(.01, 0);
+                this.angle = 0;
+                this.aVelocity = 0;
+                this.aAcceleration = getRandomIntInclusive(0, 300)
                 this.size = 10
                 this.width = 0
                 this.mass = 10
@@ -42,6 +45,9 @@
                 this.velocity.add(this.acceleration)
                 // this.velocity.limit(this.limit)
                 this.location.add(this.velocity)
+                this.aAcceleration = this.acceleration.x / 10.0;
+                this.aVelocity += this.aAcceleration
+                this.angle += this.aVelocity
                 this.acceleration.mult(0)
             }
 
@@ -110,7 +116,8 @@
         var running = false;
         var raf;
 
-
+        const gui = new GUI({ closed: true });
+        gui.hide()
 
         var title = {
             text: param_title,
@@ -142,10 +149,19 @@
                 y: getRandomIntInclusive(-500, 500)
             },
             lineWidth: getRandomIntInclusive(0, 20),
+            lineWidthB: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
             randomFont: getRandomIntInclusive(0, 3),
             gradient: null
         }
+
+
+        gui.add(title, 'lineWidth');
+        gui.add(title, 'lineWidthB');
+
+        gui.add(title, 'text');
+        gui.add(colorStop, 'aAcceleration')
+        // gui.add(title, 'y1');
 
         console.log(title.gradientColor[0])
 
@@ -237,26 +253,32 @@
                 // ctx.fill();
 
                 for (var i = 0; i < 90; i++) {
+                    ctx.save()
                     ctx.beginPath();
                     ctx.fillStyle = 'white';
-                    ctx.lineWidth = 10;
+                    ctx.lineWidth = title.lineWidth;
                     ctx.strokeStyle = gradient;
+                    ctx.rotate(colorStop.angle)
                     ctx.ellipse(fruits[i].x, fruits[i].y, fruits[i].rx, fruits[i].ry, Math.PI / 4, 0, 2 * Math.PI);
-                    
-                    
+
+
                     ctx.stroke();
                     ctx.fill();
+                    ctx.restore();
                     // fruits[i].y = fruits[i].y - 1 
                 }
 
                 for (var i = 0; i < 90; i++) {
+                    ctx.save()
                     ctx.beginPath();
                     ctx.fillStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[3]},${title.gradientAlpha[1]}`
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = lineWidthB;
                     // ctx.strokeStyle = gradient;
+                    ctx.rotate(colorStop.angle)
                     ctx.ellipse(fruits[i].y, fruits[i].x, fruits[i].rx, fruits[i].rx, Math.PI / 4, 0, 2 * Math.PI);
                     // ctx.stroke();
                     ctx.fill();
+                    ctx.restore();
                     // fruits[i].y = fruits[i].y - 1 
                 }
 

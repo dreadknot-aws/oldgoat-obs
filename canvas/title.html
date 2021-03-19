@@ -30,6 +30,9 @@
                 this.location = new Vector(0, 0);
                 this.velocity = new Vector(0, 0);
                 this.acceleration = new Vector(.01, 0);
+                this.angle = 0;
+                this.aVelocity = 0;
+                this.aAcceleration = randn_bm(.01, .05, 1);
                 this.size = 10
                 this.width = 0
                 this.mass = 10
@@ -40,6 +43,9 @@
             update() {
                 this.velocity.add(this.acceleration)
                 // this.velocity.limit(this.limit)
+                this.aAcceleration = this.acceleration.x / 10.0;
+                this.aVelocity += this.aAcceleration
+                this.angle += this.aVelocity
                 this.location.add(this.velocity)
                 this.acceleration.mult(0)
             }
@@ -137,8 +143,8 @@
                 getRandomIntInclusive(0, canvas.height)                 
             ],
             pos: {
-                x: getRandomIntInclusive(0, 100),
-                y: getRandomIntInclusive(100, canvas.height)
+                x: getRandomIntInclusive(0, canvas.width),
+                y: getRandomIntInclusive(0, canvas.height)
             },
             angle: getRandomIntInclusive(80, 100),
             lineWidth: getRandomIntInclusive(0, 20),
@@ -247,7 +253,7 @@
 
 
 
-                // ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 let gradient = ctx.createLinearGradient(title.box[0], title.box[1], title.box[2],  title.box[3]);
 
@@ -273,12 +279,16 @@
                 ctx.lineWidth = title.lineWidth
                 ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
 
-                // ctx.save();
+                ctx.save();
 
-                // ctx.translate(0, 0);
-                // ctx.rotate(title.angle * Math.PI / 180);
-                ctx.strokeText(title.text, title.pos.x, title.pos.y, 1200)
-                ctx.fillText(title.text, title.pos.x, title.pos.y, 1200)
+                ctx.translate( title.pos.x + title.lineWidth,  title.pos.y + title.lineWidth);
+                // ctx.rotate(title.angle);
+                // ctx.translate(colorStop.location.x, colorStop.location.y);
+                ctx.rotate(colorStop.angle)
+                
+                ctx.strokeText(title.text, 0, 0, 1200)
+                ctx.fillText(title.text, 0, 0, 1200)
+                ctx.restore();
 
                 ctx.save();
                 for (var i=0; i < title.count; i++)
