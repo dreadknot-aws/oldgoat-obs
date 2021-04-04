@@ -52,20 +52,33 @@
     let frameLocation = new Vector(975, 800);
     let frameVelocity = new Vector(1, 0);
 
-    let redRangeStart = Math.floor(Math.random() * 255)
-    let blueRangeStart = Math.floor(Math.random() * 255)
-    let greenRangeStart = Math.floor(Math.random() * 255)
-    let redRangeEnd = Math.floor(Math.random() * 255)
-    let blueRangeEnd = Math.floor(Math.random() * 255)
-    let greenRangeEnd = Math.floor(Math.random() * 255)
+    // let redRangeStart = Math.floor(Math.random() * 255)
+    // let blueRangeStart = Math.floor(Math.random() * 255)
+    // let greenRangeStart = Math.floor(Math.random() * 255)
+    // let redRangeEnd = Math.floor(Math.random() * 255)
+    // let blueRangeEnd = Math.floor(Math.random() * 255)
+    // let greenRangeEnd = Math.floor(Math.random() * 255)
 
-    let gredRangeStart = Math.floor(Math.random() * 255)
-    let gblueRangeStart = Math.floor(Math.random() * 255)
-    let ggreenRangeStart = Math.floor(Math.random() * 255)
-    let gredRangeEnd = Math.floor(Math.random() * 255)
-    let gblueRangeEnd = Math.floor(Math.random() * 255)
-    let ggreenRangeEnd = Math.floor(Math.random() * 255)
+    // let gredRangeStart = Math.floor(Math.random() * 255)
+    // let gblueRangeStart = Math.floor(Math.random() * 255)
+    // let ggreenRangeStart = Math.floor(Math.random() * 255)
+    // let gredRangeEnd = Math.floor(Math.random() * 255)
+    // let gblueRangeEnd = Math.floor(Math.random() * 255)
+    // let ggreenRangeEnd = Math.floor(Math.random() * 255)
 
+    let redRangeStart = 0
+    let blueRangeStart = 0
+    let greenRangeStart = 0
+    let redRangeEnd = 255
+    let blueRangeEnd = 255
+    let greenRangeEnd =255
+
+    let gredRangeStart = 0
+    let gblueRangeStart = 0
+    let ggreenRangeStart = 0
+    let gredRangeEnd = 255
+    let gblueRangeEnd = 255
+    let ggreenRangeEnd =255
 
     let x0 = Math.floor(Math.random() * canvas.width)
     let y0 = Math.floor(Math.random() * canvas.height)
@@ -78,11 +91,15 @@
     let image = new Image();
     let cloud = new Image();
 
+
+
+
+    
     let date = Date.now();
 
-    function drawPaintBrush(ctx, screenX, screenY, radius = 1280, redShift = -50, blueShift = 100, greenShift = -50,
-        redMax = 100, blueMax = 255, greenMax = 255,
-        redStartMax = 0, blueStartMax = 100, greenStartMax = 50
+    function drawPaintBrush(ctx, screenX, screenY, radius = 1280, redShift = 0, blueShift = 0, greenShift = 0,
+        redMax = 255, blueMax = 255, greenMax = 255,
+        redStartMax = 0, blueStartMax = 255, greenStartMax = 255
     ) 
     {
 
@@ -289,11 +306,12 @@
             //     0,
             //     ${Math.floor(255 - 42.5 * i)},
             //     ${Math.floor(255 - 42.5 * i)})`;
-            ctx.lineWidth = 5
+            ctx.lineWidth = getRandomIntInclusive(0, canvas.height)
             ctx.beginPath()
+            ctx.moveTo(getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
             ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
             ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
-            ctx.arc(2000, 1415, 1000 + i * 100, (Math.PI / 180) * 180, 0, 0)
+            ctx.lineTo(getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
             ctx.stroke()
             ctx.fill()
         }
@@ -432,6 +450,16 @@
         let ctx2 = canvas2.getContext("2d");
 
         ctx.save();
+
+        var gradient2 = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+        gradient2.addColorStop(0, `rgba(${prg}, ${pgg}, ${pbg}, ${pag})`);
+        gradient2.addColorStop(.5, `rgba(${pr2g}, ${pg2g}, ${pb2g}, ${pa2g})`);
+        gradient2.addColorStop(1, `rgba(${pr3g}, ${pg3g}, ${pb3g}, ${pa3g})`);
+        ctx.fillStyle = gradient2;
+
+
+        ctx.fillRect(0, 1410, canvas.width, canvas.height / 2);
+        
         // aBoat.draw(ctx)
         aBoat.checkEdges();
         aBoat.applyForce(wind)

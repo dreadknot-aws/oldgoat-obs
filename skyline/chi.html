@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <canvas id="frame" width="1280" height="720"></canvas>
+    <canvas id="frame" width="1280" height="720" hidden></canvas>
     <canvas id="canvas" width="2140" height="1430"></canvas>
     <canvas id="tint" width="2140" height="1430"></canvas>
     <canvas id="cloud" width="2140" height="1090"></canvas>
@@ -245,7 +245,20 @@
 
 
             tint_ctx.drawImage(img, 0, 0, 2140, 1430, 0, 0, 2140, 1430)
+
+            // ctx.drawImage(img, 6110, 0, 2140, 1430, -310, 0, 2140, 1430)
+
+
+            // tint_ctx.drawImage(img, 6110, 0, 2140, 1430, -310, 0, 2140, 1430)
+
+
             tint_ctx.globalCompositeOperation = 'source-atop'
+
+            // tint_ctx.globalCompositeOperation = 'destination-in'
+
+            
+
+
 
             tint_ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -266,7 +279,7 @@
             // cloud_ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // cloud_ctx.globalAlpha = 0.5;
-            cloud_ctx.globalCompositeOperation = 'source-over'
+            cloud_ctx.globalCompositeOperation = 'source-in'
 
             // cloud_ctx.drawImage(img, 3615 , 318 , 3599 , 1090 , 0, 0, 3599 , 1090 )
             // cloud_ctx.globalAlpha = 0.5;
@@ -385,15 +398,15 @@
 
         ctx.restore();
 
-        ctx.filter = `brightness(50%) opacity(100%) invert(%75)`
+        ctx.filter = `brightness(100%) opacity(100%) invert(%100)`
 
         ctx.drawImage(img, 6110, 0, 2140, 1430, -310, 0, 2140, 1430)
 
 
-        ctx.filter = `brightness(50%) opacity(100%) invert(75%)`
+        ctx.filter = `brightness(100%) opacity(25%) invert(100%)`
 
         ctx.drawImage(img, 2140, 0, 1836, 1430, 0, 0, 1836, 1430)
-        ctx.filter = `brightness(100%) opacity(100%) invert(0%)`
+        ctx.filter = `brightness(100%) opacity(100%) invert(100%)`
 
         ctx.drawImage(image, 0, 0)
 
@@ -407,7 +420,7 @@
         ctx.strokeText('Dreadknot:' + date, 850, 1400)
 
 
-        drawPaintBrush(ctx, frameLocation.x, frameLocation.y)
+        // drawPaintBrush(ctx, frameLocation.x, frameLocation.y)
 
         // This works
         // let cloud_el = document.getElementById('cloud');
@@ -416,7 +429,7 @@
         ctx.restore();
 
         let frame_ctx = document.getElementById('frame').getContext('2d');
-        frame_ctx.putImageData(ctx.getImageData(frameLocation.x, frameLocation.y, 1280, 720), 0, 0);
+        // frame_ctx.putImageData(ctx.getImageData(frameLocation.x, frameLocation.y, 1280, 720), 0, 0);
 
           
 

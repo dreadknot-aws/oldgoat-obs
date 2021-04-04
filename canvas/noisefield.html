@@ -15,7 +15,7 @@
         import { GUI } from '../js/dat.gui.module.js';
         import { Vector } from '../js/mr.vector.js';
         // import * as OpenSimplexNoise from "../js/opensimplexnoise.js";
-        
+
         // import '../js/opensimplexnoise.js';
 
         let osn;
@@ -204,19 +204,34 @@
 
 
         let fruits = []
+        // for (var i = 0; i < 90; i++) {
+        //     // fruits.push({ x: getRandomIntInclusive(0, canvas.width), y: getRandomIntInclusive(0, canvas.height), rx: getRandomIntInclusive(1, 5), ry: getRandomIntInclusive(1, 5) })
+        //     fruits.push({
+        //         x: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, i) * canvas.width),
+        //         y: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, i) * canvas.height),
+        //         rx: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, i) * 10),
+        //         ry: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, i) * 10)
+        //     })
+        // }
+
         for (var i = 0; i < 90; i++) {
             // fruits.push({ x: getRandomIntInclusive(0, canvas.width), y: getRandomIntInclusive(0, canvas.height), rx: getRandomIntInclusive(1, 5), ry: getRandomIntInclusive(1, 5) })
-            fruits.push({ x: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, g) * canvas.width),
-                          y: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, g) * canvas.height), 
-                          rx: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, g)), 
-                          ry: Math.abs(osn.evaluate3D(10 * i / canvas.width, 10 * i / canvas.height, g))
-                        })
+            fruits.push({
+                x: Math.abs(osn.evaluate2D(0, i) * canvas.width * 2),
+                y: Math.abs(osn.evaluate2D(1, i) * canvas.height),
+                rx: Math.abs(osn.evaluate2D(2, i) * 5),
+                ry: Math.abs(osn.evaluate2D(3,i) * 10)
+                
+            })
+            console.log(fruits[i])
         }
-
+        
         var sin = Math.sin(Math.PI / 6);
         var cos = Math.cos(Math.PI / 6);
 
         var rgswitch = 'x';
+
+        // var myImageData = ctx.createImageData(1280, 720);
 
         function draw() {
             if (k < 1500) {
@@ -253,7 +268,7 @@
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
-                console.log(osn.evaluate3D(10 * 1 / canvas.width, 10 * 1 / canvas.height, g));
+                // console.log(osn.evaluate3D(10 * 1 / canvas.width, 10 * 1 / canvas.height, g));
 
                 // ctx.fillStyle = 'black'
 
@@ -267,10 +282,22 @@
                 // ctx.stroke();
                 // ctx.fill();
 
+
+                // for (let x = 0; x < canvas.width; x++) {
+                //     for (let y = 0; y < canvas.height; y++) {
+                //         const v = osn.evaluate3D(10 * x / canvas.width, 10 * y / canvas.height, g);
+                //         // set(x, y, (v + 1) * 127);
+                //     }
+                // }
+
+
+                // ctx.putImageData(myImageData, dx, dy);
+
                 for (var i = 0; i < 90; i++) {
                     ctx.save()
                     ctx.beginPath();
-                    ctx.fillStyle = 'white';
+                    // ctx.fillStyle = 'black';
+                    ctx.fillStyle = `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`
                     ctx.lineWidth = title.lineWidth;
                     ctx.strokeStyle = gradient;
                     ctx.rotate(colorStop.angle)
@@ -297,7 +324,7 @@
                     // fruits[i].y = fruits[i].y - 1 
                 }
 
-                
+
 
                 // ctx.fillRect(0,0, canvas.width, canvas.height)
 
