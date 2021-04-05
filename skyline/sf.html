@@ -25,6 +25,11 @@
             background: transparent;
             background-color: rgba(182, 26, 26, 1)
         }
+
+        #cloud {
+            background: transparent;
+            background-color: rgba(182, 26, 26, 1)
+        }
     </style>
 </head>
 
@@ -297,7 +302,7 @@
         gradient.addColorStop(1, `rgba(${pr3g}, ${pg3g}, ${pb3g}, ${pa3g})`);
         ctx.fillStyle = gradient;
 
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         for (let i = 6; i > 0; i--) {
             // ctx.strokeStyle = `rgb(
@@ -314,7 +319,7 @@
             ctx.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, .5)`
             ctx.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
             ctx.lineTo(getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
-            ctx.stroke()
+            // ctx.stroke()
             ctx.fill()
         }
 
@@ -537,7 +542,7 @@
         // ctx.globalAlpha = 0.1;
         // ctx.drawImage(img, 3615, 318, 3599, 1090, 0, 200, 3599, 1090)
 
-        ctx.globalCompositeOperation = "destination-out"
+        // ctx.globalCompositeOperation = "destination-out"
         ctx.drawImage(cloud, 0, 100)
         // ctx.globalAlpha = 1;
 
@@ -650,43 +655,43 @@
         // let pb3 = randn_bm(0, 255, 1)
         // let pa3 = randn_bm(200, 255, 1)
 
-        for (let i = 0; i < 50; i++) {
-            let cx = Math.floor(randn_bm(frameLocation.x, frameLocation.x + 1280, 1))
-            let cy = Math.floor(randn_bm(frameLocation.y - 360, frameLocation.y + 1000, 1))
-            let pwidth = Math.floor(Math.random() * 25)
-            let pheight = Math.floor(Math.random() * 25)
+        // for (let i = 0; i < 50; i++) {
+        //     let cx = Math.floor(randn_bm(frameLocation.x, frameLocation.x + 1280, 1))
+        //     let cy = Math.floor(randn_bm(frameLocation.y - 360, frameLocation.y + 1000, 1))
+        //     let pwidth = Math.floor(Math.random() * 25)
+        //     let pheight = Math.floor(Math.random() * 25)
 
-            let pr = randn_bm(redRangeStart, redRangeEnd, 1)
-            let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
-            let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
-            let pa = randn_bm(200, 255, 1)
+        //     let pr = randn_bm(redRangeStart, redRangeEnd, 1)
+        //     let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
+        //     let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
+        //     let pa = randn_bm(200, 255, 1)
 
-            let pr2 = randn_bm(redRangeStart, redRangeEnd, 1)
-            let pg2 = randn_bm(blueRangeStart, blueRangeEnd, 1)
-            let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
-            let pa2 = randn_bm(200, 255, 1)
+        //     let pr2 = randn_bm(redRangeStart, redRangeEnd, 1)
+        //     let pg2 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+        //     let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+        //     let pa2 = randn_bm(200, 255, 1)
 
-            let pr3 = randn_bm(redRangeStart, redRangeEnd, 1)
-            let pg3 = randn_bm(blueRangeStart, blueRangeEnd, 1)
-            let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
-            let pa3 = randn_bm(200, 255, 1)
+        //     let pr3 = randn_bm(redRangeStart, redRangeEnd, 1)
+        //     let pg3 = randn_bm(blueRangeStart, blueRangeEnd, 1)
+        //     let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
+        //     let pa3 = randn_bm(200, 255, 1)
 
-            let fblur = Math.floor(Math.random() * 1)
-            let brush_size = Math.random() * (1.5 - .5) + .5
-            let brush_distance = Math.random() * (5 - 1) + 1
-            // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-            let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
-            gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
-            gradient.addColorStop(.5, `rgba(${pr2}, ${pg2}, ${pb2}, ${pa2})`);
-            gradient.addColorStop(1, `rgba(${pr3}, ${pg3}, ${pb3}, ${pa3})`);
-            ctx.fillStyle = gradient;
+        //     let fblur = Math.floor(Math.random() * 1)
+        //     let brush_size = Math.random() * (1.5 - .5) + .5
+        //     let brush_distance = Math.random() * (5 - 1) + 1
+        //     // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
+        //     let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
+        //     gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
+        //     gradient.addColorStop(.5, `rgba(${pr2}, ${pg2}, ${pb2}, ${pa2})`);
+        //     gradient.addColorStop(1, `rgba(${pr3}, ${pg3}, ${pb3}, ${pa3})`);
+        //     ctx.fillStyle = gradient;
 
-            // ctx.filter = `blur(${fblur}px)`
-            ctx.fillRect(cx, cy, pwidth, pheight);
-        }
+        //     // ctx.filter = `blur(${fblur}px)`
+        //     ctx.fillRect(cx, cy, pwidth, pheight);
+        // }
 
 
-        drawPaintBrush(ctx, frameLocation.x, frameLocation.y + 150)
+        // drawPaintBrush(ctx, frameLocation.x, frameLocation.y + 150)
 
         // This works
         // let cloud_el = document.getElementById('cloud');
