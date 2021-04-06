@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <canvas id="frame" width="1280" height="720" hidden></canvas>
+    <canvas id="frame" width="1280" height="720"></canvas>
     <canvas id="canvas" width="2140" height="1430"></canvas>
     <canvas id="tint" width="2140" height="1430"></canvas>
     <canvas id="cloud" width="2140" height="1090"></canvas>
@@ -73,6 +73,11 @@
     let x1 = Math.floor(Math.random() * canvas.width)
     let y1 = Math.floor(Math.random() * canvas.height)
     let r1 = Math.floor(Math.random() * canvas.height)
+
+
+
+    let framelimitsx = getRandomIntInclusive(50, 100)
+    let framelimitsy =  getRandomIntInclusive(275, 600)
 
     let img = new Image();
     let image = new Image();
@@ -429,7 +434,8 @@
         let frame_ctx = document.getElementById('frame').getContext('2d');
         // frame_ctx.putImageData(ctx.getImageData(frameLocation.x, frameLocation.y, 1280, 720), 0, 0);
 
-          
+        frame_ctx.putImageData(ctx.getImageData(framelimitsx, framelimitsy, 1280, 720), 0, 0);
+  
 
         window.requestAnimationFrame(draw);
     }
