@@ -24,6 +24,9 @@
             document.body.classList.add('fonts-loaded');
         }
 
+        const daysWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+        const monthsYear = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        let now = new Date();
 
         class Boat {
             constructor() {
@@ -96,6 +99,15 @@
         let params = (new URL(document.location)).searchParams;
         let param_title = params.get('title');
         let og_bg_color = params.get('ogcolor')
+
+        if (param_title == "Date") {
+            param_title =  daysWeek[now.getDay()] + ' ' + monthsYear[now.getMonth()] + ' ' + now.getDate()
+
+        }
+        else if (param_title == 'Time')
+        {
+            param_title =  now.getHours() + ':' + now.getMinutes()
+        }
 
     if (param_title == null) {
         // some_variable is either null or undefined
