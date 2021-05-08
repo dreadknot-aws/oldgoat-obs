@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300"></canvas>
+</body>
+<script type="application/javascript">
+
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+    }
+
+    function randn_bm(min, max, skew) {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+        while (v === 0) v = Math.random();
+        let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+        num = num / 10.0 + 0.5; // Translate to 0 -> 1
+        if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+        num = Math.pow(num, skew); // Skew
+        num *= max - min; // Stretch to fill range
+        num += min; // offset to min
+        return num;
+    }
+
+    var hexTitle = {
+        // text: param_title,
+        gradientColor: [
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255),
+            getRandomIntInclusive(0, 255)
+        ],
+        gradientAlpha: [
+            Math.random(),
+            Math.random(),
+            Math.random(),
+            Math.random()
+        ],
+        box: [
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height),
+            getRandomIntInclusive(0, canvas.width),
+            getRandomIntInclusive(0, canvas.height)
+        ],
+        pos: {
+            x: getRandomIntInclusive(0, canvas.width),
+            y: getRandomIntInclusive(0, canvas.height)
+        },
+        startEdge: getRandomIntInclusive(0, 5),
+        angle: getRandomIntInclusive(80, 100),
+        lineWidth: getRandomIntInclusive(0, 20),
+        fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
+        randomFont: getRandomIntInclusive(0, 3),
+        fontSize: getRandomIntInclusive(95, 150),
+        hexSize: getRandomIntInclusive(1, 150),
+        count: 0,
+        comps: ['source-over',
+            'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+            'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+            'hue', 'saturation', 'color', 'luminosity'],
+        CompositeOperation: getRandomIntInclusive(0, 18)
+    }
+
+
+    function clock() {
+        var now = new Date();
+        var ctx = document.getElementById('canvas').getContext('2d');
+        ctx.save();
+        // ctx.clearRect(0, 0, 150, 150);
+        ctx.translate(75, 75);
+        ctx.scale(0.4, 0.4);
+        ctx.rotate(-Math.PI / 2);
+        // ctx.strokeStyle = 'black';
+        ctx.fillStyle = 'white';
+        ctx.lineWidth = 8;
+        ctx.lineCap = 'round';
+
+
+
+        // Hour marks
+        ctx.save();
+        ctx.strokeStyle = `rgba(${hexTitle.gradientColor[0]}, ${hexTitle.gradientColor[1]}, ${hexTitle.gradientColor[2]}, 1)`;
+        for (var i = 0; i < 12; i++) {
+            ctx.beginPath();
+            ctx.rotate(Math.PI / 6);
+            ctx.moveTo(hexTitle.box[i], hexTitle.box[i + 1]);
+            ctx.lineTo(hexTitle.box[i + 2], hexTitle.box[i + 3]);
+            // ctx.filter = `blur(${getRandomIntInclusive(0, 255)}px)`
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // Minute marks
+        ctx.save();
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = `rgba(${hexTitle.gradientColor[1]}, ${hexTitle.gradientColor[2]}, ${hexTitle.gradientColor[0]}, 1)`;
+
+        for (i = 0; i < 3; i++) {
+            if (i % 5 != 0) {
+                ctx.beginPath();
+                for (var i = 0; i < 2; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.quadraticCurveTo(hexTitle.box[i + 2], hexTitle.box[i + 3], hexTitle.box[i + 4], hexTitle.box[i + 5]);
+                    ctx.stroke();
+                }
+                ctx.rotate(Math.PI / 30);
+            }
+        }
+        ctx.restore();
+
+        var sec = now.getSeconds();
+        var min = now.getMinutes();
+        var hr = now.getHours();
+        hr = hr >= 12 ? hr - 12 : hr;
+
+        ctx.fillStyle = `rgba(${hexTitle.gradientColor[2]}, ${hexTitle.gradientColor[0]}, ${hexTitle.gradientColor[1]}, ${hexTitle.gradientAlpha[0]})`;
+
+        // write Hours
+        ctx.save();
+        ctx.rotate(hr * (Math.PI / 6) + (Math.PI / 360) * min + (Math.PI / 21600) * sec);
+        ctx.lineWidth = 14;
+        ctx.beginPath();
+        ctx.moveTo(-20, 0);
+        ctx.lineTo(80, 0);
+        ctx.stroke();
+        ctx.restore();
+
+        // write Minutes
+        ctx.save();
+        ctx.rotate((Math.PI / 30) * min + (Math.PI / 1800) * sec);
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(-28, 0);
+        ctx.lineTo(112, 0);
+        ctx.stroke();
+        ctx.restore();
+
+        // Write seconds
+        ctx.save();
+        ctx.rotate(sec * Math.PI / 30);
+        ctx.strokeStyle = `rgba(${hexTitle.gradientColor[0]}, ${hexTitle.gradientColor[1]}, ${hexTitle.gradientColor[2]}, ${hexTitle.gradientAlpha[1]})`;
+        ctx.fillStyle = `rgba(${hexTitle.gradientColor[3]}, ${hexTitle.gradientColor[4]}, ${hexTitle.gradientColor[5]}, ${hexTitle.gradientAlpha[0]})`;
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.globalCompositeOperation = hexTitle.comps[hexTitle.CompositeOperation]
+        for (var j = hexTitle.startEdge; j < hexTitle.hexSize; j++) {
+            ctx.moveTo((canvas.width / hexTitle.hexSize) * j, 0);
+            ctx.lineTo(canvas.width / hexTitle.hexSize * j, canvas.height);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.lineWidth = 14;
+        // ctx.strokeStyle = '#325FA2';
+        ctx.arc(0, 0, 142, 0, Math.PI * 2, true);
+        ctx.stroke();
+
+        ctx.restore();
+
+        window.requestAnimationFrame(clock);
+    }
+
+    window.requestAnimationFrame(clock);
+</script>
+
+</html>
