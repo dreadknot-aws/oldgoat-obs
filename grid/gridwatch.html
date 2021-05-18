@@ -44,8 +44,8 @@
             getRandomIntInclusive(0, 255)
         ],
         gradientAlpha: [
-            Math.random(),
-            Math.random(),
+            Math.random() + .5,
+            Math.random() + .5,
             Math.random(),
             Math.random()
         ],
@@ -77,7 +77,7 @@
         fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
         randomFont: getRandomIntInclusive(0, 3),
         fontSize: getRandomIntInclusive(95, 150),
-        hexSize: getRandomIntInclusive(1, 150),
+        hexSize: getRandomIntInclusive(1, 50),
         count: 0,
         comps: ['source-over',
             'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
@@ -105,12 +105,18 @@
         // Hour marks
         ctx.save();
         ctx.strokeStyle = `rgba(${hexTitle.gradientColor[0]}, ${hexTitle.gradientColor[1]}, ${hexTitle.gradientColor[2]}, 1)`;
+
         for (var i = 0; i < 12; i++) {
             ctx.beginPath();
             ctx.rotate(Math.PI / 6);
-            ctx.moveTo(hexTitle.box[i], hexTitle.box[i + 1]);
-            ctx.lineTo(hexTitle.box[i + 2], hexTitle.box[i + 3]);
+            // ctx.moveTo(hexTitle.box[i], hexTitle.box[i + 1]);
+            // ctx.lineTo(hexTitle.box[i + 2], hexTitle.box[i + 3]);
             // ctx.filter = `blur(${getRandomIntInclusive(0, 255)}px)`
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.rotate(Math.PI / 6);
+            ctx.moveTo(100, 0);
+            ctx.lineTo(120, 0);
             ctx.stroke();
         }
         ctx.restore();
