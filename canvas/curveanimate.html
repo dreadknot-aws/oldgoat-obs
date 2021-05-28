@@ -171,6 +171,10 @@
                         // ctx.rotate(colorStop.angle)
                         ctx.beginPath();
                         // add some different lineWidths
+                        
+                        ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
+                        ctx.shadowBlur = 10;
+
                         ctx.lineWidth = title.lineWidth[j];
                         ctx.setLineDash([title.dashLine[i], title.dashLine[j]]);
                         // ctx.lineCap = 'round';
