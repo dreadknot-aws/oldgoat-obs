@@ -177,9 +177,9 @@
             const geometry = new three.BufferGeometry().setFromPoints(points);
             const material = new three.LineBasicMaterial({ color: 0xff0000 });
             const splineObject = new three.Line(geometry, material);
-            splineObject.rotation.x = Math.PI * .5;
+            splineObject.rotation.x = Math.PI * 1;
             splineObject.position.y = 0.05;
-            scene.add(splineObject);
+            // scene.add(splineObject);
 
 
             const objects = [];
