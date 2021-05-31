@@ -150,7 +150,12 @@
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
             randomFont: getRandomIntInclusive(0, 3),
-            gradient: null
+            gradient: null,
+            comps: ['source-over',
+                'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+                'hue', 'saturation', 'color', 'luminosity'],
+            CompositeOperation: getRandomIntInclusive(0, 18)
         }
 
         console.log(title.gradientColor[0])
@@ -229,7 +234,7 @@
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
-
+                ctx.globalCompositeOperation = title.comps[title.CompositeOperation]
                 // ctx.fillStyle = 'black'
 
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
@@ -241,6 +246,9 @@
                 // ctx.ellipse(100, 100, 50, 75, Math.PI / 4, 0, 2 * Math.PI);
                 // ctx.stroke();
                 // ctx.fill();
+                ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
+                ctx.shadowBlur = title.CompositeOperation;
+
 
                 for (var i = 0; i < 90; i++) {
                     ctx.save()
