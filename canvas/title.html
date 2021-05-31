@@ -290,7 +290,8 @@
 
                 ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
 
-
+                ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
+                ctx.shadowBlur = 10;
 
                 ctx.filter = `brightness(100%) opacity(100%)`
                 ctx.fillStyle = gradient
@@ -298,6 +299,7 @@
                 ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
 
                 ctx.save();
+
 
                 ctx.translate(title.pos.x + title.lineWidth, title.pos.y + title.lineWidth);
                 // ctx.rotate(title.angle);
@@ -309,6 +311,8 @@
                 ctx.restore();
 
                 ctx.save();
+                ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
+                ctx.shadowBlur = 10;
                 for (var i = 0; i < title.count; i++) {
                     // ctx.save();
                     ctx.translate(1280, 0);
