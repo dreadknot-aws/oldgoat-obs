@@ -115,7 +115,10 @@
                 ctx.strokeStyle = `rgba(${hexTitle.gradientColor[0]}, ${hexTitle.gradientColor[1]}, ${hexTitle.gradientColor[2]}, 1)`;
                 ctx.fillStyle = `rgba(${hexTitle.gradientColor[3]}, ${hexTitle.gradientColor[4]}, ${hexTitle.gradientColor[5]}, ${hexTitle.gradientAlpha[0]})`;
                 // ctx.rotate(((1 * Math.PI) / 60) * time.getSeconds() + ((1 * Math.PI) / 60000) * time.getMilliseconds());
-                
+
+                ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
+                ctx.shadowBlur = 10;
+
                 // TOGGLE for square lines
                 ctx.setTransform(1, hexTitle.gradientAlpha[0], hexTitle.gradientAlpha[1], 1, hexTitle.box[0], hexTitle.box[1]);
 

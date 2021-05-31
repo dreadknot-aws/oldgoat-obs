@@ -188,6 +188,9 @@
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
 
+                ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
+                ctx.shadowBlur = 10;
+                
                 ctx.fillStyle = 'black'
 
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
