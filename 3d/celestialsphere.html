@@ -24,7 +24,10 @@
     }
 </style>
 <script type="module">
-    import * as THREE from '.././js/three.module.js';
+
+import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
+        import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
+    // import * as THREE from '.././js/three.module.js';
     import { GUI } from '.././js/dat.gui.module.js';
 
 
@@ -91,38 +94,102 @@
         }
 
 
+        const vertices = [];
+
+        for (let i = 0; i < 5000; i++) {
+
+            const x = THREE.MathUtils.randFloatSpread(2000);
+            const y = THREE.MathUtils.randFloatSpread(2000);
+            const z = THREE.MathUtils.randFloatSpread(2000);
+
+            vertices.push(x, y, z);
+
+        }
+
+        const p2geometry = new THREE.BufferGeometry();
+        p2geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+        const material2 = new THREE.PointsMaterial({ color: 0xccccff });
+
+        const points2 = new THREE.Points(p2geometry, material2);
+
+        scene.add(points2);
 
 
-        const radius = 50;
-        const widthSegments = 12;
-        const heightSegments = 12;
-        const starFieldGeometry = new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments);
-        const starFieldMaterial = new THREE.PointsMaterial({
-            color: 'white',
-            sizeAttennuation: false,
-            size: 0.2,     // in world units
-        });
-        const starFieldMesh = new THREE.Points(starFieldGeometry, starFieldMaterial);
-        starFieldMesh.rotation.x = Math.PI / 12;
-        starFieldMesh.rotation.y = Math.PI / 12;
-        starFieldMesh.rotation.z = Math.PI / 12;
-        starFieldMesh.receiveShadow = true;
-        scene.add(starFieldMesh);
+        const vertices3 = [];
+
+        for (let i = 0; i < 2500; i++) {
+
+            const x = THREE.MathUtils.randFloatSpread(2000);
+            const y = THREE.MathUtils.randFloatSpread(2000);
+            const z = THREE.MathUtils.randFloatSpread(2000);
+
+            vertices3.push(x, y, z);
+
+        }
+
+        const p3geometry = new THREE.BufferGeometry();
+        p3geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices3, 3));
+
+        const material3 = new THREE.PointsMaterial({ color: 0x44cccc });
+
+        const points3 = new THREE.Points(p3geometry, material3);
+
+        scene.add(points3);
+
+
+        const vertices4 = [];
+
+        for (let i = 0; i < 500; i++) {
+
+            const x = THREE.MathUtils.randFloatSpread(2000);
+            const y = THREE.MathUtils.randFloatSpread(2000);
+            const z = THREE.MathUtils.randFloatSpread(2000);
+
+            vertices4.push(x, y, z);
+
+        }
+
+        const p4geometry = new THREE.BufferGeometry();
+        p4geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices4, 3));
+
+        const material4 = new THREE.PointsMaterial({ color: 0x440000  });
+
+        const points4 = new THREE.Points(p4geometry, material4);
+
+        scene.add(points4);
+
+
+        // const radius = 50;
+        // const widthSegments = 12;
+        // const heightSegments = 12;
+        // const starFieldGeometry = new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments);
+        // const starFieldMaterial = new THREE.PointsMaterial({
+        //     color: 'white',
+        //     sizeAttennuation: false,
+        //     size: 0.2,     // in world units
+        // });
+        // const starFieldMesh = new THREE.Points(starFieldGeometry, starFieldMaterial);
+        // starFieldMesh.rotation.x = Math.PI / 12;
+        // starFieldMesh.rotation.y = Math.PI / 12;
+        // starFieldMesh.rotation.z = Math.PI / 12;
+        // starFieldMesh.receiveShadow = true;
+        // scene.add(starFieldMesh);
 
 
 
-        const starFieldGeometry2 = new THREE.SphereBufferGeometry(radius / 1.5, widthSegments, heightSegments);
-        const starFieldMaterial2 = new THREE.PointsMaterial({
-            color: 'lightblue',
-            sizeAttennuation: true,
-            size: 0.3,     // in world units
-        });
-        const starFieldMesh2 = new THREE.Points(starFieldGeometry2, starFieldMaterial2);
-        starFieldMesh2.rotation.x = Math.PI * 1;
-        starFieldMesh2.rotation.y = Math.PI * 1;
-        starFieldMesh2.rotation.z = Math.PI * 1;
-        starFieldMesh2.receiveShadow = true;
-        scene.add(starFieldMesh2);
+        // const starFieldGeometry2 = new THREE.SphereBufferGeometry(radius / 1.5, widthSegments, heightSegments);
+        // const starFieldMaterial2 = new THREE.PointsMaterial({
+        //     color: 'lightblue',
+        //     sizeAttennuation: true,
+        //     size: 0.3,     // in world units
+        // });
+        // const starFieldMesh2 = new THREE.Points(starFieldGeometry2, starFieldMaterial2);
+        // starFieldMesh2.rotation.x = Math.PI * 1;
+        // starFieldMesh2.rotation.y = Math.PI * 1;
+        // starFieldMesh2.rotation.z = Math.PI * 1;
+        // starFieldMesh2.receiveShadow = true;
+        // scene.add(starFieldMesh2);
 
 
         // const groundGeometry = new THREE.PlaneBufferGeometry(50, 50);
@@ -238,15 +305,15 @@
 
         // Create a sine-like wave
         const curve = new THREE.SplineCurve([
-            new THREE.Vector2(0, 2),
-            new THREE.Vector2(1, 1),
-            new THREE.Vector2(2, 0),
-            new THREE.Vector2(1, -1),
-            new THREE.Vector2(0, -2),
-            new THREE.Vector2(-1, -1),
-            new THREE.Vector2(-2, 0),
-            new THREE.Vector2(-1, 1),
-            new THREE.Vector2(0, 2),
+            new THREE.Vector2(0, 10),
+            new THREE.Vector2(5, 5),
+            new THREE.Vector2(10, 0),
+            new THREE.Vector2(5, -5),
+            new THREE.Vector2(0, -10),
+            new THREE.Vector2(-5, -5),
+            new THREE.Vector2(-10, 0),
+            new THREE.Vector2(-5, 5),
+            new THREE.Vector2(0, 10),
             // new THREE.Vector2(-1, 1),
             // new THREE.Vector2(0, 2),
         ]);
@@ -313,13 +380,13 @@
 
 
             // rotate sphere
-            starFieldMesh.rotation.y = time * .01;
-            starFieldMesh.rotation.x = time * .02;
-            starFieldMesh.rotation.z = time * .03;
+            // starFieldMesh.rotation.y = time * .01;
+            // starFieldMesh.rotation.x = time * .02;
+            // starFieldMesh.rotation.z = time * .03;
 
-            starFieldMesh2.rotation.y = time * -.05;
-            starFieldMesh2.rotation.x = time * -.06;
-            starFieldMesh2.rotation.z = time * -.07;
+            // starFieldMesh2.rotation.y = time * -.05;
+            // starFieldMesh2.rotation.x = time * -.06;
+            // starFieldMesh2.rotation.z = time * -.07;
 
             // face turret at target
             targetMesh.getWorldPosition(targetPosition);
@@ -337,7 +404,7 @@
             });
 
             const camera = cameras[time * .25 % cameras.length | 0];
-            infoElem.textContent = camera.desc;
+            // infoElem.textContent = camera.desc;
 
             renderer.render(scene, camera.cam);
 
