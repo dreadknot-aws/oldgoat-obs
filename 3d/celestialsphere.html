@@ -103,38 +103,38 @@
             size: 0.2,     // in world units
         });
         const starFieldMesh = new THREE.Points(starFieldGeometry, starFieldMaterial);
-        starFieldMesh.rotation.x = Math.PI * -.5;
-        starFieldMesh.rotation.y = Math.PI * .5;
-        starFieldMesh.rotation.z = Math.PI * .5;
+        starFieldMesh.rotation.x = Math.PI / 12;
+        starFieldMesh.rotation.y = Math.PI / 12;
+        starFieldMesh.rotation.z = Math.PI / 12;
         starFieldMesh.receiveShadow = true;
         scene.add(starFieldMesh);
 
 
 
-        const starFieldGeometry2 = new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments);
+        const starFieldGeometry2 = new THREE.SphereBufferGeometry(radius / 1.5, widthSegments, heightSegments);
         const starFieldMaterial2 = new THREE.PointsMaterial({
             color: 'lightblue',
             sizeAttennuation: true,
             size: 0.3,     // in world units
         });
         const starFieldMesh2 = new THREE.Points(starFieldGeometry2, starFieldMaterial2);
-        starFieldMesh2.rotation.x = Math.PI * .1;
-        starFieldMesh2.rotation.y = Math.PI * .1;
-        starFieldMesh2.rotation.z = Math.PI * .1;
+        starFieldMesh2.rotation.x = Math.PI * 1;
+        starFieldMesh2.rotation.y = Math.PI * 1;
+        starFieldMesh2.rotation.z = Math.PI * 1;
         starFieldMesh2.receiveShadow = true;
         scene.add(starFieldMesh2);
 
 
-        const groundGeometry = new THREE.PlaneBufferGeometry(50, 50);
-        const groundMaterial = new THREE.MeshPhongMaterial({ color: 0xCC8866 });
-        const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
-        groundMesh.rotation.x = Math.PI * -.5;
-        groundMesh.receiveShadow = true;
-        scene.add(groundMesh);
+        // const groundGeometry = new THREE.PlaneBufferGeometry(50, 50);
+        // const groundMaterial = new THREE.MeshPhongMaterial({ color: 0xCC8866 });
+        // const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
+        // groundMesh.rotation.x = Math.PI * -.5;
+        // groundMesh.receiveShadow = true;
+        // scene.add(groundMesh);
 
-        const carWidth = 4;
+        const carWidth = 1;
         const carHeight = 1;
-        const carLength = 8;
+        const carLength = 1;
 
         const tank = new THREE.Object3D();
         scene.add(tank);
@@ -145,6 +145,8 @@
         bodyMesh.position.y = 1.4;
         bodyMesh.castShadow = true;
         tank.add(bodyMesh);
+
+        tank.visible = false;
 
         const tankCameraFov = 75;
         const tankCamera = makeCamera(tankCameraFov);
@@ -224,7 +226,7 @@
         targetElevation.position.z = carLength * 2;
         targetElevation.position.y = 8;
         targetElevation.add(targetBob);
-        targetBob.add(targetMesh);
+        // targetBob.add(targetMesh);
 
         const targetCamera = makeCamera();
         const targetCameraPivot = new THREE.Object3D();
@@ -236,16 +238,17 @@
 
         // Create a sine-like wave
         const curve = new THREE.SplineCurve([
-            new THREE.Vector2(-10, 0),
-            new THREE.Vector2(-5, 5),
-            new THREE.Vector2(0, 0),
-            new THREE.Vector2(5, -5),
-            new THREE.Vector2(10, 0),
-            new THREE.Vector2(5, 10),
-            new THREE.Vector2(-5, 10),
-            new THREE.Vector2(-10, -10),
-            new THREE.Vector2(-15, -8),
-            new THREE.Vector2(-10, 0),
+            new THREE.Vector2(0, 2),
+            new THREE.Vector2(1, 1),
+            new THREE.Vector2(2, 0),
+            new THREE.Vector2(1, -1),
+            new THREE.Vector2(0, -2),
+            new THREE.Vector2(-1, -1),
+            new THREE.Vector2(-2, 0),
+            new THREE.Vector2(-1, 1),
+            new THREE.Vector2(0, 2),
+            // new THREE.Vector2(-1, 1),
+            // new THREE.Vector2(0, 2),
         ]);
 
         const points = curve.getPoints(50);
@@ -254,7 +257,7 @@
         const splineObject = new THREE.Line(geometry, material);
         splineObject.rotation.x = Math.PI * .5;
         splineObject.position.y = 0.05;
-        scene.add(splineObject);
+        // scene.add(splineObject); 
 
         function resizeRendererToDisplaySize(renderer) {
             const canvas = renderer.domElement;
@@ -270,11 +273,12 @@
         const targetPosition = new THREE.Vector3();
         const tankPosition = new THREE.Vector2();
         const tankTarget = new THREE.Vector2();
+        const sphereOrbit = new THREE.Vector3();
 
         const cameras = [
-            { cam: camera, desc: 'detached camera', },
-            { cam: turretCamera, desc: 'on turret looking at target', },
-            { cam: targetCamera, desc: 'near target looking at tank', },
+            // { cam: camera, desc: 'detached camera', },
+            // { cam: turretCamera, desc: 'on turret looking at target', },
+            // { cam: targetCamera, desc: 'near target looking at tank', },
             { cam: tankCamera, desc: 'above back of tank', },
         ];
 
@@ -306,6 +310,16 @@
             curve.getPointAt((tankTime + 0.01) % 1, tankTarget);
             tank.position.set(tankPosition.x, 0, tankPosition.y);
             tank.lookAt(tankTarget.x, 0, tankTarget.y);
+
+
+            // rotate sphere
+            starFieldMesh.rotation.y = time * .01;
+            starFieldMesh.rotation.x = time * .02;
+            starFieldMesh.rotation.z = time * .03;
+
+            starFieldMesh2.rotation.y = time * -.05;
+            starFieldMesh2.rotation.x = time * -.06;
+            starFieldMesh2.rotation.z = time * -.07;
 
             // face turret at target
             targetMesh.getWorldPosition(targetPosition);
