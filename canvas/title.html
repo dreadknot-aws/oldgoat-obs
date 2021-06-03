@@ -267,9 +267,10 @@
 
             if (canvas.getContext) {
 
+                now = new Date();
                 let ctx = canvas.getContext('2d');
 
-
+                title.text = now.getHours() + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds())
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
