@@ -63,8 +63,8 @@
             }
 
             checkEdges() {
-                // console.log('checkEdges:', this.location.x)
-
+                console.log('checkEdges:', this.location.x)
+                // colorStop.location.x
                 if (this.location.x > .99) {
                     this.velocity.x = -.01;
                     this.location.x = .99
@@ -107,23 +107,23 @@
         let param_title = params.get('title');
         let og_bg_color = params.get('ogcolor')
 
-        if (param_title == "Date") {
-            param_title = daysWeek[now.getDay()] + ' ' + monthsYear[now.getMonth()] + ' ' + now.getDate()
+        // if (param_title == "Date") {
+        //     param_title = daysWeek[now.getDay()] + ' ' + monthsYear[now.getMonth()] + ' ' + now.getDate()
 
-        }
-        else if (param_title == 'Time') {
-            param_title = now.getHours() + ':' + addZero(now.getMinutes())
-        }
+        // }
+        // else if (param_title == 'Time') {
+        //     param_title = now.getHours() + ':' + addZero(now.getMinutes())
+        // }
 
-        if (param_title == null) {
-            // some_variable is either null or undefined
-            param_title = 'The BeatBunker'
-        }
+        // if (param_title == null) {
+        //     // some_variable is either null or undefined
+        //     param_title = 'The BeatBunker'
+        // }
 
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
         var tick = 0;
-        var wind = new Vector(0, 0);
+        var wind = new Vector(0, 0.005);
         var mouse = new Vector(0, 0)
 
         var colorStop = new Boat();
@@ -191,6 +191,8 @@
             colorStop.applyForce(wind);
             colorStop.checkEdges();
             colorStop.update();
+
+            // console.log(title.pos)
             draw();
         }
 
@@ -216,38 +218,26 @@
                 return;
             }
             if (e.code === 'ArrowLeft') {
-                camera.position.z = camera.position.z;
-                camera.position.x = camera.position.x - 1;  // -40, 40
-                camera.position.y = camera.position.y; // -20. 20
-                console.log(camera.position.x)
+                title.pos.x = title.pos.x - 5
+                // console.log('title.pos' + title.pos.x)
                 return;
             }
             if (e.code === 'ArrowRight') {
-                camera.position.z = camera.position.z;
-                camera.position.x = camera.position.x + 1;  // -40, 40
-                camera.position.y = camera.position.y; // -20. 20
-                console.log(camera.position.x)
+                title.pos.x = title.pos.x + 5
                 return;
             }
             if (e.code === 'ArrowUp') {
-                camera.position.z = camera.position.z;
-                camera.position.x = camera.position.x;  // -40, 40
-                camera.position.y = camera.position.y + 1; // -20. 20
-                console.log(camera.position.y)
+                title.pos.y = title.pos.y - 5
                 return;
             }
             if (e.code === 'ArrowDown') {
-                camera.position.z = camera.position.z;
-                camera.position.x = camera.position.x;  // -40, 40
-                camera.position.y = camera.position.y - 1; // -20. 20
-                console.log(camera.position.y)
+                title.pos.y = title.pos.y + 5
                 return;
             }
             if (e.code === 'KeyZ') {
-                camera.position.z = camera.position.z + 1;
-                camera.position.x = camera.position.x;  // -40, 40
-                camera.position.y = camera.position.y; // -20. 20
-                console.log(camera.position.y)
+                title.pos.x = colorStop.position.x
+                title.pos.y = colorStop.position.y
+                console.log(title.pos.x)
                 return;
             }
             if (e.code === 'KeyX') {
@@ -270,7 +260,23 @@
                 now = new Date();
                 let ctx = canvas.getContext('2d');
 
-                title.text = now.getHours() + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds())
+                if (param_title == "date") {
+                    title.text = daysWeek[now.getDay()] + ' ' + monthsYear[now.getMonth()] + ' ' + now.getDate()
+
+                }
+                else if (param_title == 'time') {
+                    title.text = now.getHours() + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds())
+                }
+                else {
+                    title.text = param_title
+                }
+
+                if (param_title == null) {
+                    // some_variable is either null or undefined
+                    param_title = 'The BeatBunker'
+                }
+
+                // title.text = now.getHours() + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds())
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -304,7 +310,8 @@
 
                 ctx.translate(title.pos.x + title.lineWidth, title.pos.y + title.lineWidth);
                 // ctx.rotate(title.angle);
-                // ctx.translate(colorStop.location.x, colorStop.location.y);
+                console.log(colorStop.location.x)
+                ctx.translate(colorStop.location.x, colorStop.location.y);
                 ctx.rotate(colorStop.angle)
 
                 ctx.strokeText(title.text, 0, 0, 1200)
