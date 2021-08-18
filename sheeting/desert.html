@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Sheeting</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 1280px;
+            height: 720px;
+            background-color: rgba(0, 0, 0, 0);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <img src="ring wide center clear.png"> -->
+    <canvas id="canvas" width="1280" height="720">City.html load some sheets and generate somerandom to use as input to
+        the draw context.</canvas>
+    <!-- <figure>
+        <figcaption>Hear it?</figcaption>
+        <audio controls src="./ZOOM0042_01.mp3">
+            Your browser does not support the
+            <code>audio</code> element.
+        </audio>
+    </figure> -->
+
+    <div><input type="button" value="save" id="savecanvas"></div>
+
+
+</body>
+
+<script type="module">
+    import { GUI } from '../js/dat.gui.module.js';
+
+    document.getElementById("savecanvas").addEventListener("click", savecanvas);
+    function savecanvas() {
+        console.log("Save")
+        var canvas = document.getElementById('canvas');
+
+        canvas.toBlob(function (blob) {
+            var newImg = document.createElement('img'),
+                url = URL.createObjectURL(blob);
+
+            newImg.onload = function () {
+                // no longer need to read the blob so it's revoked
+                URL.revokeObjectURL(url);
+            };
+
+            newImg.src = url;
+            document.body.appendChild(newImg);
+        });
+    }
+
+    class Vector {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        add(vector) {
+            this.x = this.x + vector.x;
+            this.y = this.y + vector.y;
+        }
+        sub(vector) {
+            this.x = this.x - vector.x;
+            this.y = this.y - vector.y;
+        }
+        mult(n) {
+            this.x = this.x * n;
+            this.y = this.y * n;
+        }
+        div(n) {
+            this.x = this.x / n;
+            this.y = this.y / n;
+        }
+        mag() {
+            return Math.sqrt(this.x * this.x + this.y * this.y);
+        }
+        normalize() {
+            let m = this.mag()
+            if (m != 0) {
+                this.div(m);
+            }
+        }
+        limit(max) {
+            if (this.mag() > max) {
+                this.normalize();
+                this.mult(max);
+            }
+
+        }
+        static add(a, b) {
+            let vector = new Vector(a.x + b.x, a.y + b.y)
+            return vector;
+        }
+        static sub(a, b) {
+            let vector = new Vector(a.x - b.x, a.y - b.y)
+            return vector;
+        }
+        static div(a, b) {
+            let vector = new Vector(a.x / b, a.y / b)
+            return vector
+        }
+    }
+
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+    }
+
+    function randn_bm(min, max, skew) {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+        while (v === 0) v = Math.random();
+        let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+        num = num / 10.0 + 0.5; // Translate to 0 -> 1
+        if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+        num = Math.pow(num, skew); // Skew
+        num *= max - min; // Stretch to fill range
+        num += min; // offset to min
+        return num;
+    }
+
+
+    class Gradient {
+        constructor() {
+            this.width = 640
+            this.height = 960
+            this.sx = 0
+            this.sy = 0
+            this.sw = 640
+            this.sh = 960
+            this.location = new Vector(0, 0)
+            this.velocity = new Vector(0, 0)
+            this.acceleration = new Vector(0, 0)
+            this.mass = 10.0
+
+            this.gradientPointA = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1));
+            this.gradientPointB = new Vector(Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1), Math.floor(Math.random() * 1280) * (Math.random() < 0.5 ? -1 : 1))
+            this.gradientVelocityA = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            this.gradientVelocityB = new Vector(.05 * (Math.random() < 0.5 ? -1 : 1), .05 * (Math.random() < 0.5 ? -1 : 1))
+            this.gradientStop = new Vector(Math.random(), Math.random())
+            this.gradientStopVelocity = new Vector(Math.random() * (.025 - .001) + .001)
+
+            this.color1 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+            this.color2 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+            this.color3 = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+
+        }
+        update() {
+            this.velocity.add(this.acceleration)
+            this.velocity.limit(10)
+            this.location.add(this.velocity)
+
+
+            this.gradientVelocityA.add(this.acceleration)
+            this.gradientVelocityA.limit(1)
+            this.gradientPointA.add(this.gradientVelocityA)
+
+            this.gradientVelocityB.add(this.acceleration)
+            this.gradientVelocityB.limit(1)
+            this.gradientPointB.add(this.gradientVelocityA)
+
+            this.acceleration.mult(0)
+        }
+        draw(ctx) {
+            ctx.save()
+            var gradient = ctx.createLinearGradient(this.gradientPointA.x, this.gradientPointA.y, this.gradientPointB.x, this.gradientPointB.y);
+            var gradient2 = ctx.createLinearGradient(this.gradientPointA.x, this.gradientPointA.y, this.gradientPointB.x, this.gradientPointB.y);
+
+
+
+            gradient.addColorStop(0, `rgba(${this.color2[0]}, ${this.color2[1]}, ${this.color2[2]}, 255 )`);
+            gradient.addColorStop(this.gradientStop.x, `rgba(${this.color1[0]}, ${this.color1[1]}, ${this.color1[2]}, 255)`);
+            gradient.addColorStop(1, `rgba(${this.color3[0]}, ${this.color3[1]}, ${this.color3[2]}, 255)`);
+
+            ctx.fillStyle = gradient;
+
+            ctx.fillRect(0, 0, this.width, this.height);
+
+            ctx.restore()
+        }
+        checkEdges() {
+            if (this.location.x > 1500) {
+                this.location.x = 0
+            } else if (this.location.x < -1500) {
+                this.location.x = 0
+            }
+
+            if (this.location.y > 1500) {
+                this.location.y = 0
+            } else if (this.location.y < -1500) {
+                this.location.y = 0
+            }
+        }
+        applyForce(force) {
+            let f = Vector.div(force,this.mass)
+            this.acceleration.add(f)
+        }
+
+    }
+
+    class Sheeting {
+        constructor(minOpacity) {
+            this.paths = ['desertsheet'];
+            this.comps = ['source-over',
+                'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+                'hue', 'saturation', 'color', 'luminosity'];
+            this.CompositeOperation = getRandomIntInclusive(0, this.comps.length)
+            this.width = 810
+            this.height = 801
+            this.sx = 0
+            this.sy = 0
+            this.sw = 640
+            this.sh = 960
+            this.location = new Vector(0, 0)
+            this.velocity = new Vector(0, 0)
+            this.acceleration = new Vector(0, 0)
+            this.sheets = 16
+            this.sheetSpriteMap = new Image();
+            this.sheetSpriteMap.src = this.paths[0] + '.png'
+            this.sheet = Math.floor(Math.random() * this.sheets)
+
+            // this.blur = Math.floor(Math.random() * 4)
+            this.hue = Math.floor(Math.random() * 360)
+            this.brightness = Math.floor(Math.random() * 100)
+            this.saturate = Math.floor(Math.random() * 100)
+            this.opacity = getRandomIntInclusive(minOpacity, 100)
+            this.invert = Math.floor(Math.random() * 100)
+        }
+        update() {
+            this.velocity.add(this.acceleration)
+            this.velocity.limit(.05)
+            this.location.add(this.velocity)
+        }
+        draw(ctx, sheet) {
+            ctx.save()
+            ctx.globalCompositeOperation = this.comps[this.CompositeOperation]
+            // ctx.globalCompositeOperation = 'hue'
+            // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
+            ctx.filter = `hue-rotate(${this.hue}deg) brightness(${this.brightness}%) saturate(${this.saturate}%) opacity(${this.opacity}%)`
+
+            // ctx.fillStyle = "black";
+            ctx.drawImage(this.sheetSpriteMap, this.sx + (this.width * this.sheet), this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw, this.sh)
+            // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
+            ctx.restore()
+        }
+        checkEdges() {
+            if (this.location.x > 1280) {
+                this.location.x = 1279
+            } else if (this.location.x < 590) {
+                this.location.x = 1279
+            }
+
+            if (this.location.y > this.height) {
+                this.velocity.y = -this.velocity.y;
+            } else if (this.location.y < this.height) {
+                this.velocity.y = -this.velocity.y;
+            }
+        }
+
+    }
+
+    let aSheet = new Sheeting(25);
+    let bSheet = new Sheeting(50);
+    let cSheet = new Sheeting(70);
+    let dSheet = new Sheeting(100);
+
+    let aGradient = new Gradient();
+    let bGradient = new Gradient();
+
+    let wind = new Vector(0, 50);
+
+    function init() {
+
+        window.requestAnimationFrame(draw);
+    }
+
+    function draw() {
+        let ctx = document.getElementById('canvas').getContext('2d');
+
+        aGradient.applyForce(wind)
+        aGradient.update()
+
+        aGradient.draw(ctx)
+        aSheet.draw(ctx)
+        bSheet.draw(ctx)
+        cSheet.draw(ctx)
+        dSheet.draw(ctx)
+
+        window.requestAnimationFrame(draw);
+    }
+
+
+
+    init();
+
+
+</script>
+
+</html>
