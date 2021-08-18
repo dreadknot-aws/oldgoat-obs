@@ -35,8 +35,8 @@
 
 <body>
     <canvas id="frame" width="1280" height="720"></canvas>
-    <canvas id="canvas" width="16299" height="1024"></canvas>
-    <canvas id="tint" width="2037" height="1024" hidden></canvas>
+    <canvas id="canvas" width="2037" height="1024"></canvas>
+    <canvas id="tint" width="2037" height="1024"></canvas>
     <canvas id="cloud" width="2037" height="1024"></canvas>
 
     <input type="button" value="save" id="savecanvas">
@@ -56,7 +56,7 @@
     let location = new Vector(500, 700);
     let velocity = new Vector(1, 0);
 
-    let frameLocation = new Vector(0, 720 / 2 );
+    let frameLocation = new Vector(0, 720 / 2);
     let frameVelocity = new Vector(1, 0);
 
     // let redRangeStart = Math.floor(Math.random() * 255)
@@ -78,14 +78,14 @@
     let greenRangeStart = 0
     let redRangeEnd = 255
     let blueRangeEnd = 255
-    let greenRangeEnd =255
+    let greenRangeEnd = 255
 
     let gredRangeStart = 0
     let gblueRangeStart = 0
     let ggreenRangeStart = 0
     let gredRangeEnd = 255
     let gblueRangeEnd = 255
-    let ggreenRangeEnd =255
+    let ggreenRangeEnd = 255
 
     let x0 = Math.floor(Math.random() * canvas.width)
     let y0 = Math.floor(Math.random() * canvas.height)
@@ -101,14 +101,13 @@
 
 
 
-    
+
     let date = Date.now();
 
     function drawPaintBrush(ctx, screenX, screenY, radius = 1280, redShift = 0, blueShift = 0, greenShift = 0,
         redMax = 255, blueMax = 255, greenMax = 255,
         redStartMax = 0, blueStartMax = 255, greenStartMax = 255
-    ) 
-    {
+    ) {
 
         let pwidth = Math.floor(Math.random() * 25)
         let pheight = Math.floor(Math.random() * 25)
@@ -163,128 +162,128 @@
         }
     }
 
-        class Boat {
-            constructor() {
-                this.location = new Vector(1000, 500);
-                this.velocity = new Vector(5, 5);
-                this.acceleration = new Vector(0, 0);
-                this.size = 10
-                this.width = 0
-                this.mass = 10
-                this.height = this.location.y + 5
-                this.sx = 658
-                this.sy = 350
-                this.sw = 6
-                this.sh = 11
+    class Boat {
+        constructor() {
+            this.location = new Vector(1000, 500);
+            this.velocity = new Vector(5, 5);
+            this.acceleration = new Vector(0, 0);
+            this.size = 10
+            this.width = 0
+            this.mass = 10
+            this.height = this.location.y + 5
+            this.sx = 658
+            this.sy = 350
+            this.sw = 6
+            this.sh = 11
 
-                // Assuming myButton is a button element
-                // canvas.addEventListener('click', this.onClick, false)
+            // Assuming myButton is a button element
+            // canvas.addEventListener('click', this.onClick, false)
 
 
-            }
-
-            // onClick(event) {
-            //     console.log('Boat:', arguments)
-            //     console.log('Boat:', event)
-            //     console.log('Boat:', event.clientY)
-            //     console.log('Boat:', this)
-
-            //     let MouseVector = new Vector(event.clientX, event.clientY);
-            //     Vector.sub(MouseVector, MouseVector)
-            //     //force = arguments.
-            //     //applyForce(force)
-            // }
-            update() {
-                this.velocity.add(this.acceleration)
-                this.velocity.limit(.5)
-                this.location.add(this.velocity)
-                this.acceleration.mult(0)
-            }
-            applyForce(force) {
-                let f = Vector.div(force, this.mass)
-                this.acceleration.add(f)
-            }
-            draw(ctx) {
-                ctx.save()
-                // // ctx.globalCompositeOperation = comps[spin.Composite]
-                // ctx.globalCompositeOperation = 'xor'
-                // // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
-                // // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
-
-                // // ctx.fillStyle = "black";
-                // ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
-                // // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
-                // ctx.restore()
-
-                // // Draw vector line to mouse
-                // ctx.lineWidth = 2;
-                // ctx.fillStyle = 'orange';
-                // ctx.lineCap = 'round'
-
-                // ctx.globalCompositeOperation = 'xor';
-                // ctx.beginPath();
-                // ctx.moveTo(aBoat.location.x, aBoat.location.y);
-                // ctx.lineTo(mouseLocation.x, mouseLocation.y);
-                // //ctx.rect(40, 40, 70, 70);
-                // // ctx.stroke();
-
-                // Quadratric curves example
-                ctx.translate(this.location.x, this.location.y);
-                ctx.beginPath();
-                ctx.moveTo(75, 25);
-                ctx.quadraticCurveTo(25, 25, 25, 62.5);
-                ctx.quadraticCurveTo(25, 100, 50, 100);
-                ctx.quadraticCurveTo(50, 120, 30, 125);
-                ctx.quadraticCurveTo(60, 120, 65, 100);
-                ctx.quadraticCurveTo(125, 100, 125, 62.5);
-                ctx.quadraticCurveTo(125, 25, 75, 25);
-                ctx.stroke();
-                ctx.restore();
-
-            }
-            checkEdges() {
-                if (this.location.x > 1280) {
-                    this.velocity.x *= -1;
-                    // this.location.x = 1000
-                } else if (this.location.x < 0) {
-                    // this.location.x = 1000
-                    this.velocity.x *= -1;
-                }
-
-                if (this.location.y > 720) {
-                    // this.location.y = 500
-                    this.velocity.y *= -1;
-
-                } else if (this.location.y < 472) {
-                    // this.location.y = 500
-                    this.velocity.y *= -1;
-
-                }
-            }
         }
 
+        // onClick(event) {
+        //     console.log('Boat:', arguments)
+        //     console.log('Boat:', event)
+        //     console.log('Boat:', event.clientY)
+        //     console.log('Boat:', this)
 
-        let mouseLocation = new Vector(0, 0);
-
-        let aBoat = new Boat();
-
-        // Assuming myButton is a button element
-        frame.addEventListener('click', Blow, false)
-        function Blow(event) {
-            // print and have a look at the event object 
-            // always print arguments in case of overlooking any other arguments
-            console.log('Blow:', arguments)
-            mouseLocation = new Vector(event.clientX, event.clientY)
-            // let windFrom = new Vector(-.5, 0)
-            // windFrom.sub(mouseLocation)
-            // windFrom.mag(5)
-            console.log('Blow:', mouseLocation)
-            let windFrom = Vector.sub(mouseLocation, aBoat.location)
-            windFrom.normalize()
-            // windFrom.mult(0.5);
-            aBoat.applyForce(windFrom)
-            console.log('Blow:', windFrom)
+        //     let MouseVector = new Vector(event.clientX, event.clientY);
+        //     Vector.sub(MouseVector, MouseVector)
+        //     //force = arguments.
+        //     //applyForce(force)
+        // }
+        update() {
+            this.velocity.add(this.acceleration)
+            this.velocity.limit(.5)
+            this.location.add(this.velocity)
+            this.acceleration.mult(0)
         }
+        applyForce(force) {
+            let f = Vector.div(force, this.mass)
+            this.acceleration.add(f)
+        }
+        draw(ctx) {
+            ctx.save()
+            // // ctx.globalCompositeOperation = comps[spin.Composite]
+            // ctx.globalCompositeOperation = 'xor'
+            // // ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) invert(${invert[1]}%)`
+            // // ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+
+            // // ctx.fillStyle = "black";
+            // ctx.drawImage(img[4], this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
+            // // ctx.fillRect(this.location.x, this.location.y, this.size, this.size);
+            // ctx.restore()
+
+            // // Draw vector line to mouse
+            // ctx.lineWidth = 2;
+            // ctx.fillStyle = 'orange';
+            // ctx.lineCap = 'round'
+
+            // ctx.globalCompositeOperation = 'xor';
+            // ctx.beginPath();
+            // ctx.moveTo(aBoat.location.x, aBoat.location.y);
+            // ctx.lineTo(mouseLocation.x, mouseLocation.y);
+            // //ctx.rect(40, 40, 70, 70);
+            // // ctx.stroke();
+
+            // Quadratric curves example
+            ctx.translate(this.location.x, this.location.y);
+            ctx.beginPath();
+            ctx.moveTo(75, 25);
+            ctx.quadraticCurveTo(25, 25, 25, 62.5);
+            ctx.quadraticCurveTo(25, 100, 50, 100);
+            ctx.quadraticCurveTo(50, 120, 30, 125);
+            ctx.quadraticCurveTo(60, 120, 65, 100);
+            ctx.quadraticCurveTo(125, 100, 125, 62.5);
+            ctx.quadraticCurveTo(125, 25, 75, 25);
+            ctx.stroke();
+            ctx.restore();
+
+        }
+        checkEdges() {
+            if (this.location.x > 1280) {
+                this.velocity.x *= -1;
+                // this.location.x = 1000
+            } else if (this.location.x < 0) {
+                // this.location.x = 1000
+                this.velocity.x *= -1;
+            }
+
+            if (this.location.y > 720) {
+                // this.location.y = 500
+                this.velocity.y *= -1;
+
+            } else if (this.location.y < 472) {
+                // this.location.y = 500
+                this.velocity.y *= -1;
+
+            }
+        }
+    }
+
+
+    let mouseLocation = new Vector(0, 0);
+
+    let aBoat = new Boat();
+
+    // Assuming myButton is a button element
+    frame.addEventListener('click', Blow, false)
+    function Blow(event) {
+        // print and have a look at the event object 
+        // always print arguments in case of overlooking any other arguments
+        console.log('Blow:', arguments)
+        mouseLocation = new Vector(event.clientX, event.clientY)
+        // let windFrom = new Vector(-.5, 0)
+        // windFrom.sub(mouseLocation)
+        // windFrom.mag(5)
+        console.log('Blow:', mouseLocation)
+        let windFrom = Vector.sub(mouseLocation, aBoat.location)
+        windFrom.normalize()
+        // windFrom.mult(0.5);
+        aBoat.applyForce(windFrom)
+        console.log('Blow:', windFrom)
+    }
 
 
     function init() {
@@ -352,13 +351,14 @@
 
 
 
-            tint_ctx.drawImage(img, 0, 0, 16299, 1024, 0, 0, 16299, 1024)
+            tint_ctx.drawImage(img, 2037 * 5, 0, 2037, 1024, 0, 0, 2037, 1024)
             tint_ctx.globalCompositeOperation = 'source-atop'
 
-            tint_ctx.fillRect(0, 0, 16299, 1024)
+            tint_ctx.fillRect(0, 0, 2037, 1024)
 
             image.src = tint_canvas.toDataURL();
             image.addEventListener('load', function () {
+                tint_ctx.globalCompositeOperation = 'destination-out'
                 ctx.drawImage(image, 0, 0)
             }, false);
 
@@ -377,14 +377,23 @@
             cloud_ctx.globalCompositeOperation = 'source-over'
 
             // cloud_ctx.drawImage(img, 3615 , 318 , 3599 , 1090 , 0, 0, 3599 , 1090 )
-            // cloud_ctx.globalAlpha = 0.5;
+            cloud_ctx.globalAlpha = .25;
+            cloud_ctx.drawImage(img, 2037 * 0, 0, 2037, 1024, 0, 0, 2037, 1024)
 
-            cloud_ctx.drawImage(img, 0, 0, 2037*5, 1024, 0, 0, 2037, 1024)
+            cloud_ctx.globalAlpha = 0.75;
+            cloud_ctx.drawImage(img, 2037 * 4, 0, 2037, 1024, 0, 0, 2037, 1024)
+            cloud_ctx.globalAlpha = 0.5;
+            cloud_ctx.drawImage(img, 2037 * 1, 0, 2037, 1024, 0, 0, 2037, 1024)
+            
+            cloud_ctx.drawImage(img, 2037 * 2, 0, 2037, 1024, 0, 0, 2037, 1024)
             cloud_ctx.globalCompositeOperation = 'source-in'
             cloud_ctx.fillRect(0, 0, 2037, 1024)
             cloud.src = cloud_canvas.toDataURL();
             cloud.addEventListener('load', function () {
+
+                // ctx.drawImage(cloud, 0, 0, 2037, 1024, 0, 0, 2037, 1024)
                 ctx.drawImage(cloud, 0, 0)
+
             }, false);
 
             // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
@@ -445,15 +454,15 @@
 
 
     function draw() {
-            let wind = new Vector(-.01, -.01)
+        let wind = new Vector(-.01, -.01)
         let current = new Vector(0.001, .001)
 
         let ctx = document.getElementById('canvas').getContext('2d');
         let tint_ctx = document.getElementById('tint').getContext('2d');
 
         let canvas2 = document.createElement("canvas");
-        canvas2.width = 5684;
-        canvas2.height = 812;
+        canvas2.width = 2037;
+        canvas2.height = 1024;
         let ctx2 = canvas2.getContext("2d");
 
         ctx.save();
@@ -466,7 +475,7 @@
 
 
         ctx.fillRect(0, 1024, canvas.width, canvas.height / 2);
-        
+
         // aBoat.draw(ctx)
         aBoat.checkEdges();
         aBoat.applyForce(wind)
@@ -514,10 +523,6 @@
 
 
 
-
-
-
-
         // ctx.fillStyle = gradient;
 
         // ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -525,19 +530,20 @@
         //3000x2024
         //  top
 
-        ctx.drawImage(img, 2037*7, 0, 2037, 1024, 0, 0, 3027, 1024)
+        ctx.drawImage(img, 2037 * 7, 0, 2037, 1024, 0, 0, 2037, 1024)
 
-        ctx.drawImage(img, 2037*6, 0, 2037, 1024, 0, 0, 3027, 1024)
+        ctx.drawImage(img, 2037 * 6, 0, 2037, 1024, 0, 0, 2037, 1024)
 
         // black cloud
         // ctx.drawImage(img, 6006, 0, 2994, 810, 0, 0, 2994, 810)
         // ctx.globalCompositeOperation = "destination-out"
 
-        ctx.drawImage(img, 2037*5, 0, 2037, 1024, 0, 0, 3027, 1024)
+        ctx.drawImage(img, 2037 * 5, 0, 2037, 1024, 0, 0, 2037, 1024)
 
         // // bottom
         // ctx.drawImage(img, 0, 1336, 2996, 696, 0, 1336, 2996, 696)
-
+        ctx.globalAlpha = 0.25;
+        ctx.drawImage(image, 0, 0, 2037, 1024, 0, 0, 2037, 1024)
 
         // // middle
         // ctx.drawImage(img, 6000, 923, 3000, 421, 0, 923, 3000, 421)
@@ -556,182 +562,19 @@
         ctx.restore();
 
 
-
-
-        // let bridge = { x: 6, y: 1085, width: 1784, height: 312 }
-        // ctx.drawImage(img, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
-
-        // ctx.drawImage(img, 0, 1391, 3617, 568, 0, 923, 3617, 568)
-        // ctx.drawImage(image, 0, 1391, 3617, 568, 0, 923, 3617, 568)
-        // ctx.drawImage(image, 0, 812)
-
-
-        // slice of bridge and city
-        // ctx.colorMask(true, true, false, true);
-        // ctx.filter = 'hue-rotate(45deg)'
-        // myCanvas.offscreenCanvas.width = 3617;
-        // myCanvas.offscreenCanvas.height = 568;
-        // tint_ctx.globalAlpha = 0.0;
-        // tint_ctx.fillStyle = 'rgba(255, 0, 0, 0)'
-        // tint_ctx.fillRect(0, 0, 3617, 568)
-        // tint_ctx.clearRect(0, 0, 3617, 568)
-
-        // tint_ctx.draw
-        // tint_ctx.globalCompositeOperation = "destination-atop"
-
-        // ctx2.globalCompositeOperation = "source-over"
-
-        // tint_ctx.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
-        // let imgData = tint_ctx.getImageData(0, 0, 3617, 568);
-
-        // let imgDataDest = ctx.getImageData(0, 932, 3617, 568);
-
-        // ctx2.drawImage(img, 0, 0, 3617, 568, 0, 0, 3617, 568)
-        // let c2imgData = ctx2.getImageData(0, 0, 3617, 568);
-
-        // ctx.drawImage(img, 3, 0, 3617, 568, 0, 923, 3617, 568)
-
-        // var i;
-        // for (i = 0; i < imgData.data.length; i += 4) {
-        //     if (imgData.data[i+3] > 0){
-        //         // imgData.data[i] = imgDataDest.data[i];
-        //         // imgData.data[i + 1] = imgDataDest.data[i + 1];
-        //         // imgData.data[i + 2] = imgDataDest.data[i + 2];
-        //         // imgData.data[i] = imgData.data[i];
-        //         // imgData.data[i + 1] = imgData.data[i + 1];
-        //         // imgData.data[i + 2] = imgData.data[i + 2];
-        //     }
-        //     else {
-        //         // imgData.data[i] = imgDataDest.data[i];
-        //         // imgData.data[i + 1] = imgDataDest.data[i + 1];
-        //         // imgData.data[i + 2] = imgDataDest.data[i + 2];
-        //     }
-
-        //     //imgData.data[i + 3] = imgData.data[i + 3];
-        // }
-        // ctx.globalCompositeOperation = "source-over"
-
-        // ctx.putImageData(imgData, 0, 932); 
-
-
-        // ctx.putImageData(imgData, 3, 0, 3617, 568, 0, 923, 3617, 568); 
-
-        //ctx.putImageData(imgData, 3, 923); 
-        // ctx.putImageData(c2imgData, 3, 923); 
-        // ctx.drawImage(c2imgData, 3, 932)
-
-        // var imgData = ctx.getImageData(0, 923, 1617, 568);
-
-        // var i;
-        // for (i = 0; i < imgData.data.length; i += 4) {
-        //     imgData.data[i] = 255 - imgData.data[i];
-        //     imgData.data[i + 1] = 255 - imgData.data[i + 1];
-        //     imgData.data[i + 2] = 255 - imgData.data[i + 2];
-        //     imgData.data[i + 3] = 255;
-        // }
-
-        // ctx.putImageData(imgData, 3, 0, 0, 923, 3617, 568); 
-
         ctx.fillStyle = 'black'
         ctx.lineWidth = 1
 
         ctx.font = '12px serif';
         ctx.strokeText('Dreadknot:' + date, 850, 1000)
 
-        // ctx.fillStyle = 'white'
-        // ctx.font = '90px serif';
-        // ctx.fillText('Dreadknot:' + date, 850, 1000)
-
-        //  water
-        // ctx.drawImage(img, 0, 0, 3008, 768, 0, 0, 1280, 360)
-        // cloud
-        // ctx.drawImage(img, 6230, 578, 193, 33, location.x, location.y, 193, 33)
-        // ctx.drawImage(img, 4118, 576, 164, 60, 642, 542, 164, 60)
-        // let pr = randn_bm(0, 25, 1)
-        // let pg = randn_bm(0, 50, 1)
-        // let pb = randn_bm(0, 255, 1)
-        // let pa = randn_bm(200, 255, 1)
-
-        // let pr2 = randn_bm(0, 25, 1)
-        // let pg2 = randn_bm(0, 50, 1)
-        // let pb2 = randn_bm(0, 255, 1)
-        // let pa2 = randn_bm(200, 255, 1)
-
-        // let pr3 = randn_bm(0, 25, 1)
-        // let pg3 = randn_bm(0, 50, 1)
-        // let pb3 = randn_bm(0, 255, 1)
-        // let pa3 = randn_bm(200, 255, 1)
-
-        // for (let i = 0; i < 50; i++) {
-        //     let cx = Math.floor(randn_bm(frameLocation.x, frameLocation.x + 1280, 1))
-        //     let cy = Math.floor(randn_bm(frameLocation.y - 360, frameLocation.y + 1000, 1))
-        //     let pwidth = Math.floor(Math.random() * 25)
-        //     let pheight = Math.floor(Math.random() * 25)
-
-        //     let pr = randn_bm(redRangeStart, redRangeEnd, 1)
-        //     let pg = randn_bm(blueRangeStart, blueRangeEnd, 1)
-        //     let pb = randn_bm(greenRangeStart, greenRangeEnd, 1)
-        //     let pa = randn_bm(200, 255, 1)
-
-        //     let pr2 = randn_bm(redRangeStart, redRangeEnd, 1)
-        //     let pg2 = randn_bm(blueRangeStart, blueRangeEnd, 1)
-        //     let pb2 = randn_bm(greenRangeStart, greenRangeEnd, 1)
-        //     let pa2 = randn_bm(200, 255, 1)
-
-        //     let pr3 = randn_bm(redRangeStart, redRangeEnd, 1)
-        //     let pg3 = randn_bm(blueRangeStart, blueRangeEnd, 1)
-        //     let pb3 = randn_bm(greenRangeStart, greenRangeEnd, 1)
-        //     let pa3 = randn_bm(200, 255, 1)
-
-        //     let fblur = Math.floor(Math.random() * 1)
-        //     let brush_size = Math.random() * (1.5 - .5) + .5
-        //     let brush_distance = Math.random() * (5 - 1) + 1
-        //     // ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${pa})`;
-        //     let gradient = ctx.createRadialGradient(cx, cy, brush_size, cx + brush_distance, cy + brush_distance, brush_size);
-        //     gradient.addColorStop(0, `rgba(${pr}, ${pg}, ${pb}, ${pa})`);
-        //     gradient.addColorStop(.5, `rgba(${pr2}, ${pg2}, ${pb2}, ${pa2})`);
-        //     gradient.addColorStop(1, `rgba(${pr3}, ${pg3}, ${pb3}, ${pa3})`);
-        //     ctx.fillStyle = gradient;
-
-        //     // ctx.filter = `blur(${fblur}px)`
-        //     ctx.fillRect(cx, cy, pwidth, pheight);
-        // }
-
-
-        // drawPaintBrush(ctx, frameLocation.x, frameLocation.y + 150)
-
-        // This works
-        // let cloud_el = document.getElementById('cloud');
-        // ctx.drawImage(cloud_el, 3, 0, 3617, 568, 0, 923, 3617, 568)
-
-
-        // for (let i = 6; i > 0; i--) {
-        //     // ctx.strokeStyle = `rgb(
-        //     //     0,
-        //     //     ${Math.floor(255 - 42.5 * i)},
-        //     //     ${Math.floor(255 - 42.5 * i)})`;
-        //     // ctx.fillStyle = `rgb(
-        //     //     0,
-        //     //     ${Math.floor(255 - 42.5 * i)},
-        //     //     ${Math.floor(255 - 42.5 * i)})`;
-
-        //     // ctx.beginPath(rainbow)
-        //             let rainbow = new Path2D();
-
-        //     rainbow.fillStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
-        //     rainbow.strokeStyle = `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, 255)`
-        //     rainbow.arc(2000, 1415, 1000 + i * 100, (Math.PI / 180) * 180, 0, 0)
-        //     ctx.stroke(rainbow)
-        //     ctx.fill(rainbow)
-        // }
 
         ctx.restore();
 
         let frame_ctx = document.getElementById('frame').getContext('2d');
         frame_ctx.putImageData(ctx.getImageData(frameLocation.x, frameLocation.y, 1280, 720), 0, 0);
-        // frame_ctx.drawImage(ctx.i, 0, 0)
 
-          
+
 
         window.requestAnimationFrame(draw);
     }
