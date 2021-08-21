@@ -87,12 +87,12 @@
     let gblueRangeEnd = 255
     let ggreenRangeEnd = 255
 
-    let x0 = Math.floor(Math.random() * canvas.width)
-    let y0 = Math.floor(Math.random() * canvas.height)
-    let r0 = Math.floor(Math.random() * canvas.height)
-    let x1 = Math.floor(Math.random() * canvas.width)
-    let y1 = Math.floor(Math.random() * canvas.height)
-    let r1 = Math.floor(Math.random() * canvas.height)
+    let x0 = getRandomIntInclusive(canvas.width / 2, canvas.width)
+    let y0 = getRandomIntInclusive(canvas.height / 2, canvas.width)
+    let r0 = getRandomIntInclusive(canvas.width / 2, canvas.width)
+    let x1 = getRandomIntInclusive(canvas.width / 2, canvas.width)
+    let y1 = getRandomIntInclusive(canvas.height / 2, canvas.width)
+    let r1 = getRandomIntInclusive(canvas.height / 2, canvas.height)
 
     let img = new Image();
     let image = new Image();
@@ -300,9 +300,27 @@
         gradient.addColorStop(.5, `rgba(${pr2g}, ${pg2g}, ${pb2g}, ${pa2g})`);
         gradient.addColorStop(1, `rgba(${pr3g}, ${pg3g}, ${pb3g}, ${pa3g})`);
         ctx.fillStyle = gradient;
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1;
 
-        // ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+
+        ctx.beginPath();       // Start a new path
+        ctx.moveTo(30, 50);    // Move the pen to (30, 50)
+        ctx.lineTo(150, 100);  // Draw a line to (150, 100)
+        ctx.stroke();          // Render the path
+        ctx.save();
+        // ctx.strokeStyle = red;
+        for (let i = 0; i > 50; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(canvas.width, canvas.height)
+            // ctx.lineTo(getRandomIntInclusive(0, canvas.width), getRandomIntInclusive(0, canvas.height));
+            ctx.stroke()
+
+        }
+        ctx.restore();
         for (let i = 6; i > 0; i--) {
             // ctx.strokeStyle = `rgb(
             //     0,
@@ -384,7 +402,7 @@
             cloud_ctx.drawImage(img, 2037 * 4, 0, 2037, 1024, 0, 0, 2037, 1024)
             cloud_ctx.globalAlpha = 0.5;
             cloud_ctx.drawImage(img, 2037 * 1, 0, 2037, 1024, 0, 0, 2037, 1024)
-            
+
             cloud_ctx.drawImage(img, 2037 * 2, 0, 2037, 1024, 0, 0, 2037, 1024)
             cloud_ctx.globalCompositeOperation = 'source-in'
             cloud_ctx.fillRect(0, 0, 2037, 1024)
