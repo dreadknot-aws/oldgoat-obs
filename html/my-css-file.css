@@ -1,14 +1,17 @@
 p {
     border-style: solid;
-    border-color: black;
-    color: rgba(0, 0, 0, 0.788);
+    /* border-color: rgba(102, 13, 175, 0.733); */
+    color: rgb(0, 0, 0);
     background: gold 10px 10px repeat-x fixed;
     /* text-shadow: 1px 1px 1px rgb(0, 0, 0); */
-    width: calc(1280px - 30%);
+    /* width: calc(1280px - 50%); */
     font-size: 5em;
+    box-shadow: 5px 10px rgb(100, 0, 67);
+    line-height: 90%;
+    margin: 10px;
     font-family: 'introrustg-base2line';
     text-align: center;
-    padding: 10px 15px 15px 5px;
+    padding: 5px 5px 5px 5px;
 }
 
 body { background-color: rgba(0, 0, 0, 0);
@@ -62,7 +65,7 @@ h4 {
   }
 
 
-/* #title {
+#title {
     color: rgb(0,255,0);
     stroke: black;
     border-color: rgb(0, 0, 0);
@@ -79,7 +82,7 @@ h4 {
     /* background-blend-mode: difference; */
     text-shadow: 1px 1px 1px peru;
     padding: 10px 15px 15px 5px;
-} */
+}
 
 #justone {
     border-color: red;
