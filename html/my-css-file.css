@@ -1,15 +1,16 @@
 p {
     border-style: solid;
     /* border-color: rgba(102, 13, 175, 0.733); */
-    color: rgb(0, 0, 0);
-    background: gold 10px 10px repeat-x fixed;
+    color: rgba(243, 14, 14, 0.322);
+    background: rgb(2, 92, 177) 10px 10px repeat-x fixed;
     /* text-shadow: 1px 1px 1px rgb(0, 0, 0); */
     /* width: calc(1280px - 50%); */
     font-size: 5em;
     box-shadow: 5px 10px rgb(100, 0, 67);
     line-height: 90%;
     margin: 10px;
-    font-family: 'introrustg-base2line';
+    /* font-family: 'introrustg-base2line'; */
+    font-family: 'Archivo', sans-serif;
     text-align: center;
     padding: 5px 5px 5px 5px;
 }
@@ -26,7 +27,7 @@ h1 {
     background-color: black;
     background-blend-mode: soft-light;
     border: solid;
-    font-family: 'introrustg-base2line';
+    font-family: 'Archivo', sans-serif;
 }
 
 h2 {
@@ -35,7 +36,7 @@ h2 {
     font-size: 3.5em;
     background-color: gold;
     border: solid;
-    font-family: 'introrustg-base2line';
+    font-family: 'Archivo', sans-serif;
 }
 
 
@@ -45,7 +46,7 @@ h3 {
     font-size: 5em;
     background-color: white;
     border: solid;
-    font-family: 'introrustg-base2line';
+    font-family: 'Archivo', sans-serif;
 }
 
 
@@ -56,7 +57,7 @@ h4 {
     font-size: 3.5em;
     background-color: gold;
     border: solid;
-    font-family: 'Metal Mania', cursive;
+    font-family: 'Archivo', sans-serif;
 }
 
 #MyRect {
@@ -64,9 +65,27 @@ h4 {
     stroke: rgb(0, 0, 0);
   }
 
+  p {
+    animation-duration: 3s;
+    animation-name: slidein;
+  }
+  
+  @keyframes slidein {
+    from {
+      margin-left: 100%;
+      width: 300%;
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }
 
 #title {
-    color: rgb(0,255,0);
+    margin-top: 33%;
+    margin-left: 10%;
+    color: rgb(255, 255, 255);
     stroke: black;
     border-color: rgb(0, 0, 0);
     border-style: solid;
@@ -75,9 +94,11 @@ h4 {
     width: calc(1280px - 30%);
     font-size: 5em;
     /* background-color: gold; */
-    background: gold 10px 10px repeat-x fixed;
+    background: rgb(0, 0, 0) 10px 10px repeat-x fixed;
     border: solid;
-    font-family: 'introrustg-base2line';
+    /* font-family: 'introrustg-base2line'; */
+    font-family: 'Archivo', sans-serif;
+
     text-align: center;
     /* background-blend-mode: difference; */
     text-shadow: 1px 1px 1px peru;
