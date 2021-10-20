@@ -15,16 +15,16 @@
         import { Vector } from '../js/mr.vector.js';
 
 
-    async function loadFonts() {
-        const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
-        // wait for font to be loaded
-        await font.load();
-        // add font to document
-        document.fonts.add(font);
-        // enable font with CSS class
-        document.body.classList.add('fonts-loaded');
-    }
-    // loadFonts();
+        async function loadFonts() {
+            const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
+            // wait for font to be loaded
+            await font.load();
+            // add font to document
+            document.fonts.add(font);
+            // enable font with CSS class
+            document.body.classList.add('fonts-loaded');
+        }
+        // loadFonts();
 
         class Boat {
             constructor() {
@@ -92,10 +92,10 @@
         let param_title = params.get('title');
         let og_bg_color = params.get('ogcolor')
 
-    if (param_title == null) {
-        // some_variable is either null or undefined
-        param_title = 'The BeatBunker'
-    }
+        if (param_title == null) {
+            // some_variable is either null or undefined
+            param_title = 'The BeatBunker'
+        }
 
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
@@ -131,7 +131,7 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height),
                 getRandomIntInclusive(0, canvas.width),
-                getRandomIntInclusive(0, canvas.height)                
+                getRandomIntInclusive(0, canvas.height)
             ],
             pos: {
                 x: getRandomIntInclusive(-500, 500),
@@ -157,7 +157,9 @@
             running = false;
         });
 
+
         function loop() {
+
             window.requestAnimationFrame(loop);
             colorStop.applyForce(wind);
             colorStop.checkEdges();
@@ -169,11 +171,11 @@
             colorStop.location.x = colorStop.location.x + .01
         }
 
-        let line = { x: getRandomIntInclusive(-500, 500), y: getRandomIntInclusive(-500, 500)}
+        let line = { x: getRandomIntInclusive(-500, 500), y: getRandomIntInclusive(-500, 500) }
         let k = 0;
         let g = 0;
-          var sin = Math.sin(Math.PI / 6);
-            var cos = Math.cos(Math.PI / 6);
+        var sin = Math.sin(Math.PI / 6);
+        var cos = Math.cos(Math.PI / 6);
 
         function draw() {
             if (k < 1500) {
@@ -190,7 +192,7 @@
 
                 ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
                 ctx.shadowBlur = 10;
-                
+
                 ctx.fillStyle = 'black'
 
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
@@ -198,7 +200,7 @@
                 gradient.addColorStop(1, `rgba(${title.gradientColor[6]},${title.gradientColor[7]},${title.gradientColor[8]},${title.gradientAlpha[1]}`);
                 ctx.fillStyle = gradient;
 
-                ctx.fillRect(0,0, canvas.width, canvas.height)
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
 
                 let gradient2 = ctx.createRadialGradient(canvas.width, canvas.height, 1, 1, k, 1);
 
@@ -220,7 +222,7 @@
 
                 // ctx.fillText(title.text, title.pos.x, title.pos.y)
                 ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
-                 ctx.lineWidth = 5
+                ctx.lineWidth = 5
                 // ctx.strokeText(title.text, title.pos.x, title.pos.y)
 
                 // ctx.resetTransform();
@@ -228,8 +230,32 @@
             }
         }
 
+        // const element = document.getElementById('some-element-you-want-to-animate');
+        let start, previousTimeStamp;
 
-        raf = window.requestAnimationFrame(loop);
+        function step(timestamp) {
+            if (start === undefined)
+                start = timestamp;
+            const elapsed = timestamp - start;
+
+            if (previousTimeStamp !== timestamp) {
+                // Math.min() is used here to make sure the element stops at exactly 200px
+                const count = Math.min(0.1 * elapsed, 200);
+                console.log(count)
+                loop()
+
+
+                // element.style.transform = 'translateX(' + count + 'px)';
+            }
+
+            if (elapsed < 2000) { // Stop the animation after 2 seconds
+                previousTimeStamp = timestamp
+                window.requestAnimationFrame(step);
+            }
+        }
+
+
+        raf = window.requestAnimationFrame(step);
 
 
     </script>
