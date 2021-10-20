@@ -33,7 +33,7 @@
                 this.acceleration = new Vector(.01, 0);
                 this.angle = 0;
                 this.aVelocity = 0;
-                this.aAcceleration = getRandomIntInclusive(0,300)
+                this.aAcceleration = getRandomIntInclusive(0, 300)
                 this.size = 10
                 this.width = 0
                 this.mass = 10
@@ -173,7 +173,7 @@
         });
 
         function loop() {
-            window.requestAnimationFrame(loop);
+            // window.requestAnimationFrame(loop);
             colorStop.applyForce(wind);
             colorStop.checkEdges();
             colorStop.update();
@@ -260,7 +260,7 @@
                     // ctx.rotate(colorStop.angle)
                     // ctx.ellipse(fruits[i].x, fruits[i].y, fruits[i].rx, fruits[i].ry, Math.PI / 4, 0, 2 * Math.PI);
                     ctx.fillRect(fruits[i].x, fruits[i].y, fruits[i].rx, fruits[i].ry);
-                    
+
                     ctx.stroke();
                     ctx.fill();
                     ctx.restore();
@@ -314,7 +314,32 @@
         }
 
 
-        raf = window.requestAnimationFrame(loop);
+        // const element = document.getElementById('some-element-you-want-to-animate');
+        let start, previousTimeStamp;
+
+        function step(timestamp) {
+            if (start === undefined)
+                start = timestamp;
+            const elapsed = timestamp - start;
+
+            if (previousTimeStamp !== timestamp) {
+                // Math.min() is used here to make sure the element stops at exactly 200px
+                const count = Math.min(0.1 * elapsed, 200);
+                console.log(count)
+                loop()
+
+
+                // element.style.transform = 'translateX(' + count + 'px)';
+            }
+
+            if (elapsed < 10000) { // Stop the animation after seconds
+                previousTimeStamp = timestamp
+                window.requestAnimationFrame(step);
+            }
+        }
+
+
+        raf = window.requestAnimationFrame(step);
 
 
     </script>
