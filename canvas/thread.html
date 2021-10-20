@@ -80,10 +80,10 @@
         let param_title = params.get('title');
         let og_bg_color = params.get('ogcolor')
 
-    if (param_title == null) {
-        // some_variable is either null or undefined
-        param_title = 'The BeatBunker'
-    }
+        if (param_title == null) {
+            // some_variable is either null or undefined
+            param_title = 'The BeatBunker'
+        }
 
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
@@ -119,7 +119,7 @@
                 getRandomIntInclusive(0, canvas.width),
                 getRandomIntInclusive(0, canvas.height),
                 getRandomIntInclusive(0, canvas.width),
-                getRandomIntInclusive(0, canvas.height)                
+                getRandomIntInclusive(0, canvas.height)
             ],
             lineWidth: getRandomIntInclusive(0, 20),
             fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
@@ -142,7 +142,7 @@
         });
 
         function loop() {
-            window.requestAnimationFrame(loop);
+            // window.requestAnimationFrame(loop);
             colorStop.applyForce(wind);
             colorStop.checkEdges();
             colorStop.update();
@@ -174,7 +174,7 @@
                 gradient.addColorStop(1, `rgba(${title.gradientColor[2]},${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientAlpha[0]}`);
                 ctx.fillStyle = gradient;
 
-                ctx.fillRect(0,0, canvas.width, canvas.height)
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
 
                 // ctx.fillRect(111, 222, canvas.width, canvas.height)
                 let gradient2 = ctx.createRadialGradient(1, k, 1, title.box[0], title.box[1], 1);
@@ -195,8 +195,33 @@
             }
         }
 
+        // const element = document.getElementById('some-element-you-want-to-animate');
+        let start, previousTimeStamp;
 
-        raf = window.requestAnimationFrame(loop);
+        function step(timestamp) {
+            if (start === undefined)
+                start = timestamp;
+            const elapsed = timestamp - start;
+
+            if (previousTimeStamp !== timestamp) {
+                // Math.min() is used here to make sure the element stops at exactly 200px
+                const count = Math.min(0.1 * elapsed, 200);
+                console.log(count)
+                loop()
+
+
+                // element.style.transform = 'translateX(' + count + 'px)';
+            }
+
+            if (elapsed < 10000) { // Stop the animation after seconds
+                previousTimeStamp = timestamp
+                window.requestAnimationFrame(step);
+            }
+        }
+
+
+        raf = window.requestAnimationFrame(step);
+
 
 
     </script>
@@ -207,13 +232,16 @@
             background: transparent;
             /* overflow: hidden; */
         }
+
         canvas {
             width: 100%;
             height: 100%;
             /* background-color: rgba(255, 255, 255, 1); */
             margin: 0;
-            position: absolute; 
-            left: 0; top: 0; z-index: 1;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
         }
     </style>
 </head>
