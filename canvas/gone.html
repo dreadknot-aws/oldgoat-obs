@@ -7,6 +7,48 @@
     <script type="module">
         var raf;
 
+
+        var title = {
+            gradientColor: [
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255),
+                getRandomIntInclusive(0, 255)
+            ],
+            gradientAlpha: [
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random()
+            ],
+            box: [
+                getRandomIntInclusive(0, canvas.width),
+                getRandomIntInclusive(0, canvas.height),
+                getRandomIntInclusive(0, canvas.width),
+                getRandomIntInclusive(0, canvas.height)
+            ],
+            pos: {
+                x: getRandomIntInclusive(-500, 500),
+                y: getRandomIntInclusive(-500, 500)
+            },
+            lineWidth: getRandomIntInclusive(0, 20),
+            angleStep: getRandomIntInclusive(0, 120),
+            speed: getRandomIntInclusive(0, 120),
+            fonts: ['Galindo', 'Holtwood One SC', 'Faster One', 'Bangers'],
+            randomFont: getRandomIntInclusive(0, 3),
+            gradient: null,
+            comps: ['source-over',
+                'lighter', 'copy', 'xor', 'multiply', 'screen', 'overlay', 'darken',
+                'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion',
+                'hue', 'saturation', 'color', 'luminosity'],
+            CompositeOperation: getRandomIntInclusive(0, 18)
+        }
+
         function getRandomIntInclusive(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -47,281 +89,30 @@
                 var ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // ctx.save()
-                // ctx.translate(canvas.width / 2, canvas.height / 2);
-
                 var time = new Date();
-                // Rotate
-                // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
 
-                // ctx.rotate(2 * Math.PI / 180);
-                // ctx.beginPath();
-                // ctx.moveTo(0, 0);
-
-                // ctx.lineTo(100, 0);
-
-                // ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-                // ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // // ctx.fillStyle = 'red';
-                // // if (time * .25 % 2 | 0)
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-
-                // ctx.lineTo(-100, 0);
-                // ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.fillStyle = 'red';
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
-                // ctx.lineTo(100, 0);
-
-                // // ctx.lineTo(canvas.width, canvas.height);
-                // // ctx.lineTo(0,canvas.height);
-                // // ctx.lineTo(0,0)
-                // ctx.stroke();
-
-                // // ctx.moveTo(0, 0);
-
-                // // ctx.fill();
-                // ctx.restore()
-
-
-
-
-                // ctx.save()
-                // ctx.translate(canvas.width / 2, canvas.height / 2);
-                // ctx.translate(200, 0);
-                // ctx.translate(200 * (Math.cos(60 * Math.PI / 180)), 200 * (Math.sin(60 * Math.PI / 180)));
-
-
-                // var time = new Date();
-                // // Rotate
-                // // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
-
-                // // ctx.rotate(2 * Math.PI / 180);
-                // ctx.beginPath();
-                // ctx.moveTo(0, 0);
-                // ctx.lineTo(100, 0);
-                // ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-                // ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // // ctx.fillStyle = 'red';
-                // // if (time * .25 % 2 | 0)
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-
-                // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // ctx.lineTo(-100, 0);
-
-                // ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-
-                // ctx.fillStyle = 'red';
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
-                // ctx.lineTo(100, 0);
-
-                // // ctx.lineTo(canvas.width, canvas.height);
-                // // ctx.lineTo(0,canvas.height);
-                // // ctx.lineTo(0,0)
-                // ctx.stroke();
-
-                // // ctx.moveTo(0, 0);
-
-                // // ctx.fill();
-                // ctx.restore()
-
-                // ctx.save()
-                // ctx.translate(canvas.width / 2, canvas.height / 2);
-                // ctx.translate(100, 0);
-                // ctx.translate(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-
-
-                // var time = new Date();
-                // // Rotate
-                // // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
-
-                // // ctx.rotate(2 * Math.PI / 180);
-                // ctx.beginPath();
-                // ctx.moveTo(0, 0);
-                // ctx.lineTo(100, 0);
-                // ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-                // ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // // ctx.fillStyle = 'red';
-                // // if (time * .25 % 2 | 0)
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-
-                // ctx.lineTo(-100, 0);
-                // ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.fillStyle = 'red';
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
-                // ctx.lineTo(100, 0);
-
-                // // ctx.lineTo(canvas.width, canvas.height);
-                // // ctx.lineTo(0,canvas.height);
-                // // ctx.lineTo(0,0)
-                // ctx.stroke();
-
-                // // ctx.moveTo(0, 0);
-
-                // // ctx.fill();
-                // ctx.restore()
-
-
-                // ctx.save()
-                // ctx.translate(canvas.width / 2, canvas.height / 2);
-                // ctx.translate(-100 * (Math.cos(300 * Math.PI / 180)), -100 * (Math.sin(300 * Math.PI / 180)));
-                // ctx.translate(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-
-
-                // var time = new Date();
-                // // Rotate
-                // // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
-
-                // // ctx.rotate(2 * Math.PI / 180);
-                // ctx.beginPath();
-                // ctx.moveTo(0, 0);
-                // ctx.lineTo(100, 0);
-                // ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-                // ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // // ctx.fillStyle = 'red';
-                // // if (time * .25 % 2 | 0)
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-
-                // ctx.lineTo(-100, 0);
-                // ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.fillStyle = 'red';
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
-                // ctx.lineTo(100, 0);
-
-                // // ctx.lineTo(canvas.width, canvas.height);
-                // // ctx.lineTo(0,canvas.height);
-                // // ctx.lineTo(0,0)
-                // ctx.stroke();
-
-                // // ctx.moveTo(0, 0);
-
-                // // ctx.fill();
-                // ctx.restore()
-
-
-                // ctx.save()
-                // ctx.translate(canvas.width / 2, canvas.height / 2);
-                // ctx.translate(200 * (Math.cos(300 * Math.PI / 180)), 200 * (Math.sin(300 * Math.PI / 180)));
-                // ctx.translate(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-
-
-                // var time = new Date();
-                // // Rotate
-                // // ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
-
-                // // ctx.rotate(2 * Math.PI / 180);
-                // ctx.beginPath();
-                // ctx.moveTo(0, 0);
-                // ctx.lineTo(100, 0);
-                // ctx.lineTo(100 * (Math.cos(60 * Math.PI / 180)), 100 * (Math.sin(60 * Math.PI / 180)));
-                // ctx.lineTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // // ctx.fillStyle = 'red';
-                // // if (time * .25 % 2 | 0)
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(120 * Math.PI / 180)), 100 * (Math.sin(120 * Math.PI / 180)));
-
-                // ctx.lineTo(-100, 0);
-                // ctx.lineTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-                // ctx.lineTo(0, 0);
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.fillStyle = 'red';
-                // ctx.fill();
-                // ctx.stroke();
-
-                // ctx.beginPath();
-                // ctx.moveTo(100 * (Math.cos(240 * Math.PI / 180)), 100 * (Math.sin(240 * Math.PI / 180)));
-
-                // ctx.lineTo(100 * (Math.cos(300 * Math.PI / 180)), 100 * (Math.sin(300 * Math.PI / 180)));
-                // ctx.lineTo(100, 0);
-
-                // // ctx.lineTo(canvas.width, canvas.height);
-                // // ctx.lineTo(0,canvas.height);
-                // // ctx.lineTo(0,0)
-                // ctx.stroke();
-
-                // // ctx.moveTo(0, 0);
-
-                // // ctx.fill();
-                // ctx.restore()
-
-                // var gradient = ctx.createRadialGradient(randomx, randomy, radius0, controlpointx, controlpointy, radius1);
-                // gradient.addColorStop(0, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()}`);
-                // gradient.addColorStop(.5, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()}`);
-                // gradient.addColorStop(1, `rgba(${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${getRandomIntInclusive(0, 255)}, ${Math.random()}`);
 
                 var gradient = ctx.createRadialGradient(randomx, randomy, radius0, controlpointx, controlpointy, radius1);
                 gradient.addColorStop(0, `rgba(${color1}, ${color2}, ${color3}, ${alpha1}`);
                 gradient.addColorStop(.5, `rgba(${color2}, ${color3}, ${color1}, ${alpha2}`);
                 gradient.addColorStop(1, `rgba(${color3}, ${color1}, ${color2}, ${alpha3}`);
 
+                // angleStep 60 is smooth
+                var angleStep = 60 
+                // ctx.rotate(((2 * Math.PI) / title.angleStep) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
 
                 for (var i = 0; i < 10; i++) {
+                    // ctx.rotate(((2 * Math.PI) / title.angleStep) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+
                     for (var j = 0; j < 5; j++) {
                         ctx.save()
                         ctx.translate(i * 174, j * 174);
-                        ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+                        
+                        // console.log(((2 * Math.PI) / angleStep) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds())
+
+                        ctx.rotate(((title.speed * Math.PI) / angleStep) * time.getSeconds() + ((title.speed * Math.PI) / 60000) * time.getMilliseconds());
+                        
+                        ctx.rotate(1 * Math.PI / 180)
 
 
 
