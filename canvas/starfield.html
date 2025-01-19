@@ -247,8 +247,8 @@
                 gradient.addColorStop(1, `rgba(${title.gradientColor[6]},${title.gradientColor[7]},${title.gradientColor[8]},${title.gradientAlpha[1]}`);
                 ctx.fillStyle = gradient;
 
-                ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
-                        ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, .5)`;
+                ctx.shadowBlur = title.lineWidth;
 
                 // ctx.beginPath();
                 // ctx.ellipse(100, 100, 50, 75, Math.PI / 4, 0, 2 * Math.PI);

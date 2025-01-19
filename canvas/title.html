@@ -9,13 +9,16 @@
         href="https://fonts.googleapis.com/css2?family=Bangers&family=Faster+One&family=Galindo&family=Holtwood+One+SC&display=swap"
         rel="stylesheet">
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Canvas tutorial</title>
     <script type="module">
         import { GUI } from '../js/dat.gui.module.js';
         import { Vector } from '../js/mr.vector.js';
 
         async function loadFonts() {
-            const font = new FontFace('silkscreen', 'url(../fonts/slkscr.ttf)');
+            // const font = new FontFace('silkscreen', 'url(../fonts/PressStart2P-Regular.ttf)');
+            const font = new FontFace('silkscreen', 'url(../fonts/BlackOpsOne-Regular.ttf)');
+            // BlackOpsOne-Regular.ttf
             // wait for font to be loaded
             await font.load();
             // add font to document
@@ -24,7 +27,7 @@
             document.body.classList.add('fonts-loaded');
         }
 
-        const daysWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+        const daysWeek = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
         const monthsYear = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         let now = new Date();
 
@@ -123,7 +126,8 @@
         var canvas = document.getElementById('canvas');
         var background = document.getElementById('background');
         var tick = 0;
-        var wind = new Vector(0, 0.005);
+        var wind = new Vector(0, 0);
+        // var wind = new Vector(0, 0.005);
         var mouse = new Vector(0, 0)
 
         var colorStop = new Boat();
@@ -161,18 +165,21 @@
                 getRandomIntInclusive(0, canvas.height)
             ],
             pos: {
-                x: getRandomIntInclusive(0, canvas.width / 2),
-                y: getRandomIntInclusive(0, canvas.height / 2)
+                x: 0,
+                y: 0 + 150
             },
-            angle: getRandomIntInclusive(80, 100),
-            lineWidth: getRandomIntInclusive(0, 20),
+            // angle: getRandomIntInclusive(80, 100),
+            angle: 0,
+            lineWidth: 5,
             fonts: ['silkscreen', 'silkscreen', 'silkscreen', 'silkscreen'],
             randomFont: getRandomIntInclusive(0, 3),
-            fontSize: getRandomIntInclusive(95, 150),
+            fontSize: 150,
             count: 0
         }
 
-        console.log(title.gradientColor[0])
+        // console.log(title.gradientColor[0])
+
+        loadFonts();
 
         canvas.addEventListener('mousemove', function (e) {
             if (!running) {
@@ -188,8 +195,8 @@
 
         function loop() {
             // window.requestAnimationFrame(loop);
-            colorStop.applyForce(wind);
-            colorStop.checkEdges();
+            // colorStop.applyForce(wind);
+            // colorStop.checkEdges();
             colorStop.update();
 
             // console.log(title.pos)
@@ -237,14 +244,14 @@
             if (e.code === 'KeyZ') {
                 title.pos.x = colorStop.position.x
                 title.pos.y = colorStop.position.y
-                console.log(title.pos.x)
+                // console.log(title.pos.x)
                 return;
             }
             if (e.code === 'KeyX') {
                 camera.position.z = camera.position.z - 1;
                 camera.position.x = camera.position.x;  // -40, 40
                 camera.position.y = camera.position.y; // -20. 20
-                console.log(camera.position.y)
+                // console.log(camera.position.y)
                 return;
             }
         }
@@ -274,7 +281,7 @@
 
                 if (param_title == null) {
                     // some_variable is either null or undefined
-                    param_title = 'The BeatBunker'
+                    param_title = 'SKMDC'
                 }
 
                 // title.text = now.getHours() + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds())
@@ -284,7 +291,7 @@
                 let gradient = ctx.createLinearGradient(title.box[0], title.box[1], title.box[2], title.box[3]);
 
                 gradient.addColorStop(0, `rgba(${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientAlpha[1]}`);
-                gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[2]}`);
+                // gradient.addColorStop(colorStop.location.x, `rgba(${title.gradientColor[3]},${title.gradientColor[4]},${title.gradientColor[5]},${title.gradientAlpha[2]}`);
                 gradient.addColorStop(1, `rgba(${title.gradientColor[1]},${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientAlpha[3]}`);
 
                 ctx.filter = ``
@@ -296,24 +303,24 @@
                 // ctx.fillRect(title.box[0], title.box[1], title.box[2], title.box[3])
                 ctx.filter = `brightness(100%) opacity(100%)`
 
-                ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
+                // ctx.strokeStyle = `rgba(${title.gradientColor[2]},${title.gradientColor[0]},${title.gradientColor[1]},${title.gradientAlpha[0]})`
 
                 ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
-                ctx.shadowBlur = 10;
+                // ctx.shadowBlur = 10;
 
-                ctx.filter = `brightness(100%) opacity(100%)`
+                // ctx.filter = `brightness(100%) opacity(100%)` 
                 ctx.fillStyle = gradient
                 ctx.lineWidth = title.lineWidth
-                ctx.font = `bold ${title.fontSize}px ${title.fonts[title.randomFont]}`;
+                ctx.font = `${title.fontSize}px ${title.fonts[title.randomFont]}`;
 
                 ctx.save();
 
 
                 ctx.translate(title.pos.x + title.lineWidth, title.pos.y + title.lineWidth);
                 // ctx.rotate(title.angle);
-                console.log(colorStop.location.x)
-                ctx.translate(colorStop.location.x, colorStop.location.y);
-                ctx.rotate(colorStop.angle)
+                // console.log(colorStop.location.x)
+                // ctx.translate(colorStop.location.x, colorStop.location.y);
+                // ctx.rotate(colorStop.angle)
 
                 ctx.strokeText(title.text, 0, 0, 1200)
                 ctx.fillText(title.text, 0, 0, 1200)
@@ -321,18 +328,18 @@
 
                 ctx.save();
                 ctx.shadowColor = `rgba(${title.gradientColor[0]}, ${title.gradientColor[1]}, ${title.gradientColor[2]}, 1)`;
-                ctx.shadowBlur = 10;
-                for (var i = 0; i < title.count; i++) {
-                    // ctx.save();
-                    ctx.translate(1280, 0);
-                    // ctx.translate(title.box[i], title.box[i + 1]);
-                    // ctx.translate(getRandomIntInclusive(-90, 90), getRandomIntInclusive(-90, 90));
-                    ctx.rotate(title.angle * Math.PI / 180);
-                    ctx.strokeText(title.text, title.pos.x, title.pos.y)
-                    ctx.fillText(title.text, title.pos.x, title.pos.y)
-                    // ctx.restore();
-                }
-                ctx.restore();
+                // ctx.shadowBlur = 10;
+                // for (var i = 0; i < title.count; i++) {
+                //     // ctx.save();
+                //     ctx.translate(1280, 0);
+                //     // ctx.translate(title.box[i], title.box[i + 1]);
+                //     // ctx.translate(getRandomIntInclusive(-90, 90), getRandomIntInclusive(-90, 90));
+                //     ctx.rotate(title.angle * Math.PI / 180);
+                //     ctx.strokeText(title.text, title.pos.x, title.pos.y)
+                //     ctx.fillText(title.text, title.pos.x, title.pos.y)
+                //     // ctx.restore();
+                // }
+                // ctx.restore();
 
                 // console.log(title.angle)
                 // ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
@@ -353,17 +360,16 @@
             if (previousTimeStamp !== timestamp) {
                 // Math.min() is used here to make sure the element stops at exactly 200px
                 const count = Math.min(0.1 * elapsed, 200);
-                console.log(count)
+                // console.log(count)
                 loop()
 
 
                 // element.style.transform = 'translateX(' + count + 'px)';
             }
 
-            if (elapsed < 20000) { // Stop the animation after seconds
-                previousTimeStamp = timestamp
-                window.requestAnimationFrame(step);
-            }
+            previousTimeStamp = timestamp
+            window.requestAnimationFrame(step);
+
         }
 
 

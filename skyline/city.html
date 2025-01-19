@@ -195,7 +195,7 @@
             ctx.save()
             ctx.globalCompositeOperation = 'xor'
 
-            ctx.drawImage(sheet, this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
+            // ctx.drawImage(sheet, this.sx, this.sy, this.sw, this.sh, this.location.x, this.location.y, this.sw * 2, this.sh * 2)
             ctx.restore()
 
             // Draw vector line to mouse
@@ -284,7 +284,7 @@
     var cityv = .05 * (Math.random() < 0.5 ? -1 : 1);
     var gradientv = .05 * (Math.random() < 0.5 ? -1 : 1);
     var img = new Array(4);
-    // var blur = new Array(4);
+    var blur = new Array(4);
     var hue = new Array(4);
     var saturate = new Array(4)
     var brightness = new Array(4)
@@ -359,13 +359,14 @@
 
 
             let bridge = { x: 6, y: 170, width: 1784, height: 312 }
+            // let bridge = { x: 1784, y: 170, width: 1784 * 1, height: 312 }
             tint_ctx.drawImage(sheet, 3617, 0, bridge.width, bridge.height, bridge.x, bridge.y, bridge.width, bridge.height)
 
 
-            tint_ctx.drawImage(sheet, 0, 0, 3617, 568, 0, 0, 3617, 568)
+            // tint_ctx.drawImage(sheet, 0, 0, 3617, 568, 0, 0, 3617, 568)
             tint_ctx.globalCompositeOperation = 'source-atop'
 
-            tint_ctx.fillRect(0, 0, 3617, 568)
+            // tint_ctx.fillRect(0, 0, 3617, 568)
 
             image.src = tint_canvas.toDataURL();
             image.addEventListener('load', function () {
@@ -500,8 +501,8 @@
             gradientv = - gradientv
 
         ctx.save();
-
-        ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%)`
+        // blur here keeps the city in focus
+        ctx.filter = `hue-rotate(${hue[0]}deg) brightness(${brightness[0]}%) saturate(${saturate[0]}%) opacity(100%) blur(0px)`
 
         ctx.drawImage(sheet, 0, 576, 3603, 2119, 0, 0, 1280, 720)
         // ctx.drawImage(sheet, 0, 0,  1280, 720)
@@ -514,7 +515,7 @@
         ctx.filter = `hue-rotate(${hue[1]}deg) brightness(${brightness[1]}%) saturate(${saturate[1]}%) opacity(${opacity[1]}%) invert(${invert[1]}%)`
 
         ctx.restore();
-        ctx.filter = ``
+        ctx.filter = `blur(0px)`
 
 
 

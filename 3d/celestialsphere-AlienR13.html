@@ -19,13 +19,13 @@
         top: 1em;
         background: rgba(252, 7, 7, 0);
         padding: .5em;
-        color: white;
+        color: rgb(0, 0, 0);
         font-family: monospace;
     }
 
     body {
             margin: 0;
-            background-color: rgba(0, 0, 0, 0);
+            background-color: rgba(243, 243, 243, 0);
             overflow: hidden;
         }
 
@@ -68,10 +68,10 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         // renderer.setClearColor(0x000000);
         renderer.shadowMap.enabled = true;
 
-        function makeCamera(fov = 40) {
+        function makeCamera(fov = 80) {
             const aspect = 2;  // the canvas default
             const zNear = 0.1;
-            const zFar = 1000;
+            const zFar = 2000;
             return new THREE.PerspectiveCamera(fov, aspect, zNear, zFar);
         }
 
@@ -80,7 +80,6 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         camera.position.set(8, 4, 10).multiplyScalar(3);
         camera.lookAt(0, 0, 0);
 
-        const sphereSize = 3000;
         const scene = new THREE.Scene();
 
         {
@@ -112,9 +111,9 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
 
         for (let i = 0; i < 5000; i++) {
 
-            const x = THREE.MathUtils.randFloatSpread(sphereSize);
-            const y = THREE.MathUtils.randFloatSpread(sphereSize);
-            const z = THREE.MathUtils.randFloatSpread(sphereSize);
+            const x = THREE.MathUtils.randFloatSpread(2000);
+            const y = THREE.MathUtils.randFloatSpread(2000);
+            const z = THREE.MathUtils.randFloatSpread(2000);
 
             vertices.push(x, y, z);
 
@@ -134,9 +133,9 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
 
         for (let i = 0; i < 2500; i++) {
 
-            const x = THREE.MathUtils.randFloatSpread(sphereSize);
-            const y = THREE.MathUtils.randFloatSpread(sphereSize);
-            const z = THREE.MathUtils.randFloatSpread(sphereSize);
+            const x = THREE.MathUtils.randFloatSpread(2000);
+            const y = THREE.MathUtils.randFloatSpread(2000);
+            const z = THREE.MathUtils.randFloatSpread(2000);
 
             vertices3.push(x, y, z);
 
@@ -156,9 +155,9 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
 
         for (let i = 0; i < 500; i++) {
 
-            const x = THREE.MathUtils.randFloatSpread(sphereSize);
-            const y = THREE.MathUtils.randFloatSpread(sphereSize);
-            const z = THREE.MathUtils.randFloatSpread(sphereSize);
+            const x = THREE.MathUtils.randFloatSpread(2000);
+            const y = THREE.MathUtils.randFloatSpread(2000);
+            const z = THREE.MathUtils.randFloatSpread(2000);
 
             vertices4.push(x, y, z);
 
@@ -172,6 +171,46 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         const points4 = new THREE.Points(p4geometry, material4);
 
         scene.add(points4);
+
+
+        // const radius = 50;
+        // const widthSegments = 12;
+        // const heightSegments = 12;
+        // const starFieldGeometry = new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments);
+        // const starFieldMaterial = new THREE.PointsMaterial({
+        //     color: 'white',
+        //     sizeAttennuation: false,
+        //     size: 0.2,     // in world units
+        // });
+        // const starFieldMesh = new THREE.Points(starFieldGeometry, starFieldMaterial);
+        // starFieldMesh.rotation.x = Math.PI / 12;
+        // starFieldMesh.rotation.y = Math.PI / 12;
+        // starFieldMesh.rotation.z = Math.PI / 12;
+        // starFieldMesh.receiveShadow = true;
+        // scene.add(starFieldMesh);
+
+
+
+        // const starFieldGeometry2 = new THREE.SphereBufferGeometry(radius / 1.5, widthSegments, heightSegments);
+        // const starFieldMaterial2 = new THREE.PointsMaterial({
+        //     color: 'lightblue',
+        //     sizeAttennuation: true,
+        //     size: 0.3,     // in world units
+        // });
+        // const starFieldMesh2 = new THREE.Points(starFieldGeometry2, starFieldMaterial2);
+        // starFieldMesh2.rotation.x = Math.PI * 1;
+        // starFieldMesh2.rotation.y = Math.PI * 1;
+        // starFieldMesh2.rotation.z = Math.PI * 1;
+        // starFieldMesh2.receiveShadow = true;
+        // scene.add(starFieldMesh2);
+
+
+        // const groundGeometry = new THREE.PlaneBufferGeometry(50, 50);
+        // const groundMaterial = new THREE.MeshPhongMaterial({ color: 0xCC8866 });
+        // const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
+        // groundMesh.rotation.x = Math.PI * -.5;
+        // groundMesh.receiveShadow = true;
+        // scene.add(groundMesh);
 
         const carWidth = 1;
         const carHeight = 1;
@@ -279,9 +318,9 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
 
         // Create a sine-like wave
         const curve = new THREE.SplineCurve([
-            new THREE.Vector2(-2250, 0),
-            new THREE.Vector2(2250, 0),
-            new THREE.Vector2(-2250, 0),
+            new THREE.Vector2(-1000, 0),
+            new THREE.Vector2(1000, 0),
+            // new THREE.Vector2(10, 0),
             // new THREE.Vector2(0, 0),
             // new THREE.Vector2(0, 0),
             // new THREE.Vector2(0, 0),
@@ -313,9 +352,7 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
 
         const targetPosition = new THREE.Vector3();
         const tankPosition = new THREE.Vector2();
-        // const tankTarget = new THREE.Vector2();
-        const tankTarget = new THREE.Vector3(THREE.MathUtils.randFloatSpread(2000),THREE.MathUtils.randFloatSpread(2000),THREE.MathUtils.randFloatSpread(2000));
-
+        const tankTarget = new THREE.Vector2();
         const sphereOrbit = new THREE.Vector3();
 
         const cameras = [
@@ -348,11 +385,11 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
             targetMaterial.color.setHSL(time * 10 % 1, 1, .25);
 
             // move tank
-            const tankTime = time * .005;
+            const tankTime = time * .05;
             curve.getPointAt(tankTime % 1, tankPosition);
-            // curve.getPointAt((tankTime + 0.01) % 1, tankTarget);
+            curve.getPointAt((tankTime + 0.01) % 1, tankTarget);
             tank.position.set(tankPosition.x, 0, tankPosition.y);
-            tank.lookAt(tankTarget.x, tankTarget.z, tankTarget.y);
+            tank.lookAt(tankTarget.x, 0, tankTarget.y);
 
 
             // rotate sphere

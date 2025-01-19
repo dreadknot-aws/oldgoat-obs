@@ -178,7 +178,7 @@
         var cos = Math.cos(Math.PI / 6);
 
         function draw() {
-            if (k < 1500) {
+            if (k < 3000) {
                 k = k + 1;
             }
             g = g + 1;
@@ -186,6 +186,7 @@
                 let ctx = canvas.getContext('2d');
                 let ctx_background = background.getContext('2d')
                 let gradient = ctx.createRadialGradient(line.x, line.y, 1, k, 1, 1);
+                // let gradient = ctx.createLinearGradient() (line.x, line.y, 1, k, 1, 1);
 
                 // ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx_background.clearRect(0, 0, background.width, background.height);
@@ -248,10 +249,10 @@
                 // element.style.transform = 'translateX(' + count + 'px)';
             }
 
-            if (elapsed < 4000) { // Stop the animation after seconds
-                previousTimeStamp = timestamp
-                window.requestAnimationFrame(step);
-            }
+            // if (elapsed < 4000) { // Stop the animation after seconds 
+            previousTimeStamp = timestamp
+            window.requestAnimationFrame(step);
+            // }
         }
 
 
