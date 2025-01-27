@@ -25,14 +25,14 @@
 
     body {
         margin: 0;
-        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0);
         overflow: hidden;
     }
 
     canvas {
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0);
+        background-color: rgb(0, 0, 0);
         margin: 0;
     }
 </style>
@@ -44,6 +44,15 @@
     import { GUI } from '.././js/dat.gui.module.js';
 
     function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    function getRandomPoint() {
         var letters = '0123456789ABCDEF';
         var color = '#';
         for (var i = 0; i < 6; i++) {
@@ -132,7 +141,7 @@
         p2geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 
 
-        const material2 = new THREE.PointsMaterial({ color: getRandomColor() });
+        const material2 = new THREE.PointsMaterial({ color: 0xcccccc });
 
         const points2 = new THREE.Points(p2geometry, material2);
 
