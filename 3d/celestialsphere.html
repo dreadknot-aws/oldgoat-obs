@@ -24,25 +24,33 @@
     }
 
     body {
-            margin: 0;
-            background-color: rgba(0, 0, 0, 0);
-            overflow: hidden;
-        }
+        margin: 0;
+        background-color: rgb(0, 0, 0);
+        overflow: hidden;
+    }
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0);
-            margin: 0;
-        }
+    canvas {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0);
+        margin: 0;
+    }
 </style>
 <script type="module">
 
-import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
-        import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
+    import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
+    import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
     // import * as THREE from '.././js/three.module.js';
     import { GUI } from '.././js/dat.gui.module.js';
 
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 
     function createMaterial() {
         const material = new THREE.MeshPhongMaterial({
@@ -71,7 +79,7 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         function makeCamera(fov = 90) {
             const aspect = 2;  // the canvas default
             const zNear = 0.1;
-            const zFar = 2000;
+            const zFar = 1500;
             return new THREE.PerspectiveCamera(fov, aspect, zNear, zFar);
         }
 
@@ -123,7 +131,8 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         const p2geometry = new THREE.BufferGeometry();
         p2geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 
-        const material2 = new THREE.PointsMaterial({ color: 0xccccff });
+
+        const material2 = new THREE.PointsMaterial({ color: getRandomColor() });
 
         const points2 = new THREE.Points(p2geometry, material2);
 
@@ -145,7 +154,7 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         const p3geometry = new THREE.BufferGeometry();
         p3geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices3, 3));
 
-        const material3 = new THREE.PointsMaterial({ color: 0x44cccc });
+        const material3 = new THREE.PointsMaterial({ color: getRandomColor() });
 
         const points3 = new THREE.Points(p3geometry, material3);
 
@@ -167,7 +176,7 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         const p4geometry = new THREE.BufferGeometry();
         p4geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices4, 3));
 
-        const material4 = new THREE.PointsMaterial({ color: 0x440000  });
+        const material4 = new THREE.PointsMaterial({ color: getRandomColor() });
 
         const points4 = new THREE.Points(p4geometry, material4);
 
@@ -279,9 +288,9 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
 
         // Create a sine-like wave
         const curve = new THREE.SplineCurve([
-            new THREE.Vector2(-2250, 0),
-            new THREE.Vector2(2250, 0),
-            new THREE.Vector2(-2250, 0),
+            new THREE.Vector2(-2250, -500),
+            new THREE.Vector2(2250, 1500),
+            new THREE.Vector2(-2250, 500),
             // new THREE.Vector2(0, 0),
             // new THREE.Vector2(0, 0),
             // new THREE.Vector2(0, 0),
@@ -314,7 +323,7 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         const targetPosition = new THREE.Vector3();
         const tankPosition = new THREE.Vector2();
         // const tankTarget = new THREE.Vector2();
-        const tankTarget = new THREE.Vector3(THREE.MathUtils.randFloatSpread(2000),THREE.MathUtils.randFloatSpread(2000),THREE.MathUtils.randFloatSpread(2000));
+        const tankTarget = new THREE.Vector3(THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000));
 
         const sphereOrbit = new THREE.Vector3();
 
