@@ -68,10 +68,10 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         // renderer.setClearColor(0x000000);
         renderer.shadowMap.enabled = true;
 
-        function makeCamera(fov = 40) {
+        function makeCamera(fov = 90) {
             const aspect = 2;  // the canvas default
             const zNear = 0.1;
-            const zFar = 1000;
+            const zFar = 2000;
             return new THREE.PerspectiveCamera(fov, aspect, zNear, zFar);
         }
 
