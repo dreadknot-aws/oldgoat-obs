@@ -42,6 +42,7 @@
 </style>
 
 <body>
+    <canvas id="c"></canvas>
     <script type="importmap">
             {
                 "imports": {
@@ -73,8 +74,8 @@
         init();
 
         function init() {
-
-            renderer = new THREE.WebGLRenderer();
+            const canvas = document.querySelector('#c');
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setAnimationLoop(animate);
