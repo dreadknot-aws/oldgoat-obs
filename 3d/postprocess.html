@@ -70,6 +70,7 @@
         let camera, renderer, composer;
         let object;
         let curve;
+        let cameraLook
 
 
         init();
@@ -80,11 +81,13 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setAnimationLoop(animate);
-            renderer.setClearColor( 0xffffff, 0 );
+            renderer.setClearColor(0xffffff, 0);
             renderer.clear();
             document.body.appendChild(renderer.domElement);
 
             //
+
+            cameraLook = new getRandomVector(1000);
 
             camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 2500);
             camera.position.z = 400;
@@ -243,10 +246,17 @@
             return color;
         }
 
+        function getRandomVector(range = 1000) {
+            const x = THREE.MathUtils.randFloatSpread(range);
+            const y = THREE.MathUtils.randFloatSpread(range);
+            const z = THREE.MathUtils.randFloatSpread(range);
+            return new THREE.Vector3(x, y, z);
+        }
+
         function animate() {
 
-            object.rotation.x += 0.005;
-            object.rotation.y += 0.01;
+            // object.rotation.x += 0.005;
+            // object.rotation.y += 0.01;
 
             const time = Date.now() * 0.0015;
             // time *= 0.001;
@@ -255,7 +265,7 @@
 
             const point = curve.getPointAt(tankTime % 1);
             camera.position.set(point.x, 0, point.y);
-            // camera.lookAt(point.x, point.x, point.x);
+            camera.lookAt(cameraLook.x, cameraLook.y, cameraLook.z);
             composer.render();
 
         }
