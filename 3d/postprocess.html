@@ -211,9 +211,9 @@
             composer.addPass(effect2);
 
             const bokehPass = new BokehPass(scene, camera, {
-                focus: 1.5,
+                focus: 1.0,
                 aperture: 0.025,
-                maxblur: 0.005
+                maxblur: 0.006
             });
 
             composer.addPass(bokehPass);
