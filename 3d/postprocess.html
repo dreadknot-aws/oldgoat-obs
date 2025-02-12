@@ -15,13 +15,14 @@
         width: 100vw;
         height: 100vh;
         display: block;
+        background-color: rgba(0, 0, 0, 0);
     }
 
     #info {
         position: absolute;
         left: 1em;
         top: 1em;
-        background: rgba(252, 7, 7, 0);
+        background: rgba(0, 0, 0, 0);
         padding: .5em;
         color: white;
         font-family: monospace;
@@ -55,7 +56,7 @@
 		</script>
 
     <script type="module">
-
+        // BokehPass stops alpha from working
         import * as THREE from 'https://unpkg.com/three@0.173.0/build/three.module.js';
 
         import { EffectComposer } from 'https://unpkg.com/three@0.173.0/examples/jsm/postprocessing/EffectComposer.js';
@@ -79,21 +80,22 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setAnimationLoop(animate);
+            renderer.setClearColor( 0xffffff, 0 );
+            renderer.clear();
             document.body.appendChild(renderer.domElement);
 
             //
 
-            camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1500);
+            camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 2500);
             camera.position.z = 400;
-
             const scene = new THREE.Scene();
-            scene.fog = new THREE.Fog(0x000000, 1, 1000);
-
+            scene.fog = new THREE.Fog(0x000000, 1, 3000);
+            // scene.background = new THREE.Color( 0x000000 );
             object = new THREE.Object3D();
             scene.add(object);
 
-            const geometry = new THREE.SphereGeometry(1, 4, 4);
-            const material = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
+            // const geometry = new THREE.SphereGeometry(1, 4, 4);
+            // const material = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
 
             // for (let i = 0; i < 100; i++) {
 
@@ -253,6 +255,7 @@
 
             const point = curve.getPointAt(tankTime % 1);
             camera.position.set(point.x, 0, point.y);
+            // camera.lookAt(point.x, point.x, point.x);
             composer.render();
 
         }
