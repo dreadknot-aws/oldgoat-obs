@@ -201,7 +201,7 @@
                 gradient.addColorStop(1, `rgba(${title.gradientColor[6]},${title.gradientColor[7]},${title.gradientColor[8]},${title.gradientAlpha[1]}`);
                 ctx.fillStyle = gradient;
 
-                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                // ctx.fillRect(0, 0, canvas.width, canvas.height)
 
                 let gradient2 = ctx.createRadialGradient(canvas.width, canvas.height, 1, 1, k, 1);
 
@@ -213,7 +213,10 @@
 
                 ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-
+                // ctx.filter = `blur(${getRandomIntInclusive(0, 1)}px)`;
+                // ctx.filter = `blur(${randn_bm(0, 1)}px)`;
+                ctx.filter = `blur(.1px)`;
+                
                 ctx.transform(cos, sin, -sin, cos, title.pos.x, title.pos.y);
                 // ctx.font = `bold 80px ${title.fonts[title.randomFont]}`;
                 ctx.font = `bold 150px silkscreen`;
