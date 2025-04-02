@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedural Road Generation - Three.js</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #aaccff; }
+        canvas { display: block; }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: #000;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            z-index: 1; /* Ensure it's above the canvas */
+        }
+    </style>
+</head>
+<body>
+    <div id="info">Drag to orbit, Scroll to zoom, Right-click to pan</div>
+    <div id="container"></div>
+
+    <!-- Import Three.js (use CDN or local path) -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Your JavaScript code -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>
