@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>3D Starfield with Parallax, Spaceship, and Controls</title>
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: black;
+}
+canvas {
+  display: block;
+}
+</style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+
+    let stars = [];
+    const numStars = 700;
+    const speed = 2;
+    const maxZ = 500;
+    const numLayers = 4; // Increased number of layers
+
+    // Star object
+    function Star(x, y, z, size, layer) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+      this.size = size;
+      this.layer = layer;
+    }
+
+    // Spaceship
+    const spaceship = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      size: 20,
+      speed: 5,
+      angle: 0 // Spaceship's rotation angle
+    };
+
+    let keys = {}; // Store pressed keys
+
+    // Initialize stars with layers
+    function initStars() {
+      for (let i = 0; i < numStars; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const z = Math.random() * maxZ;
+        const size = Math.random() * 2 + 1;
+        const layer = Math.floor(Math.random() * numLayers); // Assign to a layer
+        stars.push(new Star(x, y, z, size, layer));
+      }
+    }
+
+    // Project 3D point to 2D screen
+    function project(x, y, z) {
+      const factor = maxZ / (maxZ + z);
+      const screenX = x * factor;
+      const screenY = y * factor;
+      return { x: screenX, y: screenY };
+    }
+
+    // Update star positions with parallax
+    function updateStars() {
+      for (let i = 0; i < stars.length; i++) {
+        stars[i].z -= speed * (1 + stars[i].layer * 0.3); // Adjusted parallax speed
+        if (stars[i].z < 0) {
+          stars[i].z = maxZ;
+          stars[i].x = Math.random() * canvas.width;
+          stars[i].y = Math.random() * canvas.height;
+        }
+      }
+    }
+
+    // Update spaceship position and rotation
+    function updateSpaceship() {
+      if (keys['ArrowUp']) {
+        spaceship.y -= Math.cos(spaceship.angle) * spaceship.speed;
+        spaceship.x += Math.sin(spaceship.angle) * spaceship.speed;
+      }
+      if (keys['ArrowDown']) {
+        spaceship.y += Math.cos(spaceship.angle) * spaceship.speed;
+        spaceship.x -= Math.sin(spaceship.angle) * spaceship.speed;
+      }
+      if (keys['ArrowLeft']) {
+        spaceship.angle -= 0.05;
+      }
+      if (keys['ArrowRight']) {
+        spaceship.angle += 0.05;
+      }
+
+      // Keep spaceship within bounds
+      spaceship.x = Math.max(0, Math.min(spaceship.x, canvas.width));
+      spaceship.y = Math.max(0, Math.min(spaceship.y, canvas.height));
+    }
+
+    // Draw stars
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < stars.length; i++) {
+        const projected = project(stars[i].x, stars[i].y, stars[i].z);
+        const size = stars[i].size * (maxZ / (maxZ + stars[i].z));
+
+        ctx.beginPath();
+        ctx.arc(projected.x, projected.y, size, 0, 2 * Math.PI);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+      }
+    }
+
+    // Draw spaceship
+    function drawSpaceship() {
+      ctx.save(); // Save the current context state
+      ctx.translate(spaceship.x, spaceship.y); // Move to spaceship's position
+      ctx.rotate(spaceship.angle); // Rotate the spaceship
+      ctx.beginPath();
+      ctx.moveTo(0, -spaceship.size); // Nose of the spaceship
+      ctx.lineTo(spaceship.size, spaceship.size); // Right wing
+      ctx.lineTo(0, spaceship.size * 2); // Tail
+      ctx.lineTo(-spaceship.size, spaceship.size); // Left wing
+      ctx.closePath();
+      ctx.fillStyle = 'red';
+      ctx.fill();
+      ctx.restore(); // Restore the context state
+    }
+
+    // Animation loop
+    function animate() {
+      updateStars();
+      updateSpaceship();
+      drawStars();
+      drawSpaceship();
+      requestAnimationFrame(animate);
+    }
+
+    // Resize canvas
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      spaceship.x = canvas.width / 2;
+      spaceship.y = canvas.height / 2;
+      initStars();
+    }
+
+    // Key press handling
+    document.addEventListener('keydown', (event) => {
+      keys[event.key] = true;
+    });
+
+    document.addEventListener('keyup', (event) => {
+      keys[event.key] = false;
+    });
+
+    // Initial setup
+    resizeCanvas();
+    initStars();
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', resizeCanvas);
+  </script>
+</body>
+</html>
