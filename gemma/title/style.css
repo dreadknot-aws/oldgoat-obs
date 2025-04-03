@@ -5,7 +5,8 @@ body {
     display: flex; /* Using Flexbox for centering */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
-    background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460); /* Nice dark background */
+    background: transparent;
+    /* background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460); Nice dark background */
     font-family: 'Arial', sans-serif;
     overflow: hidden; /* Hide potential overflows during animation */
 }
