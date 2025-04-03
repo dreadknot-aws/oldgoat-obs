@@ -18,6 +18,37 @@
             </h2>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
 
+            // 2. Get the target elements
+            const mainTitleElement = document.querySelector('.title-3d');
+            const subTitleElement = document.querySelector('.subtitle-3d');
+
+            // 3. Define default text (if parameters are missing)
+            const defaultTitle = "3D TITLE";
+            const defaultSubtitle = "From URL Params";
+
+            // 4. Get text from URL parameters or use defaults
+            // Use the || operator to fallback to the default if the param is null/empty
+            const titleText = urlParams.get('title') || defaultTitle;
+            const subtitleText = urlParams.get('subtitle') || defaultSubtitle;
+
+            // 5. Update the HTML content and the data-text attribute
+            if (mainTitleElement) {
+                mainTitleElement.textContent = titleText;
+                mainTitleElement.setAttribute('data-text', titleText); // Sync for CSS pseudo-elements
+            }
+            if (subTitleElement) {
+                subTitleElement.textContent = subtitleText;
+                subTitleElement.setAttribute('data-text', subtitleText); // Sync for CSS pseudo-elements
+            }
+
+            // Optional: Update the page's <title> tag as well
+            document.title = `${titleText} - ${subtitleText}`;
+        });
+    </script>
 </body>
 </html>
