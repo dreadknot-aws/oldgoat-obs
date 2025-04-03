@@ -1,0 +1,125 @@
+/* Basic Setup */
+body {
+    margin: 0;
+    min-height: 100vh; /* Full viewport height */
+    display: flex; /* Using Flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460); /* Nice dark background */
+    font-family: 'Arial', sans-serif;
+    overflow: hidden; /* Hide potential overflows during animation */
+}
+
+/* The 3D Scene Container */
+.scene {
+    perspective: 1000px; /* Sets the strength of the 3D effect. Lower means more extreme. */
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container for the text elements if needed (helps with alignment/grouping) */
+.title-container {
+    text-align: center;
+    transform-style: preserve-3d; /* Crucial: Allows children to be transformed in 3D */
+    /* Apply the animation to the container to move both titles together */
+    animation: rotateScene 15s infinite linear;
+}
+
+/* Base Styling for 3D Text Elements */
+.title-3d, .subtitle-3d {
+    color: #e94560; /* Bright title color */
+    margin: 0;
+    padding: 0 20px; /* Add some padding */
+    transform-style: preserve-3d; /* Also needed here if rotating the element itself */
+    position: relative; /* Needed for pseudo-elements if used */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Main Title Styling */
+.title-3d {
+    font-size: clamp(3rem, 10vw, 6rem); /* Responsive font size */
+    font-weight: bold;
+    /* --- The 3D Extrusion Effect using text-shadow --- */
+    text-shadow:
+        1px 1px 0px #c42a43, /* Slightly darker, offset 1px */
+        2px 2px 0px #a01f31, /* Darker, offset 2px */
+        3px 3px 0px #7c1624, /* Darker, offset 3px */
+        4px 4px 0px #580e18, /* Darker, offset 4px */
+        5px 5px 0px #34070c, /* Very dark, offset 5px */
+        6px 6px 10px rgba(0, 0, 0, 0.6); /* Soft base shadow */
+
+     /* Add a subtle initial transform */
+     transform: translateZ(20px) rotateX(-5deg); /* Pull slightly forward, tilt slightly */
+}
+
+/* Subtitle Styling */
+.subtitle-3d {
+    font-size: clamp(1.5rem, 5vw, 3rem); /* Responsive font size */
+    font-weight: normal;
+    color: #f0f0f0; /* Lighter subtitle color */
+     /* --- Different 3D Extrusion for Subtitle --- */
+    text-shadow:
+        1px 1px 0px #ccc,
+        2px 2px 0px #aaa,
+        3px 3px 5px rgba(0, 0, 0, 0.4); /* Softer shadow for subtitle */
+
+    /* Position it slightly behind the main title */
+    transform: translateZ(-10px) rotateX(-5deg);
+}
+
+
+/* The Animation Keyframes */
+@keyframes rotateScene {
+    0% {
+        transform: rotateY(-15deg) rotateX(5deg); /* Start tilted */
+    }
+    50% {
+        transform: rotateY(15deg) rotateX(-5deg); /* Tilt the other way */
+    }
+    100% {
+        transform: rotateY(-15deg) rotateX(5deg); /* Return to start */
+    }
+}
+
+/* Alternative Animation Example (Uncomment to try) */
+/* @keyframes spinAndFloat {
+    0% {
+        transform: rotateY(0deg) translateZ(0px) rotateX(0deg);
+    }
+    25% {
+        transform: rotateY(10deg) translateZ(10px) rotateX(-5deg);
+    }
+    50% {
+        transform: rotateY(0deg) translateZ(20px) rotateX(0deg);
+    }
+    75% {
+        transform: rotateY(-10deg) translateZ(10px) rotateX(5deg);
+    }
+    100% {
+        transform: rotateY(0deg) translateZ(0px) rotateX(0deg);
+    }
+} */
+
+/* Apply the alternative animation (uncomment to try) */
+/* .title-container {
+    animation: spinAndFloat 10s infinite ease-in-out;
+} */
+
+
+/* Optional: Add a subtle glow or effect using pseudo-elements */
+.title-3d::before {
+    content: attr(data-text); /* Use text from data attribute */
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: inherit; /* Match padding */
+    top: 0;
+    color: #ff7f50; /* Neon glow color */
+    z-index: -1; /* Place behind the main text */
+    transform: translateZ(-30px) scale(1.05); /* Push back and slightly enlarge */
+    filter: blur(8px); /* Make it blurry */
+    opacity: 0.6;
+}
