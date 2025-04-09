@@ -2,7 +2,7 @@ const canvas = document.getElementById('countdownCanvas');
 const ctx = canvas.getContext('2d');
 
 // --- Configuration ---
-const startNumber = 5;
+const startNumber = 10;
 const durationPerNumber = 1000; // milliseconds (1 second per number)
 const canvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.8; // Responsive size
 const circleColor = 'rgba(220, 220, 200, 0.9)'; // Off-white, slightly transparent
