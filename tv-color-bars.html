@@ -16,58 +16,45 @@
         const width = canvas.width;
         const height = canvas.height;
 
-        // SMPTE color bars (top row)
-        const colors = [
-            '#C0C0C0', // Gray
-            '#FFFFFF', // White
-            '#FFFF00', // Yellow
-            '#00FF00', // Cyan
-            '#00FFFF', // Green
-            '#FF00FF', // Magenta
-            '#FF0000', // Red
-            '#0000FF'  // Blue
-        ];
-
-        // Draw top bars
-        const barWidth = width / colors.length;
-        for (let i = 0; i < colors.length; i++) {
-            ctx.fillStyle = colors[i];
-            ctx.fillRect(i * barWidth, 0, barWidth, height * 0.6);
-        }
-
-        // Middle bars (secondary colors)
-        const midColors = [
-            '#00214C', // Blue
-            '#FFFFFF', // White
-            '#32006A', // Purple
-            '#131313', // Black
-            '#DCDCDC', // Light gray
-            '#00A368', // Green
-            '#FFD800', // Yellow
-            '#B80000'  // Red
-        ];
+        const numBars = 8;
+        const barWidth = width / numBars;
         const midBarHeight = height * 0.2;
-        for (let i = 0; i < midColors.length; i++) {
-            ctx.fillStyle = midColors[i];
-            ctx.fillRect(i * barWidth, height * 0.6, barWidth, midBarHeight);
+        const botBarHeight = height * 0.2;
+
+        function hslColor(hue, sat = 100, light = 50) {
+            return `hsl(${hue},${sat}%,${light}%)`;
         }
 
-        // Bottom bars (pluge and black/white)
-        const botColors = [
-            '#000000', // Black
-            '#222222', // Dark gray
-            '#555555', // Gray
-            '#AAAAAA', // Light gray
-            '#FFFFFF', // White
-            '#AAAAAA', // Light gray
-            '#555555', // Gray
-            '#222222'  // Dark gray
-        ];
-        const botBarHeight = height * 0.2;
-        for (let i = 0; i < botColors.length; i++) {
-            ctx.fillStyle = botColors[i];
-            ctx.fillRect(i * barWidth, height * 0.8, barWidth, botBarHeight);
+        let frame = 0;
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Top bars: smoothly cycle hues
+            for (let i = 0; i < numBars; i++) {
+                const hue = (frame * 0.5 + i * 45) % 360;
+                ctx.fillStyle = hslColor(hue, 100, 50);
+                ctx.fillRect(i * barWidth, 0, barWidth, height * 0.6);
+            }
+
+            // Middle bars: different saturation/lightness
+            for (let i = 0; i < numBars; i++) {
+                const hue = (frame * 0.5 + i * 45 + 180) % 360;
+                ctx.fillStyle = hslColor(hue, 80, 40);
+                ctx.fillRect(i * barWidth, height * 0.6, barWidth, midBarHeight);
+            }
+
+            // Bottom bars: grayscale cycling
+            for (let i = 0; i < numBars; i++) {
+                const light = (Math.sin((frame * 0.02) + i) * 40 + 50);
+                ctx.fillStyle = hslColor(0, 0, light);
+                ctx.fillRect(i * barWidth, height * 0.8, barWidth, botBarHeight);
+            }
+
+            frame++;
+            requestAnimationFrame(animate);
         }
+
+        animate();
     </script>
 </body>
 </html>
