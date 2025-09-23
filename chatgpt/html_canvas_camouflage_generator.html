@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Camouflage Generator – HTML Canvas</title>
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --card: #121218;
+      --muted: #9aa3af;
+      --text: #e5e7eb;
+      --accent: #22c55e;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+    }
+    header {
+      position: sticky; top: 0; z-index: 5;
+      background: linear-gradient(180deg, rgba(18,18,24,.95), rgba(18,18,24,.75));
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--border);
+    }
+    .bar {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(120px, 1fr)) 1fr;
+      gap: 10px; padding: 10px;
+      max-width: 1200px; margin: 0 auto;
+      align-items: center;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 10px 12px;
+      display: flex; gap: 8px; align-items: center; justify-content: space-between;
+      min-height: 44px;
+    }
+    label { color: var(--muted); font-size: 12px; }
+    select, input[type="number"], input[type="text"] {
+      background: #0e0e14; color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 10px; width: 100%;
+    }
+    input[type="range"] { width: 100%; }
+    button {
+      cursor: pointer; border: 1px solid var(--border);
+      background: #111827; color: var(--text);
+      padding: 10px 14px; border-radius: 12px;
+      transition: transform .05s ease, background .2s ease, box-shadow .2s ease;
+    }
+    button:hover { background: #0f172a; }
+    button:active { transform: translateY(1px); }
+    .accent { background: #11391f; border-color: #184d2a; }
+    .accent:hover { background: #0e331a; }
+
+    #wrap {
+      position: relative; height: calc(100vh - 80px);
+      max-height: 100%;
+    }
+    canvas { width: 100%; height: 100%; display: block; border-top: 1px solid var(--border); }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 999px; background: #0f172a; border: 1px solid var(--border);
+      font-size: 12px; color: var(--muted);
+    }
+    .row { display: grid; gap: 6px; }
+    .stack { display: grid; gap: 8px; }
+    .colors { display: flex; gap: 6px; }
+    .swatch { width: 14px; height: 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,.25); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+    .hint { color: var(--muted); opacity: .9; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="card stack">
+        <div class="row">
+          <label for="palette">Palette</label>
+          <select id="palette"></select>
+        </div>
+        <div class="colors" id="palettePreview" aria-hidden="true"></div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="width:100%">
+          <label for="scale">Scale</label>
+          <input id="scale" type="range" min="0.5" max="2.5" step="0.01" value="1.2" />
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="width:100%">
+          <label for="density">Density</label>
+          <input id="density" type="range" min="0.2" max="2.0" step="0.01" value="1.0" />
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="width:100%">
+          <label for="rough">Edge Roughness</label>
+          <input id="rough" type="range" min="0" max="1.2" step="0.01" value="0.45" />
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="width:100%">
+          <label for="seed">Seed</label>
+          <input id="seed" type="text" value="field-ops" />
+        </div>
+      </div>
+
+      <div class="card" style="gap:10px;">
+        <button id="regen" class="accent">Regenerate (R)</button>
+        <button id="save">Save PNG</button>
+      </div>
+
+      <div class="pill">Tip: Shift+Click = new seed</div>
+    </div>
+  </header>
+
+  <div id="wrap">
+    <canvas id="c"></canvas>
+  </div>
+
+  <script>
+    // --- Utilities ----------------------------------------------------------
+    function hash32(x) {
+      // Robert Jenkins' 32 bit integer hash (deterministic, fast)
+      x = ((x >>> 16) ^ x) * 0x45d9f3b;
+      x = ((x >>> 16) ^ x) * 0x45d9f3b;
+      x = (x >>> 16) ^ x;
+      return x >>> 0;
+    }
+    function strToSeed(str) {
+      let h = 2166136261 >>> 0;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return h >>> 0;
+    }
+    function mulberry32(a) {
+      return function() {
+        let t = (a += 0x6d2b79f5);
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function randRange(rng, a, b) { return a + (b - a) * rng(); }
+
+    // Smooth pseudo-noise on a circle using a few harmonic cosines
+    function makeAngularNoise(rng) {
+      const harmonics = 3 + Math.floor(rng() * 3); // 3..5 waves
+      const amps = [], freqs = [], phases = [];
+      let ampSum = 0;
+      for (let i = 0; i < harmonics; i++) {
+        const amp = 0.6 * Math.pow(rng(), 1.5) + 0.2; // biased smaller
+        const freq = 1 + Math.floor(randRange(rng, 1, 5)) * (i + 1);
+        const phase = randRange(rng, 0, Math.PI * 2);
+        amps.push(amp); freqs.push(freq); phases.push(phase); ampSum += amp;
+      }
+      return function(theta) {
+        let v = 0;
+        for (let i = 0; i < harmonics; i++) {
+          v += amps[i] * Math.cos(freqs[i] * theta + phases[i]);
+        }
+        return v / ampSum; // normalized ~[-1,1]
+      };
+    }
+
+    // --- Palettes ----------------------------------------------------------
+    const PALETTES = {
+      Woodland: ["#2f3e2f", "#6a7f3f", "#9aa052", "#8b6b3a", "#403728"],
+      Desert:   ["#c9b18d", "#d6c3a5", "#a9895a", "#7c5f3a", "#4a3b2a"],
+      Jungle:   ["#0d2616", "#1d3a22", "#2e5a32", "#517c3a", "#8fae58"],
+      Snow:     ["#e9edf2", "#cfd7de", "#b3bcc6", "#929baa", "#6b7382"],
+      Urban:    ["#1b1f23", "#2d3439", "#4a545b", "#6d7a82", "#99a3ad"],
+      Ocean:    ["#0c2230", "#113748", "#165066", "#1f6c88", "#6aa5bf"],
+      Autumn:   ["#2a1f17", "#5c2f1a", "#8a4a1c", "#b36a28", "#d39b52"],
+      NightOps: ["#0c0f10", "#1a1f22", "#2a3236", "#3f4a50", "#5d6a72"]
+    };
+
+    // --- DOM ---------------------------------------------------------------
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    const wrap = document.getElementById('wrap');
+    const paletteSelect = document.getElementById('palette');
+    const palettePreview = document.getElementById('palettePreview');
+    const scaleEl = document.getElementById('scale');
+    const densityEl = document.getElementById('density');
+    const roughEl = document.getElementById('rough');
+    const seedEl = document.getElementById('seed');
+    const regenBtn = document.getElementById('regen');
+    const saveBtn = document.getElementById('save');
+
+    // Fill palette options
+    for (const name of Object.keys(PALETTES)) {
+      const opt = document.createElement('option');
+      opt.value = name; opt.textContent = name; paletteSelect.appendChild(opt);
+    }
+    paletteSelect.value = 'Woodland';
+
+    function updatePalettePreview() {
+      palettePreview.innerHTML = '';
+      const colors = PALETTES[paletteSelect.value];
+      for (const c of colors) {
+        const sw = document.createElement('div');
+        sw.className = 'swatch';
+        sw.style.background = c;
+        palettePreview.appendChild(sw);
+      }
+    }
+    updatePalettePreview();
+
+    // Resize handling with DPR awareness
+    function fitCanvasToParent() {
+      const dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+      const rect = wrap.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // logical CSS pixels
+    }
+    window.addEventListener('resize', () => { fitCanvasToParent(); draw(); });
+
+    // --- Camouflage drawing ------------------------------------------------
+    function drawCamouflage(opts) {
+      const { seed, paletteName, scale, density, roughness } = opts;
+      const rng = mulberry32(seed);
+      const W = canvas.width / (window.devicePixelRatio || 1);
+      const H = canvas.height / (window.devicePixelRatio || 1);
+      const colors = [...PALETTES[paletteName]]; // clone
+
+      // Heuristic: darker base as background
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = colors[0];
+      ctx.fillRect(0, 0, W, H);
+
+      // number of blobs per layer scales with density and canvas area
+      const baseArea = (W * H) / (1200 * 800);
+      const baseCount = Math.max(6, Math.round(14 * baseArea * density));
+
+      // For each color from mid to light then dark accents
+      const order = [2, 3, 1, 4];
+      order.forEach((idx, layerIndex) => {
+        const color = colors[idx] || colors[1];
+        const count = Math.round(baseCount * (1.1 - layerIndex * 0.15));
+        for (let i = 0; i < count; i++) {
+          const cx = randRange(rng, -0.1 * W, 1.1 * W);
+          const cy = randRange(rng, -0.1 * H, 1.1 * H);
+          const base = randRange(rng, 80, 280) * scale; // base radius
+          const angNoise = makeAngularNoise(rng);
+          const points = [];
+          const steps = Math.floor(randRange(rng, 36, 72));
+          const rough = roughness * randRange(rng, 0.8, 1.2);
+
+          for (let s = 0; s < steps; s++) {
+            const t = (s / steps) * Math.PI * 2;
+            // Radius modulated by smooth angular noise
+            const r = base * (0.72 + 0.28 * (1 + angNoise(t)) / 2) * (1 + rough * (rng() * 2 - 1));
+            const x = cx + Math.cos(t) * r;
+            const y = cy + Math.sin(t) * r;
+            points.push([x, y]);
+          }
+
+          // Draw as smooth closed path using Catmull-Rom to Bezier conversion
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          for (let j = 0; j < points.length; j++) {
+            const p0 = points[(j - 1 + points.length) % points.length];
+            const p1 = points[j];
+            const p2 = points[(j + 1) % points.length];
+            const p3 = points[(j + 2) % points.length];
+            if (j === 0) ctx.moveTo(p1[0], p1[1]);
+            const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+            const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+            const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+            const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2[0], p2[1]);
+          }
+          ctx.closePath();
+          ctx.globalAlpha = 0.96;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      // subtle texture overlay (optional)
+      const texCells = 70;
+      const cellW = W / texCells;
+      const cellH = H / texCells;
+      ctx.globalAlpha = 0.05;
+      for (let y = 0; y < texCells; y++) {
+        for (let x = 0; x < texCells; x++) {
+          const v = (hash32(seed + x * 73856093 ^ y * 19349663) % 100) / 100;
+          ctx.fillStyle = v > 0.5 ? '#000' : '#fff';
+          ctx.fillRect(x * cellW, y * cellH, 1, 1);
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function draw() {
+      const opts = {
+        seed: strToSeed(seedEl.value),
+        paletteName: paletteSelect.value,
+        scale: parseFloat(scaleEl.value),
+        density: parseFloat(densityEl.value),
+        roughness: parseFloat(roughEl.value)
+      };
+      drawCamouflage(opts);
+    }
+
+    // --- Events ------------------------------------------------------------
+    paletteSelect.addEventListener('change', () => { updatePalettePreview(); draw(); });
+    scaleEl.addEventListener('input', draw);
+    densityEl.addEventListener('input', draw);
+    roughEl.addEventListener('input', draw);
+    seedEl.addEventListener('change', draw);
+
+    regenBtn.addEventListener('click', (e) => {
+      if (e.shiftKey) {
+        // randomize seed text quickly
+        seedEl.value = Math.random().toString(36).slice(2, 8);
+      }
+      draw();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'r') draw();
+    });
+
+    saveBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = `camouflage-${paletteSelect.value.toLowerCase()}-${seedEl.value}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    // Init
+    fitCanvasToParent();
+    draw();
+  </script>
+</body>
+</html>

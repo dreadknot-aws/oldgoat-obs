@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunset Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e; /* keep a dark page background */
+            color: #e5e5e5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 0; /* remove page padding so canvas can reach edges if desired */
+            margin: 0;
+        }
+        html, body {
+            height: 100%;
+        }
+
+        .container {
+            position: fixed; /* make container fill the viewport */
+            inset: 0;
+            background-color: transparent; /* remove frame background */
+            padding: 0; /* remove internal padding */
+            border-radius: 0; /* remove rounded corners */
+            box-shadow: none; /* remove framing shadow */
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none; /* remove any border */
+            border-radius: 0; /* remove rounded corners */
+            box-shadow: none; /* remove shadows */
+            display: block;
+            outline: none;
+            background: transparent; /* ensure no background behind drawing */
+        }
+        /* slider removed */
+        /* Hide page chrome so only the canvas remains visible */
+        .title,
+        .description,
+        .button-group {
+            display: none !important;
+        }
+        .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d1d5db;
+        }
+        .description {
+            font-size: 1rem;
+            color: #a0aec0;
+            text-align: center;
+        }
+        #fullScreenBtn {
+            padding: 0.5rem 1.5rem;
+            background-color: #9d4edd;
+            color: white;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        #fullScreenBtn:hover {
+            background-color: #8a3ecb;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container">
+        <h1 class="title">Interactive Sunset</h1>
+        <p class="description">Move the slider to simulate the time of day and watch the sunset.</p>
+        <canvas id="sunsetCanvas"></canvas>
+        <div class="button-group">
+            <button id="fullScreenBtn">Full Screen</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('sunsetCanvas');
+            const ctx = canvas.getContext('2d');
+            const fullScreenBtn = document.getElementById('fullScreenBtn');
+            // timeValue is randomized on each load (0-100)
+            let timeValue = Math.floor(Math.random() * 101);
+            // console.log(`Initial timeValue: ${timeValue}`);
+
+            // Function to resize the canvas to exactly the viewport size (fill entire screen)
+            const resizeCanvas = () => {
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
+                const dpr = window.devicePixelRatio || 1;
+
+                // CSS size
+                canvas.style.width = vw + 'px';
+                canvas.style.height = vh + 'px';
+
+                // Backing store size for crispness on high-DPI displays
+                canvas.width = Math.floor(vw * dpr);
+                canvas.height = Math.floor(vh * dpr);
+
+                // Reset any transforms and scale so drawing uses CSS pixels
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            };
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                drawSunset(timeValue);
+            });
+            
+            // Listen for full-screen changes
+            document.addEventListener('fullscreenchange', () => {
+                setTimeout(() => {
+                    resizeCanvas();
+                    drawSunset(timeValue);
+                }, 100);
+            });
+
+            resizeCanvas();
+
+            function interpolateColor(color1, color2, factor) {
+                const r = Math.round(color1[0] + factor * (color2[0] - color1[0]));
+                const g = Math.round(color1[1] + factor * (color2[1] - color1[1]));
+                const b = Math.round(color1[2] + factor * (color2[2] - color1[2]));
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+
+            function drawSunset(time, anim = 0) {
+                // Use CSS pixel dimensions so they match the transformed context (we scaled by DPR)
+                const width = canvas.clientWidth;
+                const height = canvas.clientHeight;
+
+                // Time factor (0 to 1)
+                const t = time / 100;
+
+                // Sky colors (Day -> Sunset -> Night)
+                const daySky = [135, 206, 235]; // SkyBlue
+                const sunsetSky = [255, 127, 80]; // Coral
+                const nightSky = [25, 25, 112]; // MidnightBlue
+
+                let skyColor;
+                if (t < 0.5) {
+                    skyColor = interpolateColor(daySky, sunsetSky, t * 2);
+                } else {
+                    skyColor = interpolateColor(sunsetSky, nightSky, (t - 0.5) * 2);
+                }
+
+                // Sun colors
+                const daySun = [255, 255, 0]; // Yellow
+                const sunsetSun = [255, 140, 0]; // Orange
+                const nightSun = [255, 255, 255]; // White (Moon)
+
+                let sunColor;
+                if (t < 0.5) {
+                    sunColor = interpolateColor(daySun, sunsetSun, t * 2);
+                } else {
+                    sunColor = interpolateColor(sunsetSun, nightSun, (t - 0.5) * 2);
+                }
+
+                // Water colors
+                const dayWater = [0, 191, 255]; // DeepSkyBlue
+                const sunsetWater = [25, 25, 112]; // MidnightBlue
+                const nightWater = [0, 0, 0]; // Black
+
+                let waterColor;
+                if (t < 0.5) {
+                    waterColor = interpolateColor(dayWater, sunsetWater, t * 2);
+                } else {
+                    waterColor = interpolateColor(sunsetWater, nightWater, (t - 0.5) * 2);
+                }
+                
+                // Draw sky (gradient)
+                const skyGradient = ctx.createLinearGradient(0, 0, 0, height * 0.7);
+                skyGradient.addColorStop(0, skyColor);
+                skyGradient.addColorStop(1, interpolateColor(dayWater, nightWater, t));
+                ctx.fillStyle = skyGradient;
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw sun (behind the water)
+                const sunRadius = width * 0.08;
+                const sunX = width * 0.5;
+                const sunY = height * 0.7 - (t * (height * 0.8)); // Move sun down
+                // Draw a glow effect
+                const glowGradient = ctx.createRadialGradient(sunX, sunY, sunRadius * 0.5, sunX, sunY, sunRadius * 2);
+                glowGradient.addColorStop(0, `rgba(${sunColor.substring(4).slice(0, -1)}, 0.8)`);
+                glowGradient.addColorStop(1, `rgba(${sunColor.substring(4).slice(0, -1)}, 0)`);
+                ctx.fillStyle = glowGradient;
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw the sun circle
+                ctx.beginPath();
+                ctx.arc(sunX, sunY, sunRadius, 0, 2 * Math.PI);
+                ctx.fillStyle = sunColor;
+                ctx.fill();
+
+                // Draw water
+                ctx.fillStyle = waterColor;
+                ctx.fillRect(0, height * 0.7, width, height * 0.3);
+
+                // Draw subtle waves on the water
+                // anim is in seconds; use small amplitudes and low alpha for subtlety
+                const waterTop = height * 0.7;
+                const waterHeight = height - waterTop;
+                const waveCount = 4;
+                ctx.save();
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                for (let w = 0; w < waveCount; w++) {
+                    const tOff = anim * (0.6 + w * 0.15);
+                    const yBase = waterTop + (w + 1) / (waveCount + 1) * waterHeight;
+                    const amp = Math.max(1, waterHeight * 0.01 * (1 + 0.5 * Math.sin(tOff + w)));
+                    const freq = 1.5 + w * 0.6;
+
+                    ctx.beginPath();
+                    const step = Math.max(2, Math.floor(width / 150));
+                    for (let x = 0; x <= width; x += step) {
+                        const phase = (x / width) * Math.PI * 2 * freq + tOff;
+                        const y = yBase + Math.sin(phase) * amp;
+                        if (x === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+
+                    // subtle highlight stroke
+                    const alpha = 0.04 + w * 0.01;
+                    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    // slight darker troughs for depth
+                    ctx.beginPath();
+                    for (let x = 0; x <= width; x += step) {
+                        const phase = (x / width) * Math.PI * 2 * freq + tOff + 1.2;
+                        const y = yBase + Math.sin(phase) * (amp * 0.6);
+                        if (x === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.strokeStyle = `rgba(0,0,0,${0.03 + w * 0.005})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+                ctx.restore();
+
+                // Draw clouds in front of the sun (fluffy puffs, tinted by time of day)
+                // define cloud tint colors (day -> sunset -> night)
+                const dayCloud = [255,255,255];
+                const sunsetCloud = [255,190,130];
+                const nightCloud = [140,150,170];
+                let cloudTint;
+                if (t < 0.5) cloudTint = interpolateColor(dayCloud, sunsetCloud, t * 2);
+                else cloudTint = interpolateColor(sunsetCloud, nightCloud, (t - 0.5) * 2);
+
+                function rgbaFromRgbString(rgbStr, a) {
+                    return rgbStr.replace('rgb(', 'rgba(').replace(')', `, ${a})`);
+                }
+
+                ctx.save();
+                for (const c of clouds) {
+                    const cx = c.x * width;
+                    const cy = c.y * height;
+                    const cw = c.width * width;
+                    const ch = c.height * height;
+
+                    // draw multiple soft puffs using radial gradients (deterministic per cloud)
+                    const puffCount = 5;
+                    for (let k = 0; k < puffCount; k++) {
+                        const seed = Math.sin(c.jitter + k * 12.9898);
+                        const ox = (k - (puffCount-1)/2) * cw * 0.18 + (seed * 0.5) * cw * 0.06;
+                        const oy = Math.cos(c.jitter + k * 7.233) * ch * 0.06;
+                        const pr = cw * (0.22 + Math.abs(seed) * 0.18);
+
+                        const gx = cx + ox;
+                        const gy = cy + oy;
+                        const grad = ctx.createRadialGradient(gx, gy, pr * 0.15, gx, gy, pr);
+                        grad.addColorStop(0, rgbaFromRgbString(cloudTint, 0.95 * c.alpha));
+                        grad.addColorStop(1, rgbaFromRgbString(cloudTint, 0));
+
+                        ctx.fillStyle = grad;
+                        ctx.beginPath();
+                        ctx.arc(gx, gy, pr, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+
+                    // subtle darker base to give depth
+                    ctx.globalCompositeOperation = 'multiply';
+                    ctx.fillStyle = rgbaFromRgbString('rgb(0,0,0)', 0.06 * c.alpha);
+                    ctx.beginPath();
+                    ctx.ellipse(cx, cy + ch * 0.35, cw * 0.5, ch * 0.35, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.globalCompositeOperation = 'source-over';
+                }
+                ctx.restore();
+            }
+
+            // Cloud data and animation
+            const clouds = [];
+            const cloudCount = 6; // number of clouds
+            // generate simple clouds with random sizes and speeds
+            function createCloud(i) {
+                const w = 0.15 + Math.random() * 0.3; // relative width of viewport
+                const h = 0.04 + Math.random() * 0.06; // relative height
+                return {
+                    x: Math.random(), // normalized 0..1
+                    y: 0.08 + Math.random() * 0.25, // normalized vertical position in sky
+                    width: w,
+                    height: h,
+                    speed: 0.005 + Math.random() * 0.01, // fraction per second
+                    alpha: 0.25 + Math.random() * 0.25,
+                    jitter: Math.random() * 1000 + i * 100
+                };
+            }
+            for (let i = 0; i < cloudCount; i++) clouds.push(createCloud(i));
+
+            // Animation loop for subtle waves and clouds
+            let startTime = performance.now();
+            function animate(now) {
+                const elapsed = (now - startTime) / 1000; // seconds
+                // update cloud positions
+                for (const c of clouds) {
+                    c.x += c.speed * (1/60); // advance a bit each frame; based on 60fps step
+                    // wrap around
+                    if (c.x - c.width > 1) c.x = -c.width - Math.random() * 0.1;
+                }
+
+                drawSunset(timeValue, elapsed);
+                requestAnimationFrame(animate);
+            }
+
+            // Initial draw + start animation
+            requestAnimationFrame(animate);
+
+            // Full screen button event listener
+            fullScreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

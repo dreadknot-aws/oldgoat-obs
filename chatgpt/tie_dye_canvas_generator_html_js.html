@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tie‑Dye Canvas Generator</title>
+  <style>
+    :root {
+      --bg: #0b0b10;
+      --panel: #12121a;
+      --accent: #7c9cff;
+      --text: #e9e9f1;
+      --muted: #a7a7b4;
+      --shadow: 0 10px 30px rgba(0,0,0,.4);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; background: radial-gradient(1200px 800px at 10% -10%, #1a1a28, var(--bg));
+      color: var(--text); font: 500 16px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      display: grid; place-items: center; padding: 16px;
+    }
+    .app {
+      width: min(1100px, 96vw);
+      display: grid; gap: 16px;
+      grid-template-columns: 320px 1fr;
+      align-items: start;
+    }
+    @media (max-width: 920px) {
+      .app { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: linear-gradient(180deg, #151522, #0f0f17 60%);
+      border: 1px solid #222236;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .panel h2 { margin: 0 0 10px; font-size: 18px; letter-spacing: .3px; }
+    .controls { display: grid; gap: 12px; }
+    label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+    input[type="range"], select, button {
+      width: 100%;
+      background: #0e0e16; color: var(--text);
+      border: 1px solid #26263a; border-radius: 12px; padding: 10px 12px;
+      outline: none;
+    }
+    input[type="range"] { padding: 0; height: 36px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn { cursor: pointer; transition: transform .05s ease, box-shadow .2s ease; }
+    .btn:hover { box-shadow: 0 8px 20px rgba(124,156,255,.2); }
+    .btn:active { transform: translateY(1px); }
+    .canvas-wrap { position: relative; }
+    canvas { width: 100%; height: auto; background: #000; border-radius: var(--radius); box-shadow: var(--shadow); display: block; }
+    .caption { text-align: center; color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .pill {
+      display:inline-flex; align-items:center; gap:.5ch; padding:.35rem .6rem; background:#151528; color:#b8c1ff; border:1px solid #272752; border-radius:999px; font-size:12px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="panel">
+      <h2>🎨 Tie‑Dye Generator</h2>
+      <div class="controls">
+        <label>Style
+          <select id="style">
+            <option value="spiral">Spiral (classic)</option>
+            <option value="bursts">Bursts</option>
+            <option value="crumple">Crumple (noisy)</option>
+          </select>
+        </label>
+        <label>Resolution
+          <select id="resolution">
+            <option value="1024">1024 × 1024</option>
+            <option value="1536">1536 × 1536</option>
+            <option value="2048">2048 × 2048</option>
+          </select>
+        </label>
+        <div class="row">
+          <label>Rings / Waves
+            <input id="rings" type="range" min="3" max="40" value="16" />
+          </label>
+          <label>Spiral Twist
+            <input id="twist" type="range" min="0" max="50" value="18" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Noise
+            <input id="noise" type="range" min="0" max="100" value="28" />
+          </label>
+          <label>Contrast
+            <input id="contrast" type="range" min="0" max="100" value="65" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Seed
+            <input id="seed" type="range" min="1" max="9999" value="1337" />
+          </label>
+          <label>Palette
+            <select id="palette">
+              <option value="rainbow">Rainbow</option>
+              <option value="sunset">Sunset</option>
+              <option value="oceans">Oceans</option>
+              <option value="forest">Forest</option>
+              <option value="candy">Cotton Candy</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <button class="btn" id="render">Generate</button>
+          <button class="btn" id="download">Download PNG</button>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px;">
+          <input id="animate" type="checkbox" /> Animate subtle swirl
+        </label>
+        <div class="caption">Tip: try switching styles, then tweak Noise and Twist.</div>
+      </div>
+    </section>
+
+    <section class="canvas-wrap">
+      <canvas id="canvas" width="1024" height="1024" aria-label="Tie Dye"></canvas>
+      <div class="caption"><span class="pill">HTML5 Canvas</span> <span class="pill">Procedural</span> <span class="pill">Seeded</span></div>
+    </section>
+  </div>
+
+  <script>
+    const $ = sel => document.querySelector(sel);
+    const canvas = $('#canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    // Deterministic PRNG (Mulberry32)
+    function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;}}
+
+    // Quick hash for seeds
+    const hash32 = str => {
+      let h = 2166136261>>>0;
+      for (let i=0;i<str.length;i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+      return h>>>0;
+    };
+
+    // Value noise (2D), cheap & adequate for tie-dye
+    function valueNoiseFactory(seed){
+      const rnd = mulberry32(seed);
+      const grid = new Map();
+      const key = (x,y)=>x+','+y;
+      const randCell = (x,y)=>{
+        const k = key(x,y);
+        if (!grid.has(k)) grid.set(k, rnd());
+        return grid.get(k);
+      };
+      const smooth = t=>t*t*(3-2*t);
+      return function(x,y){
+        const xi = Math.floor(x), yi = Math.floor(y);
+        const tx = x - xi, ty = y - yi;
+        const v00 = randCell(xi,yi), v10 = randCell(xi+1,yi);
+        const v01 = randCell(xi,yi+1), v11 = randCell(xi+1,yi+1);
+        const i1 = v00 + (v10 - v00) * smooth(tx);
+        const i2 = v01 + (v11 - v01) * smooth(tx);
+        return i1 + (i2 - i1) * smooth(ty);
+      }
+    }
+
+    // HSL -> RGB
+    function hslToRgb(h,s,l){
+      h = (h%360+360)%360; s/=100; l/=100;
+      const c=(1-Math.abs(2*l-1))*s, x=c*(1-Math.abs((h/60)%2-1)), m=l-c/2;
+      let r=0,g=0,b=0;
+      if(h<60){r=c;g=x;} else if(h<120){r=x;g=c;} else if(h<180){g=c;b=x;} else if(h<240){g=x;b=c;} else if(h<300){r=x;b=c;} else {r=c;b=x;}
+      return [(r+m)*255,(g+m)*255,(b+m)*255];
+    }
+
+    const palettes = {
+      rainbow: h=>h,
+      sunset: h=> (h*0.6 + 20),
+      oceans: h=> (h*0.5 + 180),
+      forest: h=> (h*0.45 + 80),
+      candy:  h=> (h*0.7 + 300)
+    };
+
+    function setResolution(px){
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      canvas.width = px * dpr;
+      canvas.height = px * dpr;
+      canvas.style.width = px + 'px';
+      canvas.style.height = px + 'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function generateOnce({style, rings, twist, noiseAmt, contrast, seed, paletteName, time=0}){
+      const size = parseInt(canvas.style.width || canvas.width, 10) || 1024;
+      const cx = size/2, cy = size/2;
+      const img = ctx.getImageData(0,0,size,size);
+      const data = img.data;
+      const baseHueMap = palettes[paletteName] || palettes.rainbow;
+
+      // Noise setup
+      const noise = valueNoiseFactory(seed);
+      const nScale = 0.008 + (noiseAmt/100)*0.02; // larger -> more turbulent
+      const nIntensity = noiseAmt/100;
+
+      // Multi-center setup for bursts/crumple
+      const rnd = mulberry32(seed);
+      const centers = [];
+      const centerCount = style==='bursts' ? 4 : style==='crumple' ? 8 : 1;
+      for (let i=0;i<centerCount;i++){
+        centers.push({
+          x: cx + (rnd()-0.5)*size*0.4,
+          y: cy + (rnd()-0.5)*size*0.4,
+          w: 0.85 + rnd()*0.6,
+          phase: rnd()*Math.PI*2
+        });
+      }
+
+      const ringFreq = (rings/size) * Math.PI * 2; // radial oscillations
+      const twistAmt = twist/50; // higher -> tighter spiral
+      const cont = (contrast/100)*1.8 + 0.2; // 0.2..2.0
+
+      let idx=0;
+      for (let y=0; y<size; y++){
+        for (let x=0; x<size; x++){
+          // Accumulate contributions
+          let hueSeed = 0;
+          for (const c of centers){
+            const dx = (x - c.x), dy = (y - c.y);
+            const r = Math.hypot(dx, dy) * c.w;
+            const theta = Math.atan2(dy, dx);
+            const swirl = theta * (180/Math.PI) * (twistAmt*1.6) + time*8*twistAmt;
+            hueSeed += (Math.sin(r * ringFreq + c.phase) * 0.5 + 0.5) * 180 + swirl;
+          }
+
+          // Add gentle turbulent noise
+          const nx = x*nScale, ny = y*nScale;
+          const n = (
+            noise(nx, ny)*0.6 +
+            noise(nx*2.1+5, ny*2.1+11)*0.3 +
+            noise(nx*4.3+17, ny*4.3+29)*0.1
+          );
+          hueSeed += (n - 0.5) * 360 * nIntensity;
+
+          // Map to hue palette and boost contrast in a wavy way
+          let hue = baseHueMap(hueSeed % 360);
+          let sat = 90;
+          let light = 50 + Math.sin((hueSeed/180)*Math.PI)*20;
+          // Contrast curve
+          light = 50 + (light-50)*cont;
+
+          const [r8,g8,b8] = hslToRgb(hue, sat, light);
+          data[idx++] = r8|0; data[idx++] = g8|0; data[idx++] = b8|0; data[idx++] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    // UI wiring
+    const ui = {
+      style: $('#style'), rings: $('#rings'), twist: $('#twist'), noise: $('#noise'),
+      contrast: $('#contrast'), seed: $('#seed'), palette: $('#palette'),
+      resolution: $('#resolution'), render: $('#render'), download: $('#download'),
+      animate: $('#animate')
+    };
+
+    function getParams(){
+      return {
+        style: ui.style.value,
+        rings: +ui.rings.value,
+        twist: +ui.twist.value,
+        noiseAmt: +ui.noise.value,
+        contrast: +ui.contrast.value,
+        seed: hash32(String(ui.seed.value + ui.style.value + ui.palette.value)) >>> 0,
+        paletteName: ui.palette.value,
+      };
+    }
+
+    let animId = 0; let t0 = 0;
+    function frame(ts){
+      const elapsed = (ts - t0) / 1000;
+      const params = getParams();
+      generateOnce({ ...params, time: elapsed });
+      animId = requestAnimationFrame(frame);
+    }
+
+    function startAnim(){
+      cancelAnimationFrame(animId); t0 = performance.now(); animId = requestAnimationFrame(frame);
+    }
+    function stopAnim(){ cancelAnimationFrame(animId); animId = 0; }
+
+    function renderNow(){
+      stopAnim();
+      const px = +ui.resolution.value;
+      setResolution(px);
+      generateOnce({ ...getParams(), time: 0 });
+      if (ui.animate.checked) startAnim();
+    }
+
+    ui.render.addEventListener('click', renderNow);
+    ui.download.addEventListener('click', ()=>{
+      const link = document.createElement('a');
+      link.download = `tie-dye-${ui.style.value}-${ui.palette.value}-${ui.seed.value}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+    ui.animate.addEventListener('change', ()=>{
+      if (ui.animate.checked) startAnim(); else stopAnim();
+    });
+
+    // Re-render on quick tweaks without pressing Generate
+    [ui.style, ui.rings, ui.twist, ui.noise, ui.contrast, ui.palette, ui.seed].forEach(el=>{
+      el.addEventListener('input', ()=>{ if (animId) return; generateOnce({ ...getParams(), time: 0 }); });
+    });
+    ui.resolution.addEventListener('change', renderNow);
+
+    // Initial render
+    setResolution(1024);
+    generateOnce({ ...getParams(), time: 0 });
+  </script>
+</body>
+</html>
