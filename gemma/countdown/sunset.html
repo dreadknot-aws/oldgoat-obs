@@ -105,9 +105,25 @@
             const canvas = document.getElementById('sunsetCanvas');
             const ctx = canvas.getContext('2d');
             const fullScreenBtn = document.getElementById('fullScreenBtn');
-            // timeValue is randomized on each load (0-100)
-            let timeValue = Math.floor(Math.random() * 101);
-            // console.log(`Initial timeValue: ${timeValue}`);
+            // sunStart is randomized on each load (0-100)
+            let sunStart = Math.floor(Math.random() * 101);
+            // sunSpeed = percent-per-second (0-100 scale). Increase to speed up animation.
+            let sunSpeed = 0.5; // default: full cycle in ~200s
+            // when true the sun animates automatically
+            let sunAuto = true;
+
+            // renderAt1080: when true, render to a fixed internal 1920x1080 backing buffer
+            // and scale the displayed canvas to fit the viewport while preserving aspect ratio.
+            const renderAt1080 = true;
+            const TARGET_WIDTH = 1920;
+            const TARGET_HEIGHT = 1080;
+            // Toggle rendering of the skyline (set false to hide skyline)
+            const SHOW_SKYLINE = false;
+            // Toggle rendering of gentle hills along the horizon
+            const SHOW_HILLS = true;
+            // current virtual render size used by drawSunset
+            let renderWidth = 0;
+            let renderHeight = 0;
 
             // Function to resize the canvas to exactly the viewport size (fill entire screen)
             const resizeCanvas = () => {
@@ -115,28 +131,70 @@
                 const vh = window.innerHeight;
                 const dpr = window.devicePixelRatio || 1;
 
-                // CSS size
-                canvas.style.width = vw + 'px';
-                canvas.style.height = vh + 'px';
+                if (renderAt1080) {
+                    // compute scale to fit TARGET into viewport while preserving aspect
+                    const scale = Math.min(vw / TARGET_WIDTH, vh / TARGET_HEIGHT) || 1;
+                    const displayedW = Math.max(1, Math.floor(TARGET_WIDTH * scale));
+                    const displayedH = Math.max(1, Math.floor(TARGET_HEIGHT * scale));
 
-                // Backing store size for crispness on high-DPI displays
-                canvas.width = Math.floor(vw * dpr);
-                canvas.height = Math.floor(vh * dpr);
+                    // CSS displayed size (scaled to fit viewport)
+                    canvas.style.width = displayedW + 'px';
+                    canvas.style.height = displayedH + 'px';
 
-                // Reset any transforms and scale so drawing uses CSS pixels
-                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                    // center the canvas inside the viewport
+                    const offsetLeft = Math.floor((vw - displayedW) / 2);
+                    const offsetTop = Math.floor((vh - displayedH) / 2);
+                    canvas.style.left = offsetLeft + 'px';
+                    canvas.style.top = offsetTop + 'px';
+
+                    // Backing store size at target resolution, scaled by DPR for crispness
+                    canvas.width = Math.floor(TARGET_WIDTH * dpr);
+                    canvas.height = Math.floor(TARGET_HEIGHT * dpr);
+
+                    // set transform so drawing coordinates map to virtual TARGET resolution
+                    // transformScale = backingWidth / displayedWidth = (TARGET_WIDTH * dpr) / (TARGET_WIDTH * scale) = dpr / scale
+                    const transformScale = dpr / scale;
+                    ctx.setTransform(transformScale, 0, 0, transformScale, 0, 0);
+
+                    renderWidth = TARGET_WIDTH;
+                    renderHeight = TARGET_HEIGHT;
+                } else {
+                    // CSS size = viewport
+
+                    canvas.style.width = vw + 'px';
+                    canvas.style.height = vh + 'px';
+                    canvas.style.left = '0px';
+                    canvas.style.top = '0px';
+
+                    // Backing store size for crispness on high-DPI displays
+                    canvas.width = Math.floor(vw * dpr);
+                    canvas.height = Math.floor(vh * dpr);
+
+                    // Reset any transforms and scale so drawing uses CSS pixels
+                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                    renderWidth = vw;
+                    renderHeight = vh;
+                }
             };
+
+            // startTime used by event handlers and the animation loop
+            let startTime = performance.now();
 
             window.addEventListener('resize', () => {
                 resizeCanvas();
-                drawSunset(timeValue);
+                const elapsedNow = (performance.now() - startTime) / 1000;
+                const currentTime = sunAuto ? (sunStart + elapsedNow * sunSpeed) % 100 : sunStart;
+                drawSunset(currentTime, elapsedNow);
             });
             
             // Listen for full-screen changes
             document.addEventListener('fullscreenchange', () => {
                 setTimeout(() => {
                     resizeCanvas();
-                    drawSunset(timeValue);
+                    const elapsedNow = (performance.now() - startTime) / 1000;
+                    const currentTime = sunAuto ? (sunStart + elapsedNow * sunSpeed) % 100 : sunStart;
+                    drawSunset(currentTime, elapsedNow);
                 }, 100);
             });
 
@@ -150,9 +208,10 @@
             }
 
             function drawSunset(time, anim = 0) {
-                // Use CSS pixel dimensions so they match the transformed context (we scaled by DPR)
-                const width = canvas.clientWidth;
-                const height = canvas.clientHeight;
+                // Use the virtual render resolution (renderWidth/renderHeight). When renderAt1080
+                // is true these will be TARGET_WIDTH/TARGET_HEIGHT so the scene is rendered at 1080p
+                const width = renderWidth || canvas.clientWidth;
+                const height = renderHeight || canvas.clientHeight;
 
                 // Time factor (0 to 1)
                 const t = time / 100;
@@ -194,36 +253,318 @@
                 }
                 
                 // Draw sky (gradient)
-                const skyGradient = ctx.createLinearGradient(0, 0, 0, height * 0.7);
+                // waterRatio controls how much of the canvas is water (0..1).
+                // Set to ~0.333 so the water and city occupy the bottom third of the canvas.
+                const waterRatio = 1 / 3; // bottom third is water
+                const skyBottom = height * (1 - waterRatio);
+                const skyGradient = ctx.createLinearGradient(0, 0, 0, skyBottom);
                 skyGradient.addColorStop(0, skyColor);
                 skyGradient.addColorStop(1, interpolateColor(dayWater, nightWater, t));
                 ctx.fillStyle = skyGradient;
                 ctx.fillRect(0, 0, width, height);
 
-                // Draw sun (behind the water)
+                // Draw sun (behind the water) with a soft blur when it intersects the water
                 const sunRadius = width * 0.08;
                 const sunX = width * 0.5;
-                const sunY = height * 0.7 - (t * (height * 0.8)); // Move sun down
-                // Draw a glow effect
-                const glowGradient = ctx.createRadialGradient(sunX, sunY, sunRadius * 0.5, sunX, sunY, sunRadius * 2);
-                glowGradient.addColorStop(0, `rgba(${sunColor.substring(4).slice(0, -1)}, 0.8)`);
-                glowGradient.addColorStop(1, `rgba(${sunColor.substring(4).slice(0, -1)}, 0)`);
-                ctx.fillStyle = glowGradient;
-                ctx.fillRect(0, 0, width, height);
+                const sunY = skyBottom - (t * (height * 0.8)); // Move sun down relative to sky bottom
 
-                // Draw the sun circle
+                // determine water top for intersection test
+                const waterTop = skyBottom;
+
+                // base blur in CSS pixels (scale with sun size)
+                const baseBlur = Math.max(2, sunRadius * 0.18);
+                // if sun intersects the water line, increase blur to simulate diffusion
+                const intersects = (sunY + sunRadius * 0.25) > waterTop;
+                const blurAmount = intersects ? baseBlur * 2.2 : baseBlur;
+
+                // Draw a blurred glow + sun disk with chromatic dispersion (split RGB glows)
+                // Parse sunColor rgb components
+                const sunRgb = sunColor.substring(4).slice(0, -1).split(',').map(v => Number(v.trim()));
+                const dispOffset = Math.max(1, sunRadius * 0.06);
+                const channelConfigs = [
+                    { dx: -dispOffset, color: `rgba(${sunRgb[0]},0,0,`, blurMult: 1.4 }, // red
+                    { dx: 0, color: `rgba(0,${sunRgb[1]},0,`, blurMult: 1.0 }, // green
+                    { dx: dispOffset, color: `rgba(0,0,${sunRgb[2]},`, blurMult: 0.7 } // blue
+                ];
+
+                ctx.save();
+                ctx.globalCompositeOperation = 'screen';
+                for (const cfg of channelConfigs) {
+                    // set a per-channel blur
+                    ctx.filter = `blur(${Math.max(1, blurAmount * cfg.blurMult)}px)`;
+                    const gx = sunX + cfg.dx;
+                    const gy = sunY;
+                    const g = ctx.createRadialGradient(gx, gy, sunRadius * 0.4, gx, gy, sunRadius * 2.2);
+                    g.addColorStop(0, cfg.color + `0.55)`);
+                    g.addColorStop(1, cfg.color + `0)`);
+                    ctx.fillStyle = g;
+                    ctx.fillRect(0, 0, width, height);
+                }
+
+                // draw the sharp-ish sun disk on top of glows (no filter)
+                ctx.filter = 'none';
+                ctx.globalCompositeOperation = 'source-over';
                 ctx.beginPath();
                 ctx.arc(sunX, sunY, sunRadius, 0, 2 * Math.PI);
                 ctx.fillStyle = sunColor;
                 ctx.fill();
+                ctx.restore();
 
                 // Draw water
                 ctx.fillStyle = waterColor;
-                ctx.fillRect(0, height * 0.7, width, height * 0.3);
+                ctx.fillRect(0, waterTop, width, height - waterTop);
+
+                // Sun reflection in the water (vertical rippled specular strips)
+                (function drawSunReflection() {
+                    // only show reflection when sun is close to the water
+                    const reflectionThreshold = sunRadius * 1.8; // distance in pixels
+                    const sunBottom = sunY + sunRadius * 0.25; // approximate visible bottom
+                    if ((waterTop - sunBottom) > reflectionThreshold) return; // sun too far above
+                    const reflTop = height * 0.7;
+                    const reflHeight = height * 0.3;
+                    // make the reflection match the sun's diameter: half-width = sunRadius
+                    const maxReflWidth = sunRadius;
+                    const centerX = sunX;
+
+                    // create a base vertical gradient for the reflection (fade out with depth)
+                    const g = ctx.createLinearGradient(0, reflTop, 0, reflTop + reflHeight);
+                    g.addColorStop(0, sunColor.replace('rgb(', 'rgba(').replace(')', ',0.55)'));
+                    g.addColorStop(0.35, sunColor.replace('rgb(', 'rgba(').replace(')', ',0.22)'));
+                    g.addColorStop(1, sunColor.replace('rgb(', 'rgba(').replace(')', ',0.00)'));
+
+                    // subtle blur when sun intersects the water (matches sun blur feel)
+                    ctx.save();
+                    const reBlur = intersects ? blurAmount * 1.3 : blurAmount * 0.6;
+                    ctx.filter = `blur(${Math.max(0.5, reBlur)}px)`;
+
+                    // draw multiple narrow rippled bands to simulate water streaks
+                    const bands = 12;
+                    for (let b = 0; b < bands; b++) {
+                        const bandY = reflTop + (b / bands) * reflHeight;
+                        const bandH = Math.max(1, Math.ceil(reflHeight / bands));
+
+                        // horizontal jitter from a sine wave across the width
+                        const freq = 0.006 + (b / bands) * 0.02;
+                        const amp = 0.6 + (b % 3) * 0.9;
+
+                        ctx.beginPath();
+                        // draw many small segments across a limited width centered on the sun
+                        const seg = Math.max(2, Math.floor(width / 220));
+                        for (let x = Math.max(0, Math.floor(centerX - maxReflWidth)); x < Math.min(width, Math.ceil(centerX + maxReflWidth)); x += seg) {
+                            const rel = (x - centerX) / maxReflWidth;
+                            const phase = (x * freq) + (anim * 1.2) + b;
+                            const dx = Math.sin(phase) * amp * (1 - Math.abs(rel));
+                            const alpha = 0.25 * (1 - Math.abs(rel));
+
+                            ctx.fillStyle = sunColor.replace('rgb(', 'rgba(').replace(')', `,${alpha})`);
+                            ctx.fillRect(x + dx, bandY, seg, bandH);
+                        }
+                    }
+
+                    // overlay the vertical fade gradient to modulate brightness
+                    ctx.globalCompositeOperation = 'lighter';
+                    ctx.fillStyle = g;
+                    ctx.fillRect(centerX - maxReflWidth, reflTop, maxReflWidth * 2, reflHeight);
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.restore();
+                })();
+
+                // Draw a simple procedural city skyline silhouette at the waterline (optional)
+                // Cache skyline geometry so we can draw windows and flicker them each frame
+                if (SHOW_SKYLINE) {
+                    if (typeof window.__sunsetSkyline === 'undefined' || window.__sunsetSkyline.renderWidth !== renderWidth) {
+                    // build skyline cache
+                    const skyline = [];
+                    const skylineHeightMax = Math.max(40, Math.floor(height * 0.18));
+                    const skylineCount = Math.floor(renderWidth / 80) || 10; // number of building blocks
+                    let x = 0;
+                    function rand(seed) { let t = Math.sin(seed) * 43758.5453123; return t - Math.floor(t); }
+                    for (let i = 0; i < skylineCount; i++) {
+                        const w = Math.max(20, Math.floor((renderWidth / skylineCount) * (0.6 + rand(i + sunStart) * 1.4)));
+                        const h = Math.max(8, Math.floor(skylineHeightMax * (0.25 + rand(i * 1.17 + sunStart) * 0.9)));
+                        // per-building randomness: base seed, phase and flicker frequency
+                        const baseSeed = rand(i + sunStart);
+                        const phase = rand(i * 2.71 + sunStart) * Math.PI * 2;
+                        // slower overall building flicker frequency (between ~0.6 and 2.5)
+                        const freq = 0.6 + rand(i * 3.13 + sunStart) * 1.9;
+                        const windowSeedBase = Math.floor(baseSeed * 10000);
+                        skyline.push({ x: x, w: w, h: h, seed: baseSeed, phase, freq, windowSeedBase });
+                        // per-window behavior (always-on/blink) is determined deterministically during draw
+                     
+                        x += w;
+                    }
+                    // extend last
+                    if (x < renderWidth) skyline.push({ x: x, w: renderWidth - x, h: Math.floor(skylineHeightMax * 0.25), seed: rand(999 + sunStart) });
+                    window.__sunsetSkyline = { buildings: skyline, renderWidth: renderWidth, skylineHeightMax };
+                    }
+
+                    (function drawSkyline() {
+                        const skylineObj = window.__sunsetSkyline;
+                    const skylineY = waterTop;
+                    ctx.save();
+                    // silhouette fill
+                    ctx.fillStyle = `rgba(8,8,12,0.95)`;
+                    // compute night factor (0..1) so windows only light up at night
+                    const nightFactor = Math.max(0, Math.min(1, (t - 0.55) / 0.45));
+                    for (const b of skylineObj.buildings) {
+                        ctx.fillRect(b.x, skylineY - b.h, b.w, b.h);
+                    }
+
+                    // draw flickering windows per building
+                    for (const b of skylineObj.buildings) {
+                        const cols = Math.max(1, Math.floor(b.w / 12));
+                        const rows = Math.max(1, Math.floor(b.h / 10));
+                        const padX = Math.max(1, Math.floor(b.w / (cols * 4)));
+                        const padY = Math.max(1, Math.floor(b.h / (rows * 6)));
+                        for (let r = 0; r < rows; r++) {
+                            for (let c = 0; c < cols; c++) {
+                                // per-window deterministic random helpers
+                                function prand(s) { let t = Math.sin(s) * 43758.5453123; return t - Math.floor(t); }
+                                const winSeed = b.windowSeedBase + r * 137 + c * 31;
+                                const windowPhase = prand(winSeed) * Math.PI * 2;
+
+                                // decide if this window is an actual window (some chance to be empty facade)
+                                const isWindow = prand(b.seed + r + c) > 0.25; // 75% chance to be a window slot
+                                if (!isWindow) continue;
+
+                                // determine permanent-on windows: small fraction (e.g., 6%) determined by seed
+                                const alwaysOn = prand(winSeed + 99) < 0.06;
+
+                                // base flicker driven by per-building freq/phase and window phase
+                                const baseFlick = 0.5 + 0.5 * Math.sin(anim * b.freq + b.phase + windowPhase + r * 0.12 + c * 0.08);
+
+                                // occasional random blink pulses: seeded and repeatable per load
+                                // reduce blink frequency and lengthen pulse width for slower, gentler blinks
+                                const blinkProbPerSec = 0.01 + prand(winSeed + 55) * 0.04; // 0.01..0.05
+                                // create a pseudo-random base phase/time for this window so blinks are not in sync
+                                const blinkPhase = prand(winSeed + 77) * 2000; // larger base offset
+                                // lengthen the repeat period and pulse width
+                                const repeatWindow = 3000 + prand(winSeed + 101) * 8000; // 3s..11s repeat
+                                const pulseCenter = 700; // ms into the period where pulse centers
+                                const pulseWidth = 420; // wider pulse for slower rise/fall
+                                const blinkPulse = Math.exp(-Math.pow(((anim * 1000 - blinkPhase) % repeatWindow - pulseCenter) / pulseWidth, 2));
+
+                                // combine: alwaysOn overrides, otherwise use base flick and occasional blink added
+                                const flick = alwaysOn ? 1 : Math.min(1, baseFlick + 0.85 * blinkPulse * nightFactor);
+
+                                if (flick > 0.55 * prand(b.seed + r + c)) {
+                                    const wx = b.x + c * (b.w / cols) + padX;
+                                    const wy = skylineY - b.h + r * (b.h / rows) + padY;
+                                    const ww = Math.max(2, Math.floor(b.w / cols) - padX * 2);
+                                    const wh = Math.max(2, Math.floor(b.h / rows) - padY * 2);
+                                    const glow = (0.5 + flick * 0.5) * nightFactor;
+                                    // slight warmth for the windows; if alwaysOn give a touch stronger alpha
+                                    const baseAlpha = 0.12 * nightFactor + glow * 0.35;
+                                    const alpha = Math.min(0.95, baseAlpha + (alwaysOn ? 0.12 : 0));
+                                    const warmR = 255;
+                                    const warmG = 200 - Math.floor(80 * prand(winSeed + 13));
+                                    ctx.fillStyle = `rgba(${warmR}, ${warmG}, 80, ${alpha})`;
+                                    ctx.fillRect(wx, wy, ww, wh);
+                                    // tiny halo for brighter windows
+                                    if (alpha > 0.18) {
+                                        ctx.fillStyle = `rgba(${warmR}, ${warmG}, 80, ${alpha * 0.12})`;
+                                        ctx.fillRect(wx - 1, wy - 1, ww + 2, wh + 2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // thin rim highlight on top of buildings
+                    const rim = ctx.createLinearGradient(0, skylineY - skylineObj.skylineHeightMax, 0, skylineY);
+                    rim.addColorStop(0, 'rgba(255,255,255,0.06)');
+                    rim.addColorStop(1, 'rgba(255,255,255,0.00)');
+                    ctx.fillStyle = rim;
+                    ctx.fillRect(0, skylineY - skylineObj.skylineHeightMax - 2, renderWidth, 4);
+
+                    ctx.restore();
+                    })();
+                } // end SHOW_SKYLINE
+
+                // Draw gentle procedural hills along the horizon (optional)
+                if (SHOW_HILLS) {
+                    if (typeof window.__sunsetHills === 'undefined' || window.__sunsetHills.renderWidth !== renderWidth) {
+                        // build a simple hills profile using a few sine octaves
+                        const points = [];
+                        const hillCount = Math.max(3, Math.floor(renderWidth / 300));
+                        function hrand(s) { let t = Math.sin(s) * 43758.5453123; return t - Math.floor(t); }
+                        for (let x = 0; x <= renderWidth; x += Math.max(8, Math.floor(renderWidth / 200))) {
+                            // normalized x 0..1
+                            const nx = x / renderWidth;
+                            // combine a few sine waves with seeded phases for gentle rolling hills
+                            let y = 0;
+                            y += Math.sin(nx * Math.PI * 2 * (1 + hrand(1) * 2) + hrand(2) * Math.PI) * 0.35;
+                            y += Math.sin(nx * Math.PI * 2 * (2 + hrand(3) * 2) + hrand(4) * Math.PI) * 0.18;
+                            y += Math.sin(nx * Math.PI * 2 * (3 + hrand(5) * 2) + hrand(6) * Math.PI) * 0.08;
+                            // normalize and map to a pixel height above waterTop
+                            const hillHeight = Math.max(12, Math.floor(skylineHeightMax * (0.18 + hrand(7) * 0.12)));
+                            const py = waterTop - (hillHeight * (0.5 + 0.5 * y));
+                            points.push({ x, y: py });
+                        }
+                        window.__sunsetHills = { points, renderWidth };
+                    }
+
+                    // draw hills silhouette behind skyline
+                    const hills = window.__sunsetHills;
+                    ctx.save();
+                    // hill color blends with dusk (darker than sky, lighter than skyline silhouette)
+                    const hillColor = `rgba(${Math.floor(20 + 30 * t)}, ${Math.floor(18 + 24 * t)}, ${Math.floor(24 + 40 * (1 - t))}, ${0.95})`;
+                    ctx.fillStyle = hillColor;
+                    ctx.beginPath();
+                    // start off-canvas left
+                    ctx.moveTo(-10, height);
+                    // draw smooth curve through points using quadratic segments
+                    for (let i = 0; i < hills.points.length; i++) {
+                        const p = hills.points[i];
+                        if (i === 0) ctx.lineTo(p.x, p.y);
+                        else {
+                            const prev = hills.points[i - 1];
+                            const cx = (prev.x + p.x) / 2;
+                            const cy = (prev.y + p.y) / 2;
+                            ctx.quadraticCurveTo(prev.x, prev.y, cx, cy);
+                        }
+                    }
+                    // finish to bottom-right and close
+                    const last = hills.points[hills.points.length - 1];
+                    ctx.lineTo(last.x, last.y);
+                    ctx.lineTo(renderWidth + 10, height);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                // Waterline distortion / refraction (thin animated horizontal slivers)
+                (function drawWaterlineDistortion() {
+                    const bandTop = waterTop - 2; // a couple pixels above the actual top
+                    const bandHeight = Math.max(6, Math.floor(height * 0.015));
+                    const bands = 12; // number of thin slivers
+                    ctx.save();
+                    for (let b = 0; b < bands; b++) {
+                        const by = bandTop + (b / bands) * bandHeight;
+                        const amp = 6 + Math.sin((anim + b) * 1.2) * 3; // horizontal offset amplitude
+                        const freq = 0.8 + b * 0.15;
+                        ctx.beginPath();
+                        // create a gradient from slightly lighter to slightly darker to fake refraction
+                        const stopA = interpolateColor([255,255,255], dayWater, Math.min(1, t * 1.2));
+                        const grad = ctx.createLinearGradient(0, by, width, by);
+                        grad.addColorStop(0, 'rgba(255,255,255,0.02)');
+                        grad.addColorStop(0.5, 'rgba(255,255,255,0.00)');
+                        grad.addColorStop(1, 'rgba(255,255,255,0.02)');
+
+                        ctx.fillStyle = grad;
+                        // draw narrow horizontal slices with sinusoidal x offset by sampling points
+                        const seg = Math.max(6, Math.floor(width / 120));
+                        for (let x = 0; x < width; x += seg) {
+                            const phase = (x / width) * Math.PI * 2 * freq + anim * 0.5;
+                            const dx = Math.sin(phase) * amp;
+                            ctx.fillRect(x + dx, by, seg, Math.ceil(bandHeight / bands));
+                        }
+                    }
+                    ctx.restore();
+                })();
 
                 // Draw subtle waves on the water
                 // anim is in seconds; use small amplitudes and low alpha for subtlety
-                const waterTop = height * 0.7;
                 const waterHeight = height - waterTop;
                 const waveCount = 4;
                 ctx.save();
@@ -334,10 +675,10 @@
             }
             for (let i = 0; i < cloudCount; i++) clouds.push(createCloud(i));
 
-            // Animation loop for subtle waves and clouds
-            let startTime = performance.now();
+            // Animation loop for subtle waves, clouds and sun
             function animate(now) {
                 const elapsed = (now - startTime) / 1000; // seconds
+
                 // update cloud positions
                 for (const c of clouds) {
                     c.x += c.speed * (1/60); // advance a bit each frame; based on 60fps step
@@ -345,7 +686,10 @@
                     if (c.x - c.width > 1) c.x = -c.width - Math.random() * 0.1;
                 }
 
-                drawSunset(timeValue, elapsed);
+                // compute current animated timeValue (0-100)
+                const currentTime = sunAuto ? (sunStart + elapsed * sunSpeed) % 100 : sunStart;
+
+                drawSunset(currentTime, elapsed);
                 requestAnimationFrame(animate);
             }
 
