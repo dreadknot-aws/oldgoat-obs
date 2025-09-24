@@ -112,15 +112,15 @@
             // when true the sun animates automatically
             let sunAuto = true;
 
-            // renderAt1080: when true, render to a fixed internal 1920x1080 backing buffer
+            // renderAt720: when true, render to a fixed internal 1280x720 backing buffer
             // and scale the displayed canvas to fit the viewport while preserving aspect ratio.
-            const renderAt1080 = true;
-            const TARGET_WIDTH = 1920;
-            const TARGET_HEIGHT = 1080;
+            const renderAt720 = true;
+            const TARGET_WIDTH = 1280;
+            const TARGET_HEIGHT = 720;
             // Toggle rendering of the skyline (set false to hide skyline)
             const SHOW_SKYLINE = false;
             // Toggle rendering of gentle hills along the horizon
-            const SHOW_HILLS = true;
+            const SHOW_HILLS = false;
             // current virtual render size used by drawSunset
             let renderWidth = 0;
             let renderHeight = 0;
@@ -131,7 +131,7 @@
                 const vh = window.innerHeight;
                 const dpr = window.devicePixelRatio || 1;
 
-                if (renderAt1080) {
+                if (renderAt720) {
                     // compute scale to fit TARGET into viewport while preserving aspect
                     const scale = Math.min(vw / TARGET_WIDTH, vh / TARGET_HEIGHT) || 1;
                     const displayedW = Math.max(1, Math.floor(TARGET_WIDTH * scale));
@@ -151,11 +151,12 @@
                     canvas.width = Math.floor(TARGET_WIDTH * dpr);
                     canvas.height = Math.floor(TARGET_HEIGHT * dpr);
 
-                    // set transform so drawing coordinates map to virtual TARGET resolution
-                    // transformScale = backingWidth / displayedWidth = (TARGET_WIDTH * dpr) / (TARGET_WIDTH * scale) = dpr / scale
-                    const transformScale = dpr / scale;
-                    ctx.setTransform(transformScale, 0, 0, transformScale, 0, 0);
+                    // set transform so drawing coordinates map to the internal TARGET resolution
+                    // we want 1 unit in our virtual 1280x720 space to map to dpr device pixels
+                    // so scale by dpr (backingPixels / targetUnits)
+                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+                    // Use TARGET units for drawing (draw code assumes 1280x720 virtual space)
                     renderWidth = TARGET_WIDTH;
                     renderHeight = TARGET_HEIGHT;
                 } else {
@@ -208,8 +209,8 @@
             }
 
             function drawSunset(time, anim = 0) {
-                // Use the virtual render resolution (renderWidth/renderHeight). When renderAt1080
-                // is true these will be TARGET_WIDTH/TARGET_HEIGHT so the scene is rendered at 1080p
+                // Use the virtual render resolution (renderWidth/renderHeight). When renderAt720
+                // is true these will be TARGET_WIDTH/TARGET_HEIGHT so the scene is rendered at 720p
                 const width = renderWidth || canvas.clientWidth;
                 const height = renderHeight || canvas.clientHeight;
 
