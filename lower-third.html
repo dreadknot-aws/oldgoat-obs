@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TV Lower Third Overlay</title>
+  <style>
+    :root{
+      --bg: rgba(0,0,0,0.6);
+      --accent: #ffcc00;
+      --accent2: #ffffff;
+      --text: #ffffff; /* ensure visible on transparent backgrounds */
+      --subtext: #ddd;
+      --font-sans: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      /* Title-safe area offsets (defaults suitable for 16:9 1920x1080) */
+      --safe-left: 80px;   /* left safe margin */
+      --safe-right: 80px;  /* right safe margin */
+      --safe-bottom: 60px; /* bottom safe margin */
+    }
+
+    html,body{height:100%;margin:0;background:transparent;font-family:var(--font-sans);}
+
+    /* container sized for OBS: 1920x1080 safe area */
+    /* The stage applies title-safe padding so the lower-third stays within a safe area.
+       You can tune the --safe-* variables for your target display. */
+    .stage{
+      position:relative;
+      width:100%;
+      height:100%;
+      padding-left:var(--safe-left);
+      padding-right:var(--safe-right);
+      padding-bottom:var(--safe-bottom);
+      box-sizing:border-box;
+      pointer-events:none; /* allow clicks to pass through when used as overlay */
+    }
+
+    .lower-third{
+      position:absolute;
+      left:40%; /* center inside the stage safe padding */
+      bottom:10%; /* anchored to the padded bottom (safe area) */
+      width:55%;
+      max-width:1150px;
+      min-width:420px;
+      color:var(--text);
+      pointer-events:none; /* overlay is click-through in production */
+      filter:drop-shadow(0 6px 18px rgba(0,0,0,0.6));
+      /* combine horizontal centering (translateX) with vertical animation (translateY)
+         translations are applied in the order X then Y by using translate(-50%, 30px) */
+      transform:translate(-50%, 30px);
+      opacity:0;
+      transition:transform 380ms cubic-bezier(.2,.9,.3,1),opacity 280ms ease;
+    }
+
+    .lower-third.show{
+      transform:translate(-50%, 0);
+      opacity:1;
+    }
+
+    .panel{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding-left:12px; /* small inset from safe-left */
+      padding-right:12px;
+    }
+
+    .bar{
+      width:14px;
+      height:84px;
+      background: linear-gradient(180deg,var(--accent), #e6a800);
+      border-radius:6px;
+      box-shadow:0 4px 8px rgba(0,0,0,0.4) inset;
+    }
+
+    .content{
+      background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      padding:14px 18px;
+      border-radius:6px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+
+    .headline{
+      font-size:28px;
+      font-weight:700;
+      letter-spacing:0.4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color:var(--accent2);
+    }
+
+    .subhead{
+      font-size:14px;
+      color:var(--subtext);
+      opacity:0.95;
+    }
+
+    .ticker{
+      margin-top:8px;
+      height:6px;
+      background:rgba(255,255,255,0.06);
+      border-radius:4px;
+      overflow:hidden;
+    }
+
+    .ticker > i{
+      display:block;
+      height:100%;
+      width:30%;
+      background:linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
+      transform:translateX(-120%);
+      animation:slide 6s linear infinite;
+    }
+
+    @keyframes slide{from{transform:translateX(-120%);}to{transform:translateX(120%);}}
+
+    /* controls removed for production overlay (click-through) */
+
+    /* responsive tweak */
+    @media (max-width:900px){
+      /* For narrow viewports, constrain the lower third to fit inside the safe area
+         while keeping it visually centered. */
+      .lower-third{left:50%;right:auto;width:calc(100% - (var(--safe-left) + var(--safe-right)));min-width:260px;transform:translate(-50%,30px)}
+      .lower-third.show{transform:translate(-50%,0)}
+      .headline{font-size:22px}
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+  <div class="lower-third show" id="lowerThird">
+      <div class="panel">
+        <div class="bar" aria-hidden="true"></div>
+        <div class="content">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div style="min-width:0;">
+              <div class="headline" id="lt-head">Breaking: Live Event</div>
+              <div class="subhead" id="lt-sub">Reporter — City Name</div>
+            </div>
+            <div style="flex-shrink:0;color:var(--subtext);font-weight:700;font-size:12px">LIVE</div>
+          </div>
+          <div class="ticker" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const lt = document.getElementById('lowerThird');
+  const head = document.getElementById('lt-head');
+  const sub = document.getElementById('lt-sub');
+
+      function show(){ lt.classList.add('show'); }
+      function hide(){ lt.classList.remove('show'); }
+      function toggle(){ lt.classList.toggle('show'); }
+
+  // Controls removed; overlay is controlled via URL params, postMessage, or window.lowerThird API
+
+      // Show initially for demo purposes after small delay
+      setTimeout(show, 250);
+
+      // OBS / external control support:
+      // 1) URL query parameters (useful for OBS Browser Source URL):
+      //    ?head=Your%20Headline&sub=Your%20Subhead&show=1
+      // 2) window.postMessage from parent (or obs):
+      //    window.postMessage({type:'set', head:'Title', sub:'Byline'}, '*');
+      //    window.postMessage({type:'show'}, '*');
+      //    window.postMessage({type:'hide'}, '*');
+      //    window.postMessage({type:'toggle'}, '*');
+
+      function parseQuery(){
+        try{
+          const q = new URLSearchParams(window.location.search);
+          const h = q.get('head');
+          const s = q.get('sub');
+          const sh = q.get('show');
+          if(h) head.textContent = decodeURIComponent(h);
+          if(s) sub.textContent = decodeURIComponent(s);
+          if(sh==='1' || sh==='true') show();
+          if(sh==='0' || sh==='false') hide();
+        }catch(e){ /* ignore */ }
+      }
+
+      parseQuery();
+
+      window.addEventListener('message', (ev) => {
+        const msg = ev.data || {};
+        if(typeof msg !== 'object') return;
+        switch(msg.type){
+          case 'set':
+            if('head' in msg) head.textContent = String(msg.head||'');
+            if('sub' in msg) sub.textContent = String(msg.sub||'');
+            break;
+          case 'show': show(); break;
+          case 'hide': hide(); break;
+          case 'toggle': toggle(); break;
+        }
+      }, false);
+
+      // Expose a simple API for OBS browser source custom JS (window.available)
+      window.lowerThird = {
+        show, hide, toggle,
+        set(headText, subText){ head.textContent = headText || ''; sub.textContent = subText || ''; },
+      };
+    })();
+  </script>
+</body>
+</html>

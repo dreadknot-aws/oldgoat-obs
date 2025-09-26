@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sunset Canvas — Animated</title>
+  <style>
+    html,body{height:100%;margin:0;background:#000;display:flex;flex-direction:column}
+    #container{flex:1;display:flex;flex-direction:column}
+    canvas{display:block;width:100%;height:100%;}
+    .ui{position:fixed;left:12px;top:12px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);color:#fff;padding:10px;border-radius:10px;font-family:system-ui,Segoe UI,Roboto,Arial;}
+    .ui label{font-size:12px;opacity:0.9}
+    .ui input[type=range]{width:140px}
+    .ui button{margin-left:6px;padding:6px 10px;border-radius:8px;border:0;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer}
+    .credits{position:fixed;right:12px;bottom:12px;color:#fff;opacity:0.7;font-family:system-ui,Segoe UI,Roboto,Arial;font-size:12px}
+  </style>
+</head>
+<body>
+  <div id="container">
+    <canvas id="c"></canvas>
+    <div class="ui" id="ui">
+      <div style="margin-bottom:6px"><strong>Sunset Simulator</strong></div>
+      <div><label>Progress</label><input id="progress" type="range" min="0" max="1" step="0.001" value="0"></div>
+      <div style="margin-top:6px"><label>Speed</label><input id="speed" type="range" min="0" max="4" step="0.01" value="1"></div>
+      <div style="margin-top:6px"><button id="play">Pause</button><button id="reset">Reset</button></div>
+      <div style="margin-top:6px"><label><input id="clouds" type="checkbox" checked> Clouds</label></div>
+      <div style="margin-top:6px"><label><input id="stars" type="checkbox"> Stars</label></div>
+    </div>
+    <div class="credits">Click/tap to speed up. Resize-aware. — Built with Canvas</div>
+  </div>
+
+<script>
+// Sunset Canvas — single-file (fixed typo in genClouds)
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  let DPR = Math.max(1, window.devicePixelRatio || 1);
+
+  function resize() {
+    DPR = Math.max(1, window.devicePixelRatio || 1);
+    // ensure canvas uses CSS pixels for drawing by scaling with DPR
+    // use the layout size from getBoundingClientRect to avoid zero client sizes during layout
+    const rect = canvas.getBoundingClientRect();
+    const cssW = Math.max(1, Math.floor(rect.width));
+    const cssH = Math.max(1, Math.floor(rect.height));
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    canvas.width = Math.max(1, Math.floor(cssW * DPR));
+    canvas.height = Math.max(1, Math.floor(cssH * DPR));
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', resize);
+  // initial call; if canvas.clientWidth is 0 (rare), schedule another resize later
+  resize();
+
+  // UI
+  const progEl = document.getElementById('progress');
+  const speedEl = document.getElementById('speed');
+  const playBtn = document.getElementById('play');
+  const resetBtn = document.getElementById('reset');
+  const cloudsEl = document.getElementById('clouds');
+  const starsEl = document.getElementById('stars');
+
+  let paused = false;
+  playBtn.addEventListener('click', () => { paused = !paused; playBtn.textContent = paused ? 'Play' : 'Pause'; });
+  resetBtn.addEventListener('click', () => { t = 0; prog = 0; progEl.value = 0; paused = false; playBtn.textContent = 'Pause'; });
+
+  progEl.addEventListener('input', e => { prog = parseFloat(e.target.value); t = prog * duration; });
+
+  // Simple easing for clouds / colors
+  function lerp(a,b,t){return a + (b-a)*t}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+  function easeInOutQuad(t){return t<0.5?2*t*t: -1+(4-2*t)*t}
+
+  // Simulation parameters
+  const duration = 18_000; // ms for full sunset by default
+  let speed = parseFloat(speedEl.value) || 1;
+  speedEl.addEventListener('input', ()=> speed = parseFloat(speedEl.value));
+
+  // Time progress state
+  let t = 0; // ms into the simulation
+  let last = performance.now();
+  let prog = 0; // 0..1 progress
+
+  // Sun properties
+  const sun = {radius: 60, color:'#FFD76B'};
+
+  // Cloud layer - generate simple particle-like clouds
+  const cloudCount = 18;
+  const clouds = [];
+  function genClouds(){
+    clouds.length = 0;
+    for(let i=0;i<cloudCount;i++){
+      // FIXED: removed extraneous 'n' that previously caused a syntax error
+      clouds.push({
+        x: Math.random(),
+        y: Math.random()*0.4 + 0.05,
+        scale: Math.random()*1.5 + 0.6,
+        offset: Math.random()*10000
+      });
+    }
+  }
+  genClouds();
+
+  // quick self-tests (run in browser console) — added simple checks after fixing syntax
+  function runSelfTests(){
+    const results = [];
+    results.push({name:'cloudCount', pass: clouds.length === cloudCount, detail: `${clouds.length} === ${cloudCount}`});
+    results.push({name:'cloudProps', pass: clouds.every(c => typeof c.x === 'number' && typeof c.offset === 'number'), detail: 'cloud props are numbers'});
+    results.push({name:'ctxAvailable', pass: !!ctx, detail: 'canvas context exists'});
+    results.push({name:'starsGenerated', pass: stars.length === 200, detail: `${stars.length} === 200`});
+
+    const passAll = results.every(r => r.pass);
+    console.group('Sunset Canvas self-test');
+    results.forEach(r => console.log(`${r.name}: ${r.pass ? 'PASS' : 'FAIL'} — ${r.detail}`));
+    console.log('Overall:', passAll ? 'PASS' : 'FAIL');
+    console.groupEnd();
+    return passAll;
+  }
+
+  // Stars
+  const stars = [];
+  for(let i=0;i<200;i++){
+    stars.push({x:Math.random(), y:Math.random()*0.45, r:Math.random()*1.3 + 0.2, tw:Math.random()*Math.PI*2});
+  }
+
+  // water waves
+  function drawWaterReflection(cx, cy, rad, progress){
+    const cssW = canvas.width / DPR;
+    const cssH = canvas.height / DPR;
+    const waterTop = cy + 40; // top y of water
+    const h = cssH;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, waterTop, cssW, h - waterTop);
+    ctx.clip();
+
+    const reflGrad = ctx.createLinearGradient(0, waterTop, 0, h);
+    reflGrad.addColorStop(0, 'rgba(255,180,80,' + lerp(0.25,0.5,1-progress) + ')');
+    reflGrad.addColorStop(0.6, 'rgba(40,50,70,' + lerp(0.2,0.6,progress) + ')');
+    reflGrad.addColorStop(1, '#0b1220');
+  ctx.fillStyle = reflGrad;
+  ctx.fillRect(0, waterTop, cssW, h - waterTop);
+
+    for(let i=0;i<6;i++){
+      const a = 0.6 * Math.pow(0.6, i) * (1-progress);
+      ctx.beginPath();
+      ctx.ellipse(cx, waterTop + (i*10) + 10, rad*0.9, rad*0.25 + i*4, 0, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,200,120,${a})`;
+      ctx.fill();
+    }
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+    for(let y=waterTop+20;y<h;y+=6){
+      ctx.beginPath();
+      const amp = 6 + Math.sin(progress*10 + y*0.03)*3;
+      ctx.moveTo(-20, y);
+      for(let x=0;x<=cssW+40;x+=20){
+        ctx.lineTo(x, y + Math.sin((x*0.02) + (y*0.05) + t*0.001)*amp);
+      }
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  function ryOffset(progress){
+    return 30 + progress*200;
+  }
+
+  // draw sky gradient based on progress
+  function drawSky(progress){
+    const cssW = canvas.width / DPR, cssH = canvas.height / DPR;
+    const w = cssW, h = cssH;
+    const top = interpolateColor([17, 24, 39],[255,140,80],progress>0.5?1:progress*2);
+    const mid = interpolateColor([135,206,235],[255,90,60],progress);
+    const bot = interpolateColor([255,220,180],[10,6,20],progress);
+
+    const g = ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0, `rgb(${top.join(',')})`);
+    g.addColorStop(0.5, `rgb(${mid.join(',')})`);
+    g.addColorStop(1, `rgb(${bot.join(',')})`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,w,h);
+  }
+
+  // color interpolation helpers
+  function interpolateColor(a,b,t){
+    return [ Math.round(lerp(a[0],b[0],t)), Math.round(lerp(a[1],b[1],t)), Math.round(lerp(a[2],b[2],t)) ];
+  }
+
+  // draw sun
+  function drawSun(progress){
+    const cssW = canvas.width / DPR, cssH = canvas.height / DPR;
+    const w = cssW, h = cssH;
+    const cx = w*0.5;
+    const syTop = h*0.25;
+    const syBottom = h*0.62;
+
+    const y = lerp(syTop, syBottom, easeInOutQuad(progress));
+    const radius = sun.radius * (1 - 0.4*progress);
+
+    const halo = ctx.createRadialGradient(cx, y, radius*0.2, cx, y, radius*3);
+    halo.addColorStop(0, 'rgba(255,230,170,1)');
+    halo.addColorStop(0.4, 'rgba(255,170,60,0.7)');
+    halo.addColorStop(1, 'rgba(255,80,20,0)');
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(cx, y, radius*3, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(cx, y, radius, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(255,210,110,${1 - 0.8*progress})`;
+    ctx.fill();
+
+    for(let i=0;i<6;i++){
+      ctx.beginPath();
+      ctx.moveTo(cx, y);
+      const a = (i/6)*Math.PI*2 + t*0.0004*(i+1);
+      ctx.lineTo(cx + Math.cos(a)*(radius*6), y + Math.sin(a)*(radius*6));
+      ctx.strokeStyle = `rgba(255,200,120,${0.02*(1-progress)})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    drawWaterReflection(cx,y,radius,progress);
+  }
+
+  // draw distant silhouette (hills / horizon)
+  function drawHorizon(progress){
+    const cssW = canvas.width / DPR, cssH = canvas.height / DPR;
+    const w = cssW, h = cssH;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(0, h*0.62);
+    for(let x=0;x<=w;x+=30){
+      ctx.lineTo(x, h*0.62 - Math.sin(x*0.008 + t*0.0005)*20 - (progress*30));
+    }
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    const dark = interpolateColor([10,10,12],[3,2,10],progress);
+    ctx.fillStyle = `rgb(${dark.join(',')})`;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // draw clouds
+  function drawClouds(progress){
+    if(!cloudsEl.checked) return;
+    const cssW = canvas.width / DPR, cssH = canvas.height / DPR;
+    const w = cssW, h = cssH;
+    ctx.save();
+    ctx.globalAlpha = 0.9;
+    for(let i=0;i<clouds.length;i++){
+      const c = clouds[i];
+      const x = (c.x * w + Math.sin(t*0.0002 + c.offset)*80 + (i*15)) % (w + 400) - 200;
+      const y = c.y * h + Math.sin(t*0.0003 + i) * 12;
+      const s = c.scale * 120;
+      const grad = ctx.createRadialGradient(x, y, 10, x, y, s);
+      const alpha = lerp(0.6, 0.95, 1-progress);
+      grad.addColorStop(0, `rgba(255,255,255,${alpha})`);
+      grad.addColorStop(1, `rgba(200,200,200,${0.02 + (1-progress)*0.2})`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.ellipse(x, y, s*1.6, s*0.6, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // draw stars
+  function drawStars(progress){
+    if(!starsEl.checked) return;
+    const cssW = canvas.width / DPR, cssH = canvas.height / DPR;
+    const w = cssW, h = cssH;
+    ctx.save();
+    const alpha = clamp((progress-0.55)/0.45, 0, 1);
+    ctx.globalCompositeOperation = 'lighter';
+    for(const s of stars){
+      const x = s.x * w;
+      const y = s.y * h * 0.9;
+      const tw = s.tw + t*0.0006;
+      const r = s.r * (0.6 + 0.4*Math.sin(tw));
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${alpha * (0.3 + Math.random()*0.7)})`;
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // main draw
+  function draw(){
+    const now = performance.now();
+    const dt = now - last; last = now;
+    if(!paused){
+      t += dt * speed * 1.0; // time scaled by UI speed
+      prog = clamp(t / duration, 0, 1);
+      progEl.value = prog;
+    }
+
+    drawSky(prog);
+    drawStars(prog);
+    drawSun(prog);
+    drawClouds(prog);
+    drawHorizon(prog);
+
+  const cssW = canvas.width / DPR, cssH = canvas.height / DPR;
+  const w = cssW, h = cssH;
+  ctx.save();
+  const vg = ctx.createRadialGradient(w/2, h/2, Math.min(w,h)/4, w/2, h/2, Math.max(w,h));
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,0.25)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0,0,w,h);
+    ctx.restore();
+
+    requestAnimationFrame(draw);
+  }
+
+  // helper: capture click to speed up temporarily
+  let speedBoostUntil = 0;
+  canvas.addEventListener('pointerdown', ()=>{ speedBoostUntil = performance.now() + 800; speed = Math.max(speed, 2.5); });
+
+  // speed manager using a clean recursive loop (no arguments.callee)
+  (function speedManager(){
+    function loop(){
+      if(performance.now() > speedBoostUntil){
+        speed = lerp(speed, parseFloat(speedEl.value) || 1, 0.06);
+      }
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  // initialize and start
+  draw();
+
+  // ensure canvas element reported sizes are up-to-date (works with flex)
+  function updateSizeLoop(){
+    resize();
+    requestAnimationFrame(updateSizeLoop);
+  }
+  requestAnimationFrame(updateSizeLoop);
+
+  // expose a small API for future tweaks
+  window.sunsetCanvas = {
+    setProgress(v){ prog = clamp(v,0,1); t = prog*duration; progEl.value = prog; },
+    setSpeed(v){ speed = v; speedEl.value = v; },
+    reset(){ t=0; prog=0; progEl.value = 0; }
+  };
+
+  // run self-tests once so the developer/user sees results in the console
+  try{ runSelfTests(); } catch(e){ console.error('Self-tests failed to run', e); }
+
+})();
+</script>
+</body>
+</html>
