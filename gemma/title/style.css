@@ -4,10 +4,11 @@ body {
     min-height: 100vh; /* Full viewport height */
     display: flex; /* Using Flexbox for centering */
     justify-content: center; /* Center horizontally */
-    align-items: top; /* Align items to the top */
+    align-items: flex-end; /* Align items to the bottom */
     background: transparent;
     /* background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460); Nice dark background */
-    font-family: 'Arial', sans-serif;
+    /* font-family: 'Arial', sans-serif; */
+    font-family: "Press Start 2P";
     overflow: hidden; /* Hide potential overflows during animation */
 }
 

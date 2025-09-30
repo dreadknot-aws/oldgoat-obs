@@ -5,20 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animated 3D HTML Title</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Galindo&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Faster+One&family=Galindo&family=Holtwood+One+SC&display=swap"
+        rel="stylesheet">
 </head>
 <body>
 
     <div class="scene">
         <div class="title-container">
             <h1 class="title-3d" data-text="RAD">
-                RAD
+                D
             </h1>
             <h2 class="subtitle-3d" data-text="DAWN">
-                DAWN
+                SQUAD
             </h2>
         </div>
     </div>
     <script>
+
+        async function loadFonts() {
+            // const font = new FontFace('silkscreen', 'url(../fonts/PressStart2P-Regular.ttf)');
+            const font = new FontFace('silkscreen', 'url(../fonts/BlackOpsOne-Regular.ttf)');
+            // BlackOpsOne-Regular.ttf
+            // wait for font to be loaded
+            await font.load();
+            // add font to document
+            document.fonts.add(font);
+            // enable font with CSS class
+            document.body.classList.add('fonts-loaded');
+        }      
+        
+        
+        loadFonts();
+        
         document.addEventListener('DOMContentLoaded', () => {
             // 1. Get URL parameters
             const urlParams = new URLSearchParams(window.location.search);
@@ -28,8 +50,8 @@
             const subTitleElement = document.querySelector('.subtitle-3d');
 
             // 3. Define default text (if parameters are missing)
-            const defaultTitle = "3D TITLE";
-            const defaultSubtitle = "From URL Params";
+            const defaultTitle = "It can only";
+            const defaultSubtitle = "Good Happen";
 
             // 4. Get text from URL parameters or use defaults
             // Use the || operator to fallback to the default if the param is null/empty
