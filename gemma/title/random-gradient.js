@@ -14,14 +14,13 @@ function setRandomGradient() {
         title.style.webkitTextFillColor = 'transparent';
         title.style.backgroundClip = 'text';
         title.style.color = 'transparent';
-        title.style.textShadow = `
-            1px 1px 0px ${color2},
-            2px 2px 0px ${color3},
-            3px 3px 0px ${color1},
-            4px 4px 0px ${color2},
-            5px 5px 0px ${color3},
-            6px 6px 10px rgba(0, 0, 0, 0.6)
-        `;
+        // title.style.textShadow = `
+        //     1px 1px 0px ${color2},
+        //     2px 2px 0px ${color3},
+        //     3px 3px 0px ${color1},
+        //     4px 4px 0px ${color2},
+        //     5px 5px 0px ${color3},
+        // `;
     }
 
     const subtitle = document.querySelector('.subtitle-3d');
@@ -35,11 +34,10 @@ function setRandomGradient() {
         subtitle.style.webkitTextFillColor = 'transparent';
         subtitle.style.backgroundClip = 'text';
         subtitle.style.color = 'transparent';
-        subtitle.style.textShadow = `
-            1px 1px 0px ${colorB},
-            2px 2px 0px ${colorC},
-            3px 3px 5px rgba(0, 0, 0, 0.4)
-        `;
+        // subtitle.style.textShadow = `
+        //     1px 1px 0px ${colorB},
+        //     2px 2px 0px ${colorC},
+        // `;
     }
 }
 
