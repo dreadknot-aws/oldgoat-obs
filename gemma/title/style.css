@@ -52,7 +52,7 @@ body {
         3px 3px 0px #7c1624, /* Darker, offset 3px */
         4px 4px 0px #580e18, /* Darker, offset 4px */
         5px 5px 0px #34070c, /* Very dark, offset 5px */
-        6px 6px 10px rgba(0, 0, 0, 0.6); Soft base shadow
+        6px 6px 10px rgba(0, 0, 0, 0.6); /*Soft base shadow
     
      /* Add a subtle initial transform */
      transform: translateZ(20px) rotateX(-5deg); /* Pull slightly forward, tilt slightly */
