@@ -31,7 +31,7 @@ body {
 
 /* Base Styling for 3D Text Elements */
 .title-3d, .subtitle-3d {
-    color: #e94560; /* Bright title color */
+    color: #3f2a26; /* Bright title color */
     margin: 0;
     padding: 0 20px; /* Add some padding */
     transform-style: preserve-3d; /* Also needed here if rotating the element itself */
@@ -46,27 +46,26 @@ body {
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
     
-    text-shadow: -5px -5px 0px #ffffff; /* Slightly darker, offset 1px */
-
+    text-shadow: -5px -5px 0px #ffffff;
      
      /* Add a subtle initial transform */
      transform: translateZ(20px) rotateX(-5deg); /* Pull slightly forward, tilt slightly */
 
     /* Remove static gradient from CSS, JS will set it dynamically */
-    background: none;
-    -webkit-background-clip: text;
+    /* background: none; */
+    /* -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent;
+    color: transparent; */
 }
 
 /* Subtitle Styling */
 .subtitle-3d {
     font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
     font-weight: normal;
-    color: #f0f0f0; /* Lighter subtitle color */
+    /* color: #f0f0f0; Lighter subtitle color */
      /* --- Different 3D Extrusion for Subtitle --- */
-    text-shadow: -5px -5px 0px #ffffff; /* Slightly darker, offset 1px */
+    /* text-shadow: -5px -5px 0px #ffffff; Slightly darker, offset 1px */
 
 
     /* Position it slightly behind the main title */
