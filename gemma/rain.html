@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Rain Effect</title>
+    <!-- Load Tailwind CSS for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for full-screen canvas and dark background ambiance */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #1a202c00; /* Dark slate background */
+            font-family: 'Inter', sans-serif;
+        }
+        #rainCanvas {
+            display: block;
+            touch-action: none; /* Prevents unwanted touch behaviors */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body>
+
+<canvas id="rainCanvas"></canvas>
+
+<script>
+    // --- CANVAS SETUP AND UTILITIES ---
+    const canvas = document.getElementById('rainCanvas');
+    const ctx = canvas.getContext('2d');
+    let raindrops = [];
+    let numDrops = 400;
+
+    /**
+     * Raindrop Class
+     * Manages the position, speed, and drawing of a single raindrop.
+     * Uses a 'z' property to simulate depth/perspective.
+     */
+    class Raindrop {
+        constructor() {
+            this.reset();
+        }
+
+        // Resets the drop to a new starting position at the top
+        reset() {
+            const { width, height } = canvas;
+            
+            // Z-axis for perspective (1 to 20). Lower Z means farther away, slower, and thinner.
+            this.z = Math.random() * 19 + 1; 
+            
+            this.x = Math.random() * width;
+            // Start the drop randomly above the viewport to simulate continuous rain
+            this.y = Math.random() * height * 0.5 - height * 0.5;
+            
+            // Speed and length based on Z (closer drops are faster and longer)
+            this.speedY = this.z * 0.5 + 5; 
+            this.len = this.z * 1.5; 
+            
+            // Opacity and thickness based on Z (closer drops are more visible)
+            this.opacity = 0.4 + Math.random() * 0.6 * (this.z / 20); 
+            this.lineWidth = 1 + (this.z / 20) * 0.7;
+        }
+
+        // Updates the drop's position
+        fall() {
+            this.y += this.speedY;
+
+            // If the drop falls below the bottom of the canvas, reset it
+            if (this.y > canvas.height) {
+                this.reset();
+            }
+        }
+
+        // Draws the drop on the canvas
+        draw() {
+            this.ctx = ctx;
+            
+            this.ctx.beginPath();
+            // Faint blue/white color, dynamic opacity
+            this.ctx.strokeStyle = `rgba(174, 194, 224, ${this.opacity})`; 
+            this.ctx.lineWidth = this.lineWidth;
+            this.ctx.lineCap = 'round';
+            
+            this.ctx.moveTo(this.x, this.y);
+            this.ctx.lineTo(this.x, this.y + this.len);
+            this.ctx.stroke();
+        }
+    }
+
+    /**
+     * Initializes the canvas size and the array of raindrops.
+     */
+    function setup() {
+        // Set canvas size to the window size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Adjust number of drops based on screen size (density remains roughly the same)
+        numDrops = Math.floor(window.innerWidth * window.innerHeight / 3000); 
+
+        // Create new raindrops
+        raindrops = [];
+        for (let i = 0; i < numDrops; i++) {
+            raindrops.push(new Raindrop());
+        }
+    }
+
+    /**
+     * The main animation loop.
+     */
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Clear the entire canvas on each frame with a slightly transparent fill
+        // This creates a subtle "motion blur" or "smear" effect for the rain
+        ctx.fillStyle = 'rgba(26, 32, 44, 0.1)'; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Update and draw each raindrop
+        raindrops.forEach(drop => {
+            drop.fall();
+            drop.draw();
+        });
+    }
+
+    // --- EVENT LISTENERS AND STARTUP ---
+
+    // Handle window resizing to keep the canvas full-screen
+    window.addEventListener('resize', setup);
+
+    // Initial setup and start the animation loop when the window is loaded
+    window.onload = function () {
+        setup();
+        animate();
+    };
+
+</script>
+
+</body>
+</html>
