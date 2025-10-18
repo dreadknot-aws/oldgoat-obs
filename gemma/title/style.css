@@ -4,7 +4,7 @@ body {
     min-height: 100vh; /* Full viewport height */
     display: flex; /* Using Flexbox for centering */
     justify-content: center; /* Center horizontally */
-    /* align-items: flex-end; Align items to the bottom */
+    align-items: flex-start; /* Align items to the top */
     background: transparent;
     /* background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460); Nice dark background */
     /* font-family: 'Arial', sans-serif; */
@@ -15,11 +15,13 @@ body {
 /* The 3D Scene Container */
 .scene {
     perspective: 1000px; /* Sets the strength of the 3D effect. Lower means more extreme. */
-    width: 45%;
+    width: 40%;
+    height: 100vh; /* make scene full viewport height */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 25px;
+    justify-content: center; /* center horizontally */
+    align-items: flex-start; /* align children to top of scene */
+    margin: 0; /* remove bottom margin so top placement is consistent */
+    box-sizing: border-box;
 }
 
 /* Container for the text elements if needed (helps with alignment/grouping) */
@@ -28,21 +30,27 @@ body {
     transform-style: preserve-3d; /* Crucial: Allows children to be transformed in 3D */
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center; /* center the titles horizontally */
+    justify-content: flex-start; /* keep main title at the top by default */
+    height: 100%; /* fill the .scene height */
+    min-height: 100vh; /* ensure it covers full viewport on small layouts */
     /* Apply the animation to the container to move both titles together */
     animation: rotateScene 15s infinite linear;
+    width: auto;
+    margin-top: 64px; /* larger gap from very top of viewport */
 }
 
 /* Base Styling for 3D Text Elements */
 .title-3d, .subtitle-3d {
-    align-items: end;
+    /* align-items: end; */
+    text-align: center;
     color: #3f2a26; /* Bright title color */
     margin: 0;
     padding: 0 20px; /* Add some padding */
     transform-style: preserve-3d; /* Also needed here if rotating the element itself */
     position: relative; /* Needed for pseudo-elements if used */
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 
@@ -61,7 +69,8 @@ body {
 
 /* Main Title Styling */
 .title-3d {
-    font-size: clamp(10rem, 10vw, 6rem); /* Responsive font size */
+    /* Smaller responsive font size */
+    font-size: clamp(6rem, 8vw, 4rem); /* Responsive font size */
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
     
@@ -88,6 +97,7 @@ body {
 .subtitle-3d {
     font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
     font-weight: normal;
+    /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
      /* --- Different 3D Extrusion for Subtitle --- */
     /* text-shadow: -5px -5px 0px #ffffff; Slightly darker, offset 1px */
@@ -95,6 +105,13 @@ body {
 
     /* Position it slightly behind the main title */
     transform: translateZ(-10px) rotateX(-5deg);
+    /* Pin subtitle to bottom-center of the viewport */
+    position: fixed;
+    left: 50%;
+    transform-origin: center;
+    transform: translateX(-50%) translateZ(-10px) rotateX(-5deg);
+    bottom: 150px; /* distance from bottom; adjust as needed */
+    z-index: 50; /* sit above other content if any */
 }
 
 
