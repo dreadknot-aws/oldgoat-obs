@@ -77,8 +77,8 @@ body {
     text-shadow: -5px -5px 0px #ffffff;
      
      /* Add a subtle initial transform */
-     transform: translateZ(20px) rotateX(-5deg); /* Pull slightly forward, tilt slightly */
-
+     transform: translateZ(20px) rotateX(-5deg); /* Pull slightly forward, tilt slightly
+    /* transform: translate3d(0px, 200px, 0px); */
     /* Remove static gradient from CSS, JS will set it dynamically */
     /* background: none; */
     /* -webkit-background-clip: text;
