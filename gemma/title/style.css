@@ -95,7 +95,7 @@ body {
 
 /* Subtitle Styling */
 .subtitle-3d {
-    font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
+    font-size: clamp(3rem, 3vw, 2rem); /* Responsive font size */
     font-weight: normal;
     /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
@@ -110,7 +110,11 @@ body {
     transform-origin: center;
     /* transform: translateX(-50%) translateZ(-10px) rotateX(-5deg); */
     bottom: 150px; /* distance from bottom; adjust as needed */
-    z-index: 50; /* sit above other content if any */
+    /* z-index: 50; sit above other content if any */
+    background:
+        /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
+        conic-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
+        animation: rotate 20s linear infinite;
 }
 
 
