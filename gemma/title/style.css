@@ -70,7 +70,7 @@ body {
 /* Main Title Styling */
 .title-3d {
     /* Smaller responsive font size */
-    font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
+    font-size: clamp(4rem, 4vw, 2rem); /* Responsive font size */
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
     
@@ -95,7 +95,7 @@ body {
 
 /* Subtitle Styling */
 .subtitle-3d {
-    font-size: clamp(3rem, 3vw, 2rem); /* Responsive font size */
+    font-size: clamp(2rem, 2vw, 1rem); /* Responsive font size */
     font-weight: normal;
     /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
