@@ -31,8 +31,8 @@ function setRandomGradient() {
         subtitle.style.color = 'transparent';
         subtitle.style.textShadow = `
             -1px -1px 0px ${colorB},
-            -3px -3px 0px ${colorC},
-            -6px -6px 0px rgba(0, 0, 0, 1)
+            -4px -4px 0px ${colorC},
+            -5px -5px 0px rgba(0, 0, 0, 1)
         `;
     }
 }
