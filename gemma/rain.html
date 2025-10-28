@@ -70,6 +70,7 @@
             
             // Opacity and thickness based on Z (closer drops are more visible)
             this.opacity = 0.4 + Math.random() * 0.6 * (this.z / 20); 
+            // this.opacity = 1
             this.lineWidth = 1 + (this.z / 20) * 0.7;
         }
 
@@ -125,7 +126,7 @@
 
         // Clear the entire canvas on each frame with a slightly transparent fill
         // This creates a subtle "motion blur" or "smear" effect for the rain
-        ctx.fillStyle = 'rgba(26, 32, 44, 0.1)'; 
+        ctx.fillStyle = 'rgba(26, 32, 44, 0.0)'; 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Update and draw each raindrop

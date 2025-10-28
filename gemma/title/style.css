@@ -95,6 +95,7 @@ body {
 
 /* Subtitle Styling */
 .subtitle-3d {
+    font-family: "Monoton", cursive;
     font-size: clamp(3rem, 3vw, 2rem); /* Responsive font size */
     font-weight: normal;
     /* display: block; */
