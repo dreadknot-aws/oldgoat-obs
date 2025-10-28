@@ -69,6 +69,7 @@ body {
 
 /* Main Title Styling */
 .title-3d {
+    font-family: Black Ops One;
     /* Smaller responsive font size */
     font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
     font-weight: bold;
@@ -95,7 +96,7 @@ body {
 
 /* Subtitle Styling */
 .subtitle-3d {
-    font-family: "Monoton", cursive;
+    font-family: "Monoton";
     /* font-family: Bungee, cursive; */
     /* font-family: Nosifer, cursive; */
     font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
