@@ -16,6 +16,7 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nosifer&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -31,6 +32,37 @@
     </div>
     <script>
         
+        // Set the subtitle element to a random font from the loaded Google fonts.
+        // Exposed as window.setRandomSubtitleFont() so you can call it from dev tools or other scripts.
+        function setRandomSubtitleFont(forceFont) {
+            const fonts = [
+                'Monoton',
+                'Press Start 2P',
+                'Galindo',
+                'Bitcount Grid Single',
+                'Bungee',
+                'Bangers',
+                'Faster One',
+                'Holtwood One SC',
+                'Nosifer',
+                'Black Ops One',
+                'Silkscreen'
+            ];
+            const subtitle = document.querySelector('.subtitle-3d');
+            if (!subtitle) return null;
+            let choice = forceFont || null;
+            if (!choice) {
+                // pick a random font name from the list
+                choice = fonts[Math.floor(Math.random() * fonts.length)];
+            }
+            // Apply as an inline style to override any stylesheet font-family
+            subtitle.style.fontFamily = `"${choice}", sans-serif`;
+            // Return the font name for debugging
+            return choice;
+        }
+        // expose to window for external scripts / devtools
+        window.setRandomSubtitleFont = setRandomSubtitleFont;
+
         document.addEventListener('DOMContentLoaded', () => {
             // 1. Get URL parameters
             const urlParams = new URLSearchParams(window.location.search);
@@ -57,6 +89,10 @@
                 subTitleElement.textContent = subtitleText;
                 subTitleElement.setAttribute('data-text', subtitleText); // Sync for CSS pseudo-elements
             }
+
+            // If a specific subtitleFont param is provided, use it; otherwise pick a random loaded font
+            const subtitleFontParam = urlParams.get('subtitleFont');
+            setRandomSubtitleFont(subtitleFontParam || undefined);
 
             // Optional: Update the page's <title> tag as well
             document.title = `${titleText} - ${subtitleText}`;
