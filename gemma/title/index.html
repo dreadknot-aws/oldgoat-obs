@@ -67,6 +67,33 @@
             // 1. Get URL parameters
             const urlParams = new URLSearchParams(window.location.search);
 
+                // Set the main title element to a random font from the loaded Google fonts.
+                // Exposed as window.setRandomTitleFont()
+                function setRandomTitleFont(forceFont) {
+                    const fonts = [
+                        'Black Ops One',
+                        'Silkscreen',
+                        'Bungee',
+                        'Galindo',
+                        'Monoton',
+                        'Press Start 2P',
+                        'Nosifer',
+                        'Bangers',
+                        'Faster One',
+                        'Holtwood One SC',
+                        'Bitcount Grid Single'
+                    ];
+                    const title = document.querySelector('.title-3d');
+                    if (!title) return null;
+                    let choice = forceFont || null;
+                    if (!choice) {
+                        choice = fonts[Math.floor(Math.random() * fonts.length)];
+                    }
+                    title.style.fontFamily = `"${choice}", sans-serif`;
+                    return choice;
+                }
+                window.setRandomTitleFont = setRandomTitleFont;
+
             // 2. Get the target elements
             const mainTitleElement = document.querySelector('.title-3d');
             const subTitleElement = document.querySelector('.subtitle-3d');
@@ -93,6 +120,10 @@
             // If a specific subtitleFont param is provided, use it; otherwise pick a random loaded font
             const subtitleFontParam = urlParams.get('subtitleFont');
             setRandomSubtitleFont(subtitleFontParam || undefined);
+
+            // If a specific titleFont param is provided, use it; otherwise pick a random loaded font
+            const titleFontParam = urlParams.get('titleFont');
+            setRandomTitleFont(titleFontParam || undefined);
 
             // Optional: Update the page's <title> tag as well
             document.title = `${titleText} - ${subtitleText}`;
