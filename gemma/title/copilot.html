@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Galindo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Faster+One&family=Galindo&family=Holtwood+One+SC&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nosifer&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Anime.js — Text Coming From Top</title>
+    <style>
+        /* Basic layout */
+        :root { background: #0b122000; color: #000000; }
+        html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+        .wrap { min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:6vh 20px; box-sizing:border-box; }
+
+        /* Text block */
+        .hero { max-width:900px; width:100%; text-align:center; }
+        h1 { font-size: clamp(28px, 6vw, 64px); line-height:1.02; margin:0; font-weight:700; overflow:visible; }
+
+        /* each character will be an inline-block that starts above the view */
+        .letter { display:inline-block; transform: translateY(-120%); opacity:0; white-space:pre; }
+
+        .subtitle { margin-top:18px; color:#000000; font-size:clamp(28px,4.4vw,36px); opacity:0; transform:translateY(-10px); }
+        /* small nicety */
+        .credit { margin-top:36px; font-size:12px; color:#7e8796; opacity:0.8; }
+    </style>
+</head>
+<body>
+        <script>
+
+        // Set the subtitle element to a random font from the loaded Google fonts.
+        // Exposed as window.setRandomSubtitleFont() so you can call it from dev tools or other scripts.
+        function setRandomSubtitleFont(forceFont) {
+            const fonts = [
+                'Monoton',
+                'Press Start 2P',
+                'Bitcount Grid Single',
+                'Bungee',
+                'Faster One',
+                'Nosifer',
+                'Black Ops One',
+                'Silkscreen'
+            ];
+            const subtitle = document.querySelector('.subtitle');
+            if (!subtitle) return null;
+            let choice = forceFont || null;
+            if (!choice) {
+                // pick a random font name from the list
+                choice = fonts[Math.floor(Math.random() * fonts.length)];
+            }
+            // Apply as an inline style to override any stylesheet font-family
+            subtitle.style.fontFamily = `"${choice}", sans-serif`;
+            // Return the font name for debugging
+            return choice;
+        }
+        // expose to window for external scripts / devtools
+        window.setRandomSubtitleFont = setRandomSubtitleFont;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Set the main title element to a random font from the loaded Google fonts.
+            // Exposed as window.setRandomTitleFont()
+            function setRandomTitleFont(forceFont) {
+                const fonts = [
+                    'Black Ops One',
+                    'Silkscreen',
+                    'Bungee',
+                    'Monoton',
+                    'Press Start 2P',
+                    'Nosifer',
+                    'Faster One',
+                    'Bitcount Grid Single'
+                ];
+                const title = document.querySelector('.title');
+                if (!title) return null;
+                let choice = forceFont || null;
+                if (!choice) {
+                    choice = fonts[Math.floor(Math.random() * fonts.length)];
+                }
+                title.style.fontFamily = `"${choice}", sans-serif`;
+                return choice;
+            }
+            window.setRandomTitleFont = setRandomTitleFont;
+
+            // 2. Get the target elements
+            const mainTitleElement = document.querySelector('.title');
+            const subTitleElement = document.querySelector('.subtitle');
+
+            // 3. Define default text (if parameters are missing)
+            const defaultTitle = "It can only";
+            const defaultSubtitle = "good happen";
+
+            // 4. Get text from URL parameters or use defaults
+            // Use the || operator to fallback to the default if the param is null/empty
+            const titleText = urlParams.get('title') || defaultTitle;
+            const subtitleText = urlParams.get('subtitle') || defaultSubtitle;
+
+            // 5. Update the HTML content and the data-text attribute
+            if (mainTitleElement) {
+                mainTitleElement.textContent = titleText;
+                mainTitleElement.setAttribute('data-text', titleText); // Sync for CSS pseudo-elements
+            }
+            if (subTitleElement) {
+                subTitleElement.textContent = subtitleText;
+                subTitleElement.setAttribute('data-text', subtitleText); // Sync for CSS pseudo-elements
+            }
+
+            // If a specific subtitleFont param is provided, use it; otherwise pick a random loaded font
+            const subtitleFontParam = urlParams.get('subtitleFont');
+            setRandomSubtitleFont(subtitleFontParam || undefined);
+
+            // If a specific titleFont param is provided, use it; otherwise pick a random loaded font
+            const titleFontParam = urlParams.get('titleFont');
+            setRandomTitleFont(titleFontParam || undefined);
+
+            // Optional: Update the page's <title> tag as well
+            document.title = `${titleText} - ${subtitleText}`;
+        });
+    </script>
+
+    <div class="wrap">
+        <div class="hero">
+            <h1 id="title" class="title">dreadknot</h1>
+            <div class="subtitle">D-SQUAD</div>
+            <!-- <div class="credit">Battlefield 6</div> -->
+        </div>
+    </div>
+
+    <!-- anime.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <script>
+        // Wrap non-space characters in spans so we can animate each one
+        document.addEventListener('DOMContentLoaded', function () {
+            var title = document.getElementById('title');
+            title.innerHTML = title.textContent.replace(/(\S|\s)/g, function(c){
+                // preserve spaces as regular spaces (rendered as &nbsp;)
+                if (c === ' ') return '<span class="letter">&#8203;</span>';
+                return '<span class="letter">' + c + '</span>';
+            });
+
+            // Timeline: letters drop from above; subtitle fades/ slides in after a short overlap
+            anime.timeline({ autoplay: true })
+                .add({
+                    targets: '.letter',
+                    translateY: ['-120%','0%'],
+                    opacity: [0,1],
+                    easing: 'cubicBezier(.2,.85,.32,1)',
+                    duration: 700,
+                    delay: anime.stagger(45)
+                })
+                .add({
+                    targets: '.subtitle',
+                    translateY: ['-10px','0px'],
+                    opacity: [0,1],
+                    easing: 'easeOutExpo',
+                    duration: 600
+                }, '-=420')
+                .add({
+                    targets: '.credit',
+                    opacity: [0,0.9],
+                    duration: 600,
+                    easing: 'linear'
+                }, '-=400');
+        });
+    </script>
+</body>
+</html>
