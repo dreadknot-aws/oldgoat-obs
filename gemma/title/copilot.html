@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -18,25 +19,99 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Anime.js — Text Coming From Top</title>
     <style>
+        @property --angle {
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: true;
+        }
+
+        @keyframes rotate {
+            to {
+                --angle: 1turn;
+            }
+        }
+
         /* Basic layout */
-        :root { background: #0b122000; color: #000000; }
-        html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-        .wrap { min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:6vh 20px; box-sizing:border-box; }
+        :root {
+            background: #0b122000;
+            color: #000000;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 6vh 20px;
+            box-sizing: border-box;
+        }
 
         /* Text block */
-        .hero { max-width:900px; width:100%; text-align:center; }
-        h1 { font-size: clamp(28px, 6vw, 64px); line-height:1.02; margin:0; font-weight:700; overflow:visible; }
+        .hero {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(28px, 6vw, 64px);
+            line-height: 1.02;
+            margin: 0;
+            font-weight: 700;
+            overflow: visible;
+        }
 
         /* each character will be an inline-block that starts above the view */
-        .letter { display:inline-block; transform: translateY(-120%); opacity:0; white-space:pre; }
+        .letter {
+            display: inline-block;
+            transform: translateY(-120%);
+            text-shadow: -5px -5px 0px #ffffff;
+            opacity: 0;
+            white-space: pre;
+            background:
+                /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
+                conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
+            animation: rotate 20s linear infinite;
+                        background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+        }
 
-        .subtitle { margin-top:18px; color:#000000; font-size:clamp(28px,4.4vw,36px); opacity:0; transform:translateY(-10px); }
+        .subtitle {
+            background:
+                conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
+            animation: rotate 20s linear infinite;
+            margin-top: 18px;
+            color: transparent;
+            font-size: clamp(28px, 4.4vw, 36px);
+            opacity: 0;
+            transform: translateY(-10px);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            /* text-shadow: -5px -5px 0px #ffffff; */
+
+        }
+
         /* small nicety */
-        .credit { margin-top:36px; font-size:12px; color:#7e8796; opacity:0.8; }
+        .credit {
+            margin-top: 36px;
+            font-size: 12px;
+            color: #7e8796;
+            opacity: 0.8;
+        }
     </style>
 </head>
+
 <body>
-        <script>
+    <script>
 
         // Set the subtitle element to a random font from the loaded Google fonts.
         // Exposed as window.setRandomSubtitleFont() so you can call it from dev tools or other scripts.
@@ -142,7 +217,7 @@
         // Wrap non-space characters in spans so we can animate each one
         document.addEventListener('DOMContentLoaded', function () {
             var title = document.getElementById('title');
-            title.innerHTML = title.textContent.replace(/(\S|\s)/g, function(c){
+            title.innerHTML = title.textContent.replace(/(\S|\s)/g, function (c) {
                 // preserve spaces as regular spaces (rendered as &nbsp;)
                 if (c === ' ') return '<span class="letter">&#8203;</span>';
                 return '<span class="letter">' + c + '</span>';
@@ -152,26 +227,27 @@
             anime.timeline({ autoplay: true })
                 .add({
                     targets: '.letter',
-                    translateY: ['-120%','0%'],
-                    opacity: [0,1],
+                    translateY: ['-120%', '0%'],
+                    opacity: [0, 1],
                     easing: 'cubicBezier(.2,.85,.32,1)',
                     duration: 700,
                     delay: anime.stagger(45)
                 })
                 .add({
                     targets: '.subtitle',
-                    translateY: ['-10px','0px'],
-                    opacity: [0,1],
+                    translateY: ['-10px', '0px'],
+                    opacity: [0, 1],
                     easing: 'easeOutExpo',
                     duration: 600
                 }, '-=420')
                 .add({
                     targets: '.credit',
-                    opacity: [0,0.9],
+                    opacity: [0, 0.9],
                     duration: 600,
                     easing: 'linear'
                 }, '-=400');
         });
     </script>
 </body>
+
 </html>
