@@ -29,11 +29,11 @@ function setRandomGradient() {
         subtitle.style.webkitTextFillColor = 'transparent';
         subtitle.style.backgroundClip = 'text';
         subtitle.style.color = 'transparent';
-        subtitle.style.textShadow = `
-            -1px -1px 0px ${colorB},
-            -4px -4px 0px ${colorC},
-            -5px -5px 0px rgba(0, 0, 0, 0)
-        `;
+        // subtitle.style.textShadow = `
+        //     -1px -1px 0px ${colorB},
+        //     -4px -4px 0px ${colorC},
+        //     -5px -5px 0px rgba(0, 0, 0, 0)
+        // `;
     }
 }
 
