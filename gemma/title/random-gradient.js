@@ -23,7 +23,7 @@ function setRandomGradient() {
         const colorA = randomColor();
         const colorB = randomColor();
         const colorC = randomColor();
-        const gradientSub = `linear-gradient(90deg, ${colorA} 0%, ${colorB} 50%, ${colorC} 100%)`;
+        const gradientSub = `linear-gradient(90deg, ${colorA} 0%, ${colorB} 50%, ${colorC} 100%) 0 0 / var(--bg-size) 100%`;
         subtitle.style.background = gradientSub;
         subtitle.style.webkitBackgroundClip = 'text';
         subtitle.style.webkitTextFillColor = 'transparent';

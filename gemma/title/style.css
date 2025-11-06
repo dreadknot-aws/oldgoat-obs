@@ -96,6 +96,7 @@ body {
 
 /* Subtitle Styling */
 .subtitle-3d {
+    --bg-size: 400%;
     font-family: "Monoton";
     /* font-family: Bungee, cursive; */
     /* font-family: Nosifer, cursive; */
@@ -104,7 +105,7 @@ body {
     /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
      /* --- Different 3D Extrusion for Subtitle --- */
-    /* text-shadow: -5px -5px 0px #ffffff; /* Slightly darker, offset 1px */
+    /* text-shadow: 1px 1px 0px #ffffff; /* Slightly darker, offset 1px */
 
 
     /* Position it slightly behind the main title */
@@ -114,14 +115,19 @@ body {
     transform-origin: center;
     /* transform: translateX(-50%) translateZ(-10px) rotateX(-5deg); */
     bottom: 150px; /* distance from bottom; adjust as needed */
+    animation: move-bg 60s infinite linear;
     /* z-index: 50; sit above other content if any */
-    background:
+    /* background: */
         /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
-        conic-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
-        animation: rotate 20s linear infinite;
+        /* conic-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
+        /* animation: rotate 20s linear infinite; */
 }
 
-
+@keyframes move-bg {
+  to {
+    background-position: var(--bg-size) 0;
+  }
+}
 
 
 /* The Animation Keyframes */
