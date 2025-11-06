@@ -33,15 +33,35 @@
 
         @keyframes Animation {
             0% {
-                background-position: 10% 0%
+                transform: scale(1);
+                background-position: 10% 0%;
             }
 
             50% {
-                background-position: 91% 100%
+                transform: scale(1.2);
+                background-position: 100% 100%;
             }
 
             100% {
-                background-position: 10% 0%
+                transform: scale(1);
+                background-position: 0% 50%;
+            }
+        }
+
+        .subtitle {
+            /* ... previous styles ... */
+            animation: gradient-animation 3s linear infinite;
+            /* Adjust duration and timing */
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 400% center;
+                /* Or other values to move the gradient */
             }
         }
 
@@ -99,10 +119,16 @@
         }
 
         .subtitle {
-            background:
-                conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
-                animation: rotate 20s linear infinite;
-                /* animation: Animation 5s ease infinite; */
+            /* background:
+                conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
+            /* animation: rotate 20s linear infinite; */
+            background: linear-gradient(90deg,
+                    var(--color-one),
+                    var(--color-two),
+                    var(--color-one)) 0 0 / var(--bg-size) 100%;
+            /* background: linear-gradient(90deg, #ff7eb3, #ff758c, #ff6a5e); */
+            animation: gradient-animation 3s linear infinite;
+            /* animation: Animation 5s ease infinite; */
             margin-top: 18px;
             color: transparent;
             font-size: clamp(28px, 4.4vw, 36px);
@@ -167,7 +193,7 @@
                 const colorA = randomColor();
                 const colorB = randomColor();
                 const colorC = randomColor();
-                const gradientSub = `linear-gradient(90deg, ${colorA} 0%, ${colorB} 50%, ${colorC} 100%)`;
+                const gradientSub = `linear-gradient(90deg, ${colorA} 0%, ${colorB} 50%, ${colorC} 100%) 0 0 / 100% 100%`;
                 subtitle.style.background = gradientSub;
                 subtitle.style.webkitBackgroundClip = 'text';
                 subtitle.style.webkitTextFillColor = 'transparent';
