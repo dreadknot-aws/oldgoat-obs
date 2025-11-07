@@ -88,7 +88,7 @@ body {
     color: transparent; */
     background:
         /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
-        conic-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
+        conic-gradient(from var(--angle) at 1% 1%, #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
         animation: rotate 20s linear infinite;
         
         

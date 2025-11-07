@@ -8,9 +8,10 @@ function setRandomGradient() {
         const color1 = randomColor();
         const color2 = randomColor();
         const color3 = randomColor();
+        const gradient = `conic-gradient(from var(--angle) at 1% 1%, ${color1} 0%, ${color2} 50%, ${color3} 100%)`;
         // const gradient = `linear-gradient(from var(--angle), ${color1} 0%, ${color2} 50%, ${color3} 100%)`;
         // const gradient = `linear-gradient(90deg, ${color1} 0%, ${color2} 50%, ${color3} 100%)`;
-        // title.style.background = gradient;
+        title.style.background = gradient;
         title.style.webkitBackgroundClip = 'text';
         title.style.webkitTextFillColor = 'transparent';
         title.style.backgroundClip = 'text';
