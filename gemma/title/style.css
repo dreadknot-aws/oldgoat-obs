@@ -75,7 +75,7 @@ body {
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
     
-    text-shadow: -5px -5px 0px #ffffff;
+    text-shadow: -5px -5px 2px #ffffff;
      
      /* Add a subtle initial transform */
      transform: translateZ(20px) rotateX(-5deg); /* Pull slightly forward, tilt slightly
@@ -105,7 +105,7 @@ body {
     /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
      /* --- Different 3D Extrusion for Subtitle --- */
-    /* text-shadow: 1px 1px 0px #ffffff; /* Slightly darker, offset 1px */
+    text-shadow: -5px -5px 0px #ffffff; /* Slightly darker, offset 1px
 
 
     /* Position it slightly behind the main title */
