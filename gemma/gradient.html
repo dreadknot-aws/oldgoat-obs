@@ -40,5 +40,61 @@
 </style>
 </head>
 <body>
+<script>
+    // Random gradient utilities
+    function randomColor() {
+        return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+    }
+
+    // Set gradient from an array of color strings (hex or any CSS color)
+    function setGradient(colors, angle = -45) {
+        if (!colors || !colors.length) return;
+        const css = `linear-gradient(${angle}deg, ${colors.join(', ')})`;
+        document.body.style.background = css;
+        // ensure animation continues (animation declared in CSS)
+        // preserve background-size and animation from stylesheet
+        document.body.style.backgroundSize = '400% 400%';
+    }
+
+    // Create and apply a random gradient with n colors and optional speed (seconds)
+    function setRandomGradient(opts = {}) {
+        const n = typeof opts.count === 'number' && opts.count > 0 ? opts.count : 4;
+        const colors = Array.from({ length: n }, () => randomColor());
+        setGradient(colors, opts.angle || -45);
+        if (opts.speed) {
+            document.body.style.animationDuration = `${opts.speed}s`;
+        }
+        return colors;
+    }
+
+    // Parse URL query params: ?colors=ff0000,00ff00,0000ff  or ?random=1&count=3&speed=8
+    (function initGradientFromUrl() {
+        try {
+            const q = new URLSearchParams(window.location.search);
+            const colorsParam = q.get('colors');
+            const randomParam = q.get('random');
+            const count = parseInt(q.get('count') || '4', 10) || 4;
+            const speed = parseFloat(q.get('speed')) || null;
+            const angle = parseFloat(q.get('angle')) || -45;
+
+            if (colorsParam) {
+                const parts = colorsParam.split(',').map(s => s.trim()).filter(Boolean).map(s => s.startsWith('#') ? s : `#${s}`);
+                setGradient(parts, angle);
+            } else if (randomParam === '1' || randomParam === 'true') {
+                setRandomGradient({ count, speed, angle });
+            } else {
+                // default: generate a new random palette on load
+                setRandomGradient({ count: 4, speed: 12, angle: -45 });
+            }
+        } catch (e) {
+            // fallback to default behavior
+            setRandomGradient({ count: 4, speed: 12, angle: -45 });
+        }
+    })();
+
+    // Expose for console control
+    window.setRandomGradient = setRandomGradient;
+    window.setGradient = setGradient;
+</script>
 </body>
 </html>
