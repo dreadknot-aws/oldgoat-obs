@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Gradient</title>
+<style>
+    /* Apply a full-screen gradient animation */
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        color: white;
+        background: linear-gradient(-45deg, #ff6b6b, #f7d794, #1dd1a1, #54a0ff);
+        background-size: 400% 400%; /* Larger size for smooth movement */
+        animation: gradientMove 12s ease infinite;
+    }
+
+    /* Keyframes for gradient movement */
+    @keyframes gradientMove {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    h1 {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px 40px;
+        border-radius: 10px;
+    }
+</style>
+</head>
+<body>
+</body>
+</html>
