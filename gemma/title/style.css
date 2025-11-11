@@ -105,7 +105,7 @@ body {
     /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
      /* --- Different 3D Extrusion for Subtitle --- */
-    text-shadow: -5px -5px 0px #ffffff; /* Slightly darker, offset 1px
+    /* text-shadow: -5px -5px 0px #ffffff; /* Slightly darker, offset 1px */
 
 
     /* Position it slightly behind the main title */
@@ -115,6 +115,10 @@ body {
     transform-origin: center;
     /* transform: translateX(-50%) translateZ(-10px) rotateX(-5deg); */
     bottom: 150px; /* distance from bottom; adjust as needed */
+    /* set default fade delay so the fade starts after 6s; override with the CSS var if needed */
+    --subtitle-fade-delay: 6s;
+    /* background movement continues, plus a one-shot fadeOut (opacity 1 -> 0).
+       The fade uses CSS vars for duration and delay so you can override per-element. */
     animation: move-bg 60s infinite linear;
     /* z-index: 50; sit above other content if any */
     /* background: */
@@ -141,6 +145,24 @@ body {
     100% {
         transform: rotateY(-15deg) rotateX(5deg); /* Return to start */
     }
+}
+
+/* Opacity fade animation: from fully opaque to fully transparent */
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Helper class to apply the fade-out animation. Customize duration with the --fade-duration variable. */
+.fade-out {
+    animation-name: fadeOut;
+    animation-duration: var(--fade-duration, 2s);
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards; /* keep final state (opacity:0) */
 }
 
 /* Alternative Animation Example (Uncomment to try) */
@@ -181,4 +203,20 @@ body {
     transform: translateZ(-30px) scale(1.05); /* Push back and slightly enlarge */
     filter: blur(8px); /* Make it blurry */
     opacity: 0.6;
+}
+
+
+.subtitle-3d::before {
+    content: attr(data-text); /* Use text from data attribute */
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: inherit; /* Match padding */
+    top: 0;
+    color: #ff7f50; /* Neon glow color */
+    z-index: -1; /* Place behind the main text */
+    transform: translateZ(-30px) scale(1.05); /* Push back and slightly enlarge */
+    /* filter: blur(1px); Make it blurry */
+    opacity: 1;
+    text-shadow: -5px -5px 0px #000000; /* Slightly darker, offset 1px */
 }
