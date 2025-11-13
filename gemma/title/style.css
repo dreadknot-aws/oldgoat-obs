@@ -35,7 +35,7 @@ body {
     height: 100%; /* fill the .scene height */
     min-height: 100vh; /* ensure it covers full viewport on small layouts */
     /* Apply the animation to the container to move both titles together */
-    animation: rotateScene 15s infinite linear;
+    animation: rotateScene 15s infinite ease;
     width: auto;
     margin-top: 64px; /* larger gap from very top of viewport */
 }
@@ -119,7 +119,7 @@ body {
     --subtitle-fade-delay: 6s;
     /* background movement continues, plus a one-shot fadeOut (opacity 1 -> 0).
        The fade uses CSS vars for duration and delay so you can override per-element. */
-    animation: move-bg 60s infinite linear;
+    /* animation: move-bg 60s infinite linear; */
     /* z-index: 50; sit above other content if any */
     /* background: */
         /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
@@ -142,8 +142,11 @@ body {
     50% {
         transform: rotateY(15deg) rotateX(-5deg); /* Tilt the other way */
     }
-    100% {
+    75% {
         transform: rotateY(-15deg) rotateX(5deg); /* Return to start */
+    }
+    100% {
+        transform: scale(10, 10); /* Return to start */
     }
 }
 
