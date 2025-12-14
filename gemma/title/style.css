@@ -15,7 +15,7 @@ body {
 /* The 3D Scene Container */
 .scene {
     perspective: 1000px; /* Sets the strength of the 3D effect. Lower means more extreme. */
-    width: 33%;
+    width: 25%;
     height: 100vh; /* make scene full viewport height */
     display: flex;
     justify-content: center; /* center horizontally */
@@ -96,7 +96,7 @@ body {
 
 /* Subtitle Styling */
 .subtitle-3d {
-    --bg-size: 400%;
+    --bg-size: 500%;
     font-family: "Monoton";
     /* font-family: Bungee, cursive; */
     /* font-family: Nosifer, cursive; */
@@ -116,15 +116,30 @@ body {
     /* transform: translateX(-50%) translateZ(-10px) rotateX(-5deg); */
     bottom: 150px; /* distance from bottom; adjust as needed */
     /* set default fade delay so the fade starts after 6s; override with the CSS var if needed */
-    --subtitle-fade-delay: 6s;
     /* background movement continues, plus a one-shot fadeOut (opacity 1 -> 0).
        The fade uses CSS vars for duration and delay so you can override per-element. */
     animation: move-bg 60s infinite linear;
+
+
     /* z-index: 50; sit above other content if any */
     /* background: */
         /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
         /* conic-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
         /* animation: rotate 20s linear infinite; */
+}
+
+
+
+.title-container.fade-out {
+  /* optional: delay/duration vars you can override inline */
+  --subtitle-fade-delay: 14s;                 /* start fade after 6s */
+  --subtitle-fade-duration: 5s;              /* fade duration */
+
+  animation:
+    rotateScene 15s infinite ease,
+    /* fadeOut 1s 15s infinite ease; */
+    /* fadeOut var(--subtitle-fade-duration) ease-in-out var(--subtitle-fade-delay) infinite; */
+
 }
 
 @keyframes move-bg {
@@ -161,12 +176,12 @@ body {
 }
 
 /* Helper class to apply the fade-out animation. Customize duration with the --fade-duration variable. */
-.fade-out {
+/* .fade-out {
     animation-name: fadeOut;
     animation-duration: var(--fade-duration, 2s);
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards; /* keep final state (opacity:0) */
-}
+/* } 
 
 /* Alternative Animation Example (Uncomment to try) */
 /* @keyframes spinAndFloat {

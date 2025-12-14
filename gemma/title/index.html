@@ -24,7 +24,7 @@
 <body>
 
     <div class="scene">
-        <div class="title-container">
+        <div class="title-container fade-out">
             <h1 class="title-3d" data-text="RAD">
                 D
             </h1>
@@ -137,14 +137,14 @@ https://cdn.jsdelivr.net/npm/kute.js@2.2.4/dist/kute.min.js
 
 </script>
     <script>
-        var tween2 = KUTE.fromTo('.title-3d', { translateY: -250 }, { translateY: 50 }).start();
-        var tween3 = KUTE.fromTo('.subtitle-3d', { translateY: 200 }, { translateY: 0 }).start();
+        // var tween2 = KUTE.fromTo('.title-3d', { translateY: -250 }, { translateY: 50 }).start();
+        // var tween3 = KUTE.fromTo('.subtitle-3d', { translateY: 200 }, { translateY: 0 }).start();
 
         setTimeout(function () {
             // Create a tween to fade opacity from 1 to 0 over 2 seconds
-            KUTE.to('.title-3d', { opacity: 0}, { duration: 2000 }).start();
+            // KUTE.to('.title-3d', { opacity: 0}, { duration: 2000 }).start();
             // KUTE.to('.subtitle-3d', { opacity: 0 }, { duration: 2000 }).start();
-            KUTE.to('.title-3d', { translateZ: 1500 }, { translateX:250}, {rotateX:180}, {rotateY:150}, {rotateZ:50}, { duration: 2000 }).start();
+            // KUTE.to('.title-3d', { translateZ: 1500 }, { translateX:250}, {rotateX:180}, {rotateY:150}, {rotateZ:50}, { duration: 2000 }).start();
             // KUTE.to('.subtitle-3d', { translateZ: -1500 }, { duration: 2000 }).start();
         }, 6000); // 6 seconds delay before starting fade out
 
