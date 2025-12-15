@@ -137,7 +137,7 @@ body {
 
   animation:
     rotateScene 15s infinite ease,
-    /* fadeOut 1s 15s infinite ease; */
+    fadeOut 15s infinite ease;
     /* fadeOut var(--subtitle-fade-duration) ease-in-out var(--subtitle-fade-delay) infinite; */
 
 }
@@ -168,6 +168,9 @@ body {
 /* Opacity fade animation: from fully opaque to fully transparent */
 @keyframes fadeOut {
     0% {
+        opacity: 1;
+    }
+    80% {
         opacity: 1;
     }
     100% {
