@@ -316,7 +316,7 @@
             });
 
             // Timeline: letters drop from above; subtitle fades/ slides in after a short overlap
-            anime.timeline({ autoplay: true })
+            anime.timeline({ autoplay: true, loop: false, duration: 4000 })
                 .add({
                     targets: '.letter',
                     translateY: ['-120%', '0%'],
