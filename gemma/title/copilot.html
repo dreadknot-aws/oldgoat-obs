@@ -311,7 +311,7 @@
             var title = document.getElementById('title');
             title.innerHTML = title.textContent.replace(/(\S|\s)/g, function (c) {
                 // preserve spaces as regular spaces (rendered as &nbsp;)
-                if (c === ' ') return '<span class="letter">&#8203;</span>';
+                if (c === ' ') return '<span class="letter">&nbsp;</span>';
                 return '<span class="letter">' + c + '</span>';
             });
 
