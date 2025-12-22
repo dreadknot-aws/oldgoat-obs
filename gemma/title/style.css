@@ -15,7 +15,7 @@ body {
 /* The 3D Scene Container */
 .scene {
     perspective: 1000px; /* Sets the strength of the 3D effect. Lower means more extreme. */
-    width: 1080px;
+    width: 540px;
     white-space: normal;       /* Allow text to wrap */
     word-wrap: break-word;     /* Break long words if needed */
     overflow-wrap: break-word; /* Modern equivalent */
