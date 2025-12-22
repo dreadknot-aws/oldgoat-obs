@@ -213,7 +213,6 @@
                 'Press Start 2P',
                 'Bitcount Grid Single',
                 'Bungee',
-                'Faster One',
                 'Black Ops One',
                 'Silkscreen'
             ];
@@ -245,7 +244,6 @@
                     'Bungee',
                     'Monoton',
                     'Press Start 2P',
-                    'Faster One',
                     'Bitcount Grid Single'
                 ];
                 const title = document.querySelector('.title');
@@ -311,12 +309,12 @@
             var title = document.getElementById('title');
             title.innerHTML = title.textContent.replace(/(\S|\s)/g, function (c) {
                 // preserve spaces as regular spaces (rendered as &nbsp;)
-                if (c === ' ') return '<span class="letter">&#8203;</span>';
+                if (c === ' ') return '<span class="letter">&nbsp;</span>';
                 return '<span class="letter">' + c + '</span>';
             });
 
             // Timeline: letters drop from above; subtitle fades/ slides in after a short overlap
-            anime.timeline({ autoplay: true })
+            anime.timeline({ autoplay: true, loop: false, duration: 4000 })
                 .add({
                     targets: '.letter',
                     translateY: ['-120%', '0%'],
