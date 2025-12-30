@@ -118,6 +118,18 @@
             -webkit-background-clip: text;
         }
 
+        /* Keep each word together so words don't break across lines */
+        .word {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        /* Visual gap between words (allows line breaks at word boundaries) */
+        .word-space {
+            display: inline-block;
+            width: 0.35em;
+        }
+
         .subtitle {
             /* background:
                 conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
@@ -307,11 +319,16 @@
         // Wrap non-space characters in spans so we can animate each one
         document.addEventListener('DOMContentLoaded', function () {
             var title = document.getElementById('title');
-            title.innerHTML = title.textContent.replace(/(\S|\s)/g, function (c) {
-                // preserve spaces as regular spaces (rendered as &nbsp;)
-                if (c === ' ') return '<span class="letter">&nbsp;</span>';
-                return '<span class="letter">' + c + '</span>';
-            });
+
+            // Split text into words, wrap each word in a .word span so letters within a word stay together
+            var words = title.textContent.split(' ');
+            title.innerHTML = words.map(function (word, idx) {
+                var letters = word.split('').map(function (c) {
+                    return '<span class="letter">' + c + '</span>';
+                }).join('');
+                // add a normal space between words (allows wrapping between words)
+                return '<span class="word">' + letters + (idx < words.length - 1 ? '<span class="word-space"> </span>' : '') + '</span>';
+            }).join('');
 
             // Timeline: letters drop from above; subtitle fades/ slides in after a short overlap
             anime.timeline({ autoplay: true, loop: false, duration: 4000 })
