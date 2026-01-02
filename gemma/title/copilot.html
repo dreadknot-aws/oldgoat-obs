@@ -130,7 +130,7 @@
             width: 0.35em;
         }
 
-        .subtitle {
+        .subtitle {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
             /* background:
                 conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
             /* animation: rotate 20s linear infinite; */
@@ -331,7 +331,7 @@
             }).join('');
 
             // Timeline: letters drop from above; subtitle fades/ slides in after a short overlap
-            anime.timeline({ autoplay: true, loop: false, duration: 4000 })
+            anime.timeline({ autoplay: true, loop: true, duration: 8000 })
                 .add({
                     targets: '.letter',
                     translateY: ['-120%', '0%'],
@@ -352,7 +352,14 @@
                     opacity: [0, 0.9],
                     duration: 600,
                     easing: 'linear'
-                }, '-=400');
+                }, '-=400')
+                // 1-minute hold (60000 ms): keep final state visible before the loop restarts
+                .add({
+                    targets: '.letter, .subtitle, .credit',
+                    opacity: [1, 1],
+                    duration: 60000,
+                    easing: 'linear'
+                });
         });
     </script>
 </body>
