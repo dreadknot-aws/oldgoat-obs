@@ -248,5 +248,6 @@ body {
     transform: translateZ(-10px) scale(1.00); /* Push back and slightly enlarge */
     /* filter: blur(1px); Make it blurry */
     opacity: 1;
-    text-shadow: -1px -1px 0px #000000; /* Slightly darker, offset 1px */
+    /* text-shadow: -1px -1px 0px #000000; /* Slightly darker, offset 1px */
+    text-shadow: -2px -2px 0px #ffffff;
 }
