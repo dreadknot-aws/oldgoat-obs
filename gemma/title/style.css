@@ -170,7 +170,7 @@ body {
         transform: rotateY(-15deg) rotateX(5deg); /* Return to start */
     }
     100% {
-        transform: scale(10, 10); /* Return to start */
+        transform: scale(10, 10) translateY(100px); /* Return to start */
     }
 }
 
