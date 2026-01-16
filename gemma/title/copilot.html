@@ -95,7 +95,8 @@
         }
 
         h1 {
-            font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
+            font-size: clamp(5rem, 5vw, 3rem);
+            /* Responsive font size */
             line-height: 1.02;
             margin: 0;
             font-weight: 700;
@@ -130,7 +131,7 @@
             width: 0.35em;
         }
 
-        .subtitle {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+        .subtitle {
             /* background:
                 conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
             /* animation: rotate 20s linear infinite; */
@@ -150,9 +151,13 @@
             -webkit-text-fill-color: transparent;
             -webkit-background-clip: text;
             /* text-shadow: -5px -5px 0px #ffffff; */
-            text-shadow: -2px -2px 0px #ffffff;
-}
+            /* text-shadow: -2px -2px 0px #ffffff; */
 
+        }
+
+        .subtitle-3d::before {
+
+            text-shadow: -2px -2px 0px #ffffff;
         }
 
         /* small nicety */
