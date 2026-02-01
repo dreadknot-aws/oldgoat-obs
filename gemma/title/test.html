@@ -305,9 +305,37 @@
             subtitle.style.bottom = `${subtitleBottom}px`;
         }
 
+        function setRandomFont() {
+            const fonts = [
+                'Monoton',
+                'Press Start 2P',
+                'Galindo',
+                'Bitcount Grid Single',
+                'Bungee',
+                'Bangers',
+                'Faster One',
+                'Holtwood One SC',
+                'Nosifer',
+                'Black Ops One',
+                'Silkscreen'
+            ];
+            const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
+            const title = document.querySelector('.title');
+            if (title) {
+                title.style.fontFamily = `"${randomFont}", cursive`;
+            }
+
+            const subtitle = document.querySelector('.subtitle');
+            if (subtitle) {
+                const randomFontSub = fonts[Math.floor(Math.random() * fonts.length)];
+                subtitle.style.fontFamily = `"${randomFontSub}", cursive`;
+            }
+        }
+
         // Run on load
         window.addEventListener('DOMContentLoaded', setRandomGradient);
         window.addEventListener('DOMContentLoaded', randomizePosition);
+        window.addEventListener('DOMContentLoaded', setRandomFont);
 
     </script>
 
