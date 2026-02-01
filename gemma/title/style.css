@@ -17,8 +17,8 @@ body {
     perspective: 1000px; /* Sets the strength of the 3D effect. Lower means more extreme. */
     width: 540px;
     white-space: normal;       /* Allow text to wrap */
-    word-wrap: break-word;     /* Break long words if needed */
-    overflow-wrap: break-word; /* Modern equivalent */
+    /* word-wrap: break-word;     /* Break long words if needed */
+    /* overflow-wrap: break-word; /* Modern equivalent */
     height: 100vh; /* make scene full viewport height */
     display: flex;
     justify-content: center; /* center horizontally */
@@ -42,8 +42,8 @@ body {
     width: auto;
     margin-top: 64px; /* larger gap from very top of viewport */
     white-space: normal;       /* Allow text to wrap */
-    word-wrap: break-word;     /* Break long words if needed */
-    overflow-wrap: break-word; /* Modern equivalent */
+    /* word-wrap: break-word;     /* Break long words if needed */
+    /* overflow-wrap: break-word; /* Modern equivalent */
 }
 
 /* Base Styling for 3D Text Elements */
@@ -58,8 +58,8 @@ body {
     text-transform: uppercase;
     letter-spacing: 1px;
     white-space: normal;       /* Allow text to wrap */
-    word-wrap: break-word;     /* Break long words if needed */
-    overflow-wrap: break-word; /* Modern equivalent */
+    /* word-wrap: break-word;     /* Break long words if needed */
+    /* overflow-wrap: break-word; /* Modern equivalent */
 }
 
 
