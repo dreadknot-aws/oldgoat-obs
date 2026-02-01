@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Galindo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Faster+One&family=Galindo&family=Holtwood+One+SC&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nosifer&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        @property --angle {
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: true;
+        }
+
+        @keyframes rotate {
+            to {
+                --angle: 1turn;
+            }
+        }
+
+
+
+        /* Basic layout */
+        :root {
+            background: #0b1220;
+            color: #000000;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 6vh 20px;
+            box-sizing: border-box;
+        }
+
+        /* Text block */
+        .hero {
+            /* max-width: 1080px; */
+            width: 540px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(5rem, 5vw, 3rem);
+            /* Responsive font size */
+            line-height: 1.02;
+            margin: 0;
+            font-weight: 700;
+            overflow: visible;
+        }
+
+        /* each character will be an inline-block that starts above the view */
+        .letter {
+            display: inline-block;
+            transform: translateY(-120%);
+            text-shadow: -4px -4px 0px #ffffff;
+            opacity: 0;
+            white-space: pre;
+            background:
+                /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
+                conic-gradient(from var(--angle), #ff7f50 0%, #ff1493 50%, #1e90ff 100%);
+            animation: rotate 20s linear infinite;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+        }
+
+        /* Keep each word together so words don't break across lines */
+        .word {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        /* Visual gap between words (allows line breaks at word boundaries) */
+        .word-space {
+            display: inline-block;
+            width: 0.35em;
+        }
+
+        .subtitle {
+
+            margin-top: 18px;
+            font-size: clamp(56px, 8.8vw, 72px);
+
+            transform: translateY(-10px);
+            background-clip: text;
+            -webkit-background-clip: text;
+            /* text-shadow: -5px -5px 0px #ffffff; */
+
+        }
+
+
+        /* small nicety */
+        .credit {
+            margin-top: 36px;
+            font-size: 12px;
+            color: #7e8796;
+            opacity: 0.8;
+        }
+
+        .title,
+        .subtitle {
+            /* align-items: end; */
+            text-align: center;
+            color: #3f2a26;
+            /* Bright title color */
+            margin: 0;
+            padding: 0 20px;
+            /* Add some padding */
+            transform-style: preserve-3d;
+            /* Also needed here if rotating the element itself */
+            position: relative;
+            /* Needed for pseudo-elements if used */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: normal;
+            /* Allow text to wrap */
+            word-wrap: break-word;
+            /* Break long words if needed */
+            overflow-wrap: break-word;
+            /* Modern equivalent */
+        }
+
+
+        /* Subtitle Styling */
+        .subtitle {
+            --bg-size: 500%;
+            font-family: "Monoton";
+            /* font-family: Bungee, cursive; */
+            /* font-family: Nosifer, cursive; */
+            font-size: clamp(5rem, 5vw, 3rem);
+            /* Responsive font size */
+            font-weight: normal;
+            /* display: block; */
+            /* color: #f0f0f0; Lighter subtitle color */
+            /* --- Different 3D Extrusion for Subtitle --- */
+            /* text-shadow: -5px -5px 0px #ffffff; /* Slightly darker, offset 1px */
+
+
+            /* Position it slightly behind the main title */
+            /* transform: translateZ(-10px) rotateX(-5deg); */
+            /* Pin subtitle to bottom-center of the viewport */
+            position: fixed;
+            transform-origin: center;
+            /* transform: translateX(-50%) translateZ(-10px) rotateX(-5deg); */
+            bottom: 150px;
+            /* distance from bottom; adjust as needed */
+            /* set default fade delay so the fade starts after 6s; override with the CSS var if needed */
+            /* background movement continues, plus a one-shot fadeOut (opacity 1 -> 0).
+       The fade uses CSS vars for duration and delay so you can override per-element. */
+            animation: move-bg 60s infinite linear;
+
+
+            /* z-index: 50; sit above other content if any */
+            /* background: */
+            /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
+            /* conic-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
+            /* animation: rotate 20s linear infinite; */
+        }
+
+
+        @keyframes move-bg {
+            to {
+                background-position: var(--bg-size) 0;
+            }
+        }
+
+
+        /* The Animation Keyframes */
+        @keyframes rotateScene {
+            0% {
+                transform: rotateY(-15deg) rotateX(5deg);
+                /* Start tilted */
+            }
+
+            50% {
+                transform: rotateY(15deg) rotateX(-5deg);
+                /* Tilt the other way */
+            }
+
+            75% {
+                transform: rotateY(-15deg) rotateX(5deg);
+                /* Return to start */
+            }
+
+            100% {
+                transform: scale(10, 10) translateY(100px);
+                /* Return to start */
+            }
+        }
+
+        /* Opacity fade animation: from fully opaque to fully transparent */
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const mainTitleElement = document.querySelector('.title');
+            const subTitleElement = document.querySelector('.subtitle');
+
+            // 3. Define default text (if parameters are missing)
+            const defaultTitle = "It can only";
+            const defaultSubtitle = "good happen";
+
+            // 4. Get text from URL parameters or use defaults
+            // Use the || operator to fallback to the default if the param is null/empty
+            const titleText = urlParams.get('title') || defaultTitle;
+            const subtitleText = urlParams.get('subtitle') || defaultSubtitle;
+
+            // 5. Update the HTML content and the data-text attribute
+            if (mainTitleElement) {
+                mainTitleElement.textContent = titleText;
+                mainTitleElement.setAttribute('data-text', titleText); // Sync for CSS pseudo-elements
+            }
+            if (subTitleElement) {
+                subTitleElement.textContent = subtitleText;
+                subTitleElement.setAttribute('data-text', subtitleText); // Sync for CSS pseudo-elements
+            }
+        });
+
+        function randomColor() {
+            return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+        }
+
+        function setRandomGradient() {
+            const title = document.querySelector('.title');
+            if (title) {
+                const color1 = randomColor();
+                const color2 = randomColor();
+                const color3 = randomColor();
+                const gradient = `conic-gradient(from var(--angle) at 1% 1%, ${color1} 0%, ${color2} 50%, ${color3} 100%)`;
+                title.style.background = gradient;
+                title.style.webkitBackgroundClip = 'text';
+                title.style.webkitTextFillColor = 'transparent';
+                title.style.backgroundClip = 'text';
+                title.style.color = 'transparent';
+                title.style.textShadow = `-10px -10px 0px ${color3}`;
+            }
+
+            const subtitle = document.querySelector('.subtitle');
+            if (subtitle) {
+                const colorA = randomColor();
+                const colorB = randomColor();
+                const colorC = randomColor();
+                const gradientSub = `linear-gradient(90deg, ${colorA} 0%, ${colorB} 50%, ${colorC} 100%) 0 0 / var(--bg-size) 100%`;
+                subtitle.style.background = gradientSub;
+                subtitle.style.webkitBackgroundClip = 'text';
+                subtitle.style.webkitTextFillColor = 'transparent';
+                subtitle.style.backgroundClip = 'text';
+                subtitle.style.color = 'transparent';
+
+            }
+        }
+
+        function randomizePosition() {
+            const title = document.querySelector('.title');
+            const subtitle = document.querySelector('.subtitle');
+
+            // Random position for title (relative positioning)
+            const titleX = Math.random() * 200 - 100; // -100px to +100px
+            const titleY = Math.random() * 200 - 100; // -100px to +100px
+            title.style.transform = `translateX(${titleX}px) translateY(${titleY}px)`;
+
+            // Random position for subtitle (fixed positioning adjustment)
+            const subtitleX = Math.random() * 400 - 200; // -200px to +200px
+            const subtitleBottom = 150 + (Math.random() * 200 - 100); // 50px to 250px from bottom
+            subtitle.style.left = `50%`;
+            subtitle.style.transform = `translateX(calc(-50% + ${subtitleX}px))`;
+            subtitle.style.bottom = `${subtitleBottom}px`;
+        }
+
+        // Run on load
+        window.addEventListener('DOMContentLoaded', setRandomGradient);
+        window.addEventListener('DOMContentLoaded', randomizePosition);
+
+    </script>
+
+
+    <div class="wrap">
+        <div class="hero">
+            <h1 id="title" class="title">dreadknot</h1>
+            <div id="subtitle" class="subtitle">D-SQUAD</div>
+        </div>
+    </div>
+</body>
