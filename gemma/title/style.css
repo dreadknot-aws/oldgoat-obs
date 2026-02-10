@@ -40,7 +40,7 @@ body {
     /* Apply the animation to the container to move both titles together */
     animation: rotateScene 15s infinite ease;
     width: auto;
-    margin-top: 64px; /* larger gap from very top of viewport */
+    margin-top: 32px; /* larger gap from very top of viewport */
     white-space: normal;       /* Allow text to wrap */
     /* word-wrap: break-word;     /* Break long words if needed */
     /* overflow-wrap: break-word; /* Modern equivalent */
@@ -80,7 +80,8 @@ body {
 .title-3d {
     font-family: Black Ops One;
     /* Smaller responsive font size */
-    font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
+    /* font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
+    font-size: 50px;
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
     
@@ -109,7 +110,8 @@ body {
     font-family: "Monoton";
     /* font-family: Bungee, cursive; */
     /* font-family: Nosifer, cursive; */
-    font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
+    /* font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
+    font-size: 50px;
     font-weight: normal;
     /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
