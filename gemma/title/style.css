@@ -15,7 +15,7 @@ body {
 /* The 3D Scene Container */
 .scene {
     perspective: 1000px; /* Sets the strength of the 3D effect. Lower means more extreme. */
-    width: 540px;
+    width: 33%;
     white-space: normal;       /* Allow text to wrap */
     /* word-wrap: break-word;     /* Break long words if needed */
     /* overflow-wrap: break-word; /* Modern equivalent */
@@ -170,8 +170,11 @@ body {
         opacity: 1; /* Fully visible at the peak of the animation */
         transform: rotateY(-15deg) rotateX(5deg); /* Return to start */
     }
+    95% {
+        opacity: 0; /* Still fully visible just before fading out */
+    }
     100% {
-        opacity: 0; /* Fade out at the end of the cycle */
+        opacity: 0;
         transform: scale(10, 10) translateY(100px); /* Return to start */
     }
 }
