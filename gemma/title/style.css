@@ -167,9 +167,11 @@ body {
         transform: rotateY(15deg) rotateX(-5deg); /* Tilt the other way */
     }
     75% {
+        opacity: 1; /* Fully visible at the peak of the animation */
         transform: rotateY(-15deg) rotateX(5deg); /* Return to start */
     }
     100% {
+        opacity: 0; /* Fade out at the end of the cycle */
         transform: scale(10, 10) translateY(100px); /* Return to start */
     }
 }
