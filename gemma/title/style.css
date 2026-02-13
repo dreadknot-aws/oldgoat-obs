@@ -147,7 +147,7 @@ body {
   --subtitle-fade-duration: 5s;              /* fade duration */
 
   animation:
-    rotateScene 15s infinite ease,
+    /* rotateScene 15s infinite ease, */
     fadeOut 15s infinite ease;
     /* fadeOut var(--subtitle-fade-duration) ease-in-out var(--subtitle-fade-delay) infinite; */
 
