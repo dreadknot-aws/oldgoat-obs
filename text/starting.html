@@ -153,13 +153,26 @@
     root.style.setProperty('--color-secondary', getRandomColor());
     root.style.setProperty('--color-tertiary', getRandomColor());
     root.style.setProperty('--color-quaternary', getRandomColor());
+
     root.style.setProperty('--color-quinary', getRandomColor());
+
+    // Get 'text' parameter from URL
+    function getUrlParam(name, defaultValue) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || defaultValue;
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        const text = getUrlParam('text', 'starting..');
+        const heading = document.querySelector('.text_shadows');
+        if (heading) heading.textContent = text;
+    });
 
 </script>
 
 <body>
     <div class="content">
-        <h2 class="text_shadows">starting..</h2>
+        <h2 class="text_shadows"></h2>
     </div>
 </body>
 
