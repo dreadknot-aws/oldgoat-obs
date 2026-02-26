@@ -72,7 +72,7 @@ body {
     color: #3f2a26;
     /* Bright title color */
     margin: 0;
-    padding: 0 20px;
+    /* padding: 0 20px; */
     /* Add some padding */
     transform-style: preserve-3d;
     /* Also needed here if rotating the element itself */
@@ -108,7 +108,6 @@ body {
     font-size: 50px;
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
-
     text-shadow: -5px -5px 2px #ffffff;
 
     /* Add a subtle initial transform */
@@ -121,7 +120,7 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent; */
-    animation: rotateSceneTitle 15s infinite ease;
+    animation: rotateSceneTitle 60s infinite ease;
 
     background:
         /* linear-gradient(from var(--angle) , #ff7f50 0%, #ff1493 50%, #1e90ff 100%); */
@@ -157,7 +156,7 @@ body {
     /* background movement continues, plus a one-shot fadeOut (opacity 1 -> 0).
        The fade uses CSS vars for duration and delay so you can override per-element. */
     animation: move-bg 60s infinite linear;
-    animation: rotateSceneSubtitle 15s infinite ease;
+    animation: rotateSceneSubtitle 60s infinite ease;
 
     /* z-index: 50; sit above other content if any */
     /* background: */
@@ -175,11 +174,6 @@ body {
     --subtitle-fade-duration: 5s;
     /* fade duration */
 
-    animation:
-        /* rotateScene 15s infinite ease, */
-        /* fadeOut 15s infinite ease; */
-    /* fadeOut var(--subtitle-fade-duration) ease-in-out var(--subtitle-fade-delay) infinite; */
-
 }
 
 @keyframes move-bg {
@@ -195,27 +189,26 @@ body {
         transform: rotateY(15deg) rotateX(-5deg);
         /* Start tilted */
     }
-    10% {
+    5% {
         transform: translateY(-250);
     }
 
-    50% {
+    10% {
         transform: rotateY(-15deg) rotateX(5deg);
         /* Tilt the other way */
     }
 
-    75% {
+    20% {
         opacity: 1;
         /* Fully visible at the peak of the animation */
         transform: rotateY(15deg) rotateX(-5deg);
         /* Return to start */
     }
-
-    95% {
+    25% {
         opacity: 0;
-        /* Still fully visible just before fading out */
+        transform: scale(10, 10) translateY(-100px);
+        /* Return to start */
     }
-
     100% {
         opacity: 0;
         transform: scale(10, 10) translateY(-100px);
@@ -230,23 +223,30 @@ body {
         /* Start tilted */
     }
 
-    50% {
+    5% {
         transform: rotateY(15deg) rotateX(-5deg);
         /* Tilt the other way */
     }
 
-    75% {
+    10% {
         opacity: 1;
         /* Fully visible at the peak of the animation */
         transform: rotateY(-15deg) rotateX(5deg);
         /* Return to start */
     }
 
-    95% {
-        opacity: 0;
-        /* Still fully visible just before fading out */
+    20% {
+        opacity: 1;
+        /* Fully visible at the peak of the animation */
+        transform: rotateY(15deg) rotateX(-5deg);
+        /* Return to start */
     }
 
+    25% {
+        opacity: 0;
+        transform: scale(10, 10) translateY(100px);
+        /* Return to start */
+    }
     100% {
         opacity: 0;
         transform: scale(10, 10) translateY(100px);
