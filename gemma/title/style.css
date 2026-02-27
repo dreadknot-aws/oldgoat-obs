@@ -102,6 +102,7 @@ body {
 
 /* Main Title Styling */
 .title-3d {
+    top: 25px;
     font-family: Black Ops One;
     /* Smaller responsive font size */
     /* font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
@@ -150,7 +151,7 @@ body {
     position: fixed;
     transform-origin: center;
     /* transform: translateX(-50%) translateZ(-10px) rotateX(-5deg); */
-    bottom: 150px;
+    bottom: 25px;
     /* distance from bottom; adjust as needed */
     /* set default fade delay so the fade starts after 6s; override with the CSS var if needed */
     /* background movement continues, plus a one-shot fadeOut (opacity 1 -> 0).
