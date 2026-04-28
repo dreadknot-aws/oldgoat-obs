@@ -106,7 +106,7 @@ body {
     font-family: Black Ops One;
     /* Smaller responsive font size */
     /* font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
-    font-size: 50px;
+    font-size: 40px;
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
     text-shadow: -5px -5px 2px #ffffff;
@@ -137,7 +137,7 @@ body {
     /* font-family: Bungee, cursive; */
     /* font-family: Nosifer, cursive; */
     /* font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
-    font-size: 50px;
+    font-size: 30px;
     font-weight: normal;
     /* display: block; */
     /* color: #f0f0f0; Lighter subtitle color */
