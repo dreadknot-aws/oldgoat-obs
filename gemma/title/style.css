@@ -107,9 +107,9 @@ body {
     /* Smaller responsive font size */
     /* font-size: clamp(5rem, 5vw, 3rem); /* Responsive font size */
     font-size: 40px;
-    font-weight: bold;
+    /* font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
-    text-shadow: -2px -2px 0px #ffd500;
+    /*text-shadow: 1px 1px 0px #ffd500;
 
     /* Add a subtle initial transform */
     transform: translateZ(20px) rotateX(-5deg);
