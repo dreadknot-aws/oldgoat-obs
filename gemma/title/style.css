@@ -109,7 +109,7 @@ body {
     font-size: 40px;
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
-    text-shadow: -5px -5px 2px #ffffff;
+    text-shadow: -5px -5px 0px #ffd500;
 
     /* Add a subtle initial transform */
     transform: translateZ(20px) rotateX(-5deg);
@@ -329,9 +329,9 @@ body {
     /* Place behind the main text */
     transform: translateZ(-30px) scale(1.05);
     /* Push back and slightly enlarge */
-    filter: blur(8px);
+    /* filter: blur(8px);
     /* Make it blurry */
-    opacity: 0.6;
+    opacity: 1;
 }
 
 
@@ -353,5 +353,5 @@ body {
     /* filter: blur(1px); Make it blurry */
     opacity: 1;
     /* text-shadow: -1px -1px 0px #000000; /* Slightly darker, offset 1px */
-    text-shadow: -2px -2px 0px #ffffff;
+    text-shadow: -2px -2px 0px #ffd500;
 }
