@@ -109,7 +109,7 @@ body {
     font-size: 40px;
     font-weight: bold;
     /* --- The 3D Extrusion Effect using text-shadow --- */
-    text-shadow: -5px -5px 0px #ffd500;
+    text-shadow: -2px -2px 0px #ffd500;
 
     /* Add a subtle initial transform */
     transform: translateZ(20px) rotateX(-5deg);
