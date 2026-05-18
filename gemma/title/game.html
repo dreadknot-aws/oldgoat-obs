@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+
+
+
+    <title>Game Over ::before &amp; ::after animated text</title>
+
+
+
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 70vw;
+            gap: 0.5rem;
+            margin: auto;
+            text-align: center;
+            height: 100vh;
+            justify-content: space-between;
+        }
+
+        :root {
+            background: rgba(0, 0, 0, 0);
+        }
+
+        .neon-text,
+        .neon-top,
+        .neon-bottom {
+            position: relative;
+            font-family: "Press Start 2P", cursive;
+            font-size: 3.2rem;
+            position: relative;
+            width: 100%;
+            text-transform: uppercase;
+            -webkit-text-stroke: 1px #bf4080;
+            color: #fffff7;
+            z-index: 10;
+        }
+
+        .neon-text::before,
+        .neon-top::before,
+        .neon-bottom::before {
+            content: attr(data-text);
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-family: inherit;
+            font-size: 3.2rem;
+            color: #bf4080;
+            width: 100%;
+            animation: animateTextColor 3s infinite linear;
+            z-index: -1;
+        }
+
+        .neon-top,
+        .neon-top::before {
+            justify-content: start;
+        }
+
+        .neon-bottom,
+        .neon-bottom::before {
+            justify-content: end;
+        }
+        
+        .rotating-text {
+            position: relative;
+            -webkit-text-stroke: 1px #bf4080;
+        }
+
+        .rotating-text::before {
+            animation: rotatingWord 2.8s linear infinite;
+        }
+
+        .rotating-text::after {
+            content: attr(data-text);
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 8px;
+            animation: animateTextColor 3s infinite linear, rotatingWord 5s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes animateTextColor {
+            0% {
+                color: #00b4d8;
+            }
+
+            20% {
+                color: #6f2ed8;
+            }
+
+            50% {
+                color: #bf4080;
+            }
+
+            60% {
+                color: #fe5f55;
+            }
+
+            80% {
+                color: #e6f14a;
+            }
+
+            100% {
+                color: #00b4d8;
+            }
+        }
+
+        @keyframes rotatingWord {
+            0% {
+                transform: translate(0px, 0px);
+            }
+
+            20% {
+                transform: translate(5px, 0px);
+            }
+
+            40% {
+                transform: translate(5px, 5px);
+            }
+
+            60% {
+                transform: translate(0px, 5px);
+            }
+
+            100% {
+                transform: translate(0px, 0px);
+            }
+        }
+    </style>
+
+    <script>
+        // window.console = window.console || function (t) { };
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            // 2. Get the target elements
+            const mainTitleElement = document.querySelector('.neon-top');
+            const subTitleElement = document.querySelector('.neon-bottom');
+
+            // 3. Define default text (if parameters are missing)
+            const defaultTitle = "It can only";
+            const defaultSubtitle = "good happen";
+
+            // 4. Get text from URL parameters or use defaults
+            // Use the || operator to fallback to the default if the param is null/empty
+            const titleText = urlParams.get('title') || defaultTitle;
+            const subtitleText = urlParams.get('subtitle') || defaultSubtitle;
+
+            // 5. Update the HTML content and the data-text attribute
+            if (mainTitleElement) {
+                mainTitleElement.textContent = titleText;
+                mainTitleElement.setAttribute('data-text', titleText); // Sync for CSS pseudo-elements
+            }
+            if (subTitleElement) {
+                subTitleElement.textContent = subtitleText;
+                subTitleElement.setAttribute('data-text', subtitleText); // Sync for CSS pseudo-elements
+            }
+
+            // Optional: Update the page's <title> tag as well
+            document.title = `${titleText} - ${subtitleText}`;
+        });
+
+    </script>
+
+
+
+</head>
+
+<body translate="no">
+    <div class='wrapper'>
+        <p class="neon-top rotating-text" data-text="Battlefield 6">Battlefield 6</p>
+        <p class="neon-bottom rotating-text" data-text="game over">game over</p>
+    </div>
+
+
+
+</body>
+
+</html>
