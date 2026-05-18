@@ -43,7 +43,7 @@ body .text {
   font-family: "Liberty";
   font-weight: 100;
   font-size: 7rem;
-  letter-spacing: -0.25em;
+  letter-spacing: .015em;
   flex-flow: row;
 }
 body .text .letter {
@@ -136,6 +136,24 @@ body .text .letter.letter-2 {
 }
   </style>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get the text from the URL parameter or use a default
+      const urlParams = new URLSearchParams(window.location.search);
+      const dynamicText = urlParams.get('text') || 'DREADKNOT';
+      const h1 = document.querySelector('h1.text');
+      if (h1) {
+        h1.innerHTML = '';
+        for (let i = 0; i < dynamicText.length; i++) {
+          const span = document.createElement('span');
+          span.className = 'letter letter-' + ((i % 5) + 1);
+          span.textContent = dynamicText[i];
+          h1.appendChild(span);
+        }
+      }
+    });
+  </script>
+
   
 <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"></script>
 <script src="https://cpwebassets.codepen.io/assets/editor/iframe/iframeConsoleRunner-100b2a29d7a68d0f5c9eb0b3f9e63783410ea00dcab106def20a0ab3cf4a8804.js"></script>
@@ -148,12 +166,11 @@ body .text .letter.letter-2 {
         <span class="letter letter-2">R</span>
         <span class="letter letter-3">E</span>
         <span class="letter letter-4">A</span>
-	 	  <span class="letter letter-5">D</span>
+	 	    <span class="letter letter-5">D</span>
         <span class="letter letter-1">K</span>
         <span class="letter letter-2">N</span>
         <span class="letter letter-3">O</span>
         <span class="letter letter-4">T</span>
-
     </h1>
 
   
