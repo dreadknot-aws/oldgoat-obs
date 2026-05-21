@@ -30,12 +30,13 @@
       height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-end;
       position: absolute;
       left: 33vw;
       top: 0;
       pointer-events: none;
       text-align: center;
+      padding-bottom: 2rem;
     }
 
     * {
@@ -71,7 +72,7 @@
 
     body .text .letter {
       color: #d9ffdc;
-      text-shadow: 0 0 2rem #ff0000;
+      /* text-shadow: 0 0 2rem #ff0000; */
       display: inline-block;
       white-space: pre;
     }
@@ -214,7 +215,7 @@
             span.className = 'letter letter-' + ((i % 5) + 1);
             span.textContent = line[i];
             span.style.color = letterColor;
-            span.style.textShadow = `0 0 2rem ${shadowColor}`;
+            //span.style.textShadow = `0 0 2rem ${shadowColor}`;
             h1.appendChild(span);
           }
           if (lineIdx < lines.length - 1) {
