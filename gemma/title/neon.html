@@ -66,6 +66,12 @@
       white-space: pre;
       margin: 0 auto;
       display: table;
+      opacity: 1;
+      transition: opacity 5s ease;
+    }
+
+    body .text.fade-out {
+      opacity: 0;
     }
 
     body .text .letter {
@@ -220,6 +226,11 @@
             h1.appendChild(document.createElement('br'));
           }
         });
+
+        // Fade the text out after 1 minute
+        setTimeout(() => {
+          h1.classList.add('fade-out');
+        }, 60000);
       }
     });
   </script>

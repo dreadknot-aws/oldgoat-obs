@@ -49,6 +49,12 @@
             -webkit-text-stroke: 1px #bf4080;
             color: #fffff7;
             z-index: 10;
+            opacity: 1;
+            transition: opacity 5s ease;
+        }
+
+        .fade-out {
+            opacity: 0;
         }
 
         .neon-text::before,
@@ -174,6 +180,12 @@
 
             // Optional: Update the page's <title> tag as well
             document.title = `${titleText} - ${subtitleText}`;
+
+            // Fade out text after 1 minute
+            setTimeout(() => {
+                mainTitleElement?.classList.add('fade-out');
+                subTitleElement?.classList.add('fade-out');
+            }, 60000);
         });
 
     </script>
