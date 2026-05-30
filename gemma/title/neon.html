@@ -13,7 +13,7 @@
 
   <style id="INLINE_PEN_STYLESHEET_ID">
     @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
-
+    @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
     @font-face {
       font-family: "Liberty";
       src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/907368/liberty.otf");
@@ -56,7 +56,8 @@
     body .text {
       /* font-family: "Liberty"; */
       /* font-family: "Tilt Neon"; */
-      font-family: "Press Start 2P", cursive;
+      /* font-family: "Press Start 2P", cursive; */
+      font-family: "Black Ops One", system-ui;
       font-weight: 100;
       font-size: clamp(2rem, 8vw, 10rem);
       letter-spacing: .015em;
@@ -195,12 +196,10 @@
           '#ff073a', // neon red
           '#00eaff', // neon blue
           '#faff00', // neon yellow
-          '#ff00ea', // neon pink
           '#ff9900', // neon orange
           '#00ff99', // neon aqua
           '#fffb00', // neon lemon
           '#00fffb', // neon cyan
-          '#ff00c8'  // neon magenta
         ];
         return neonColors[Math.floor(Math.random() * neonColors.length)];
       }
