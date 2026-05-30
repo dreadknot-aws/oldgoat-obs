@@ -77,9 +77,17 @@
             justify-content: start;
         }
 
+        .neon-top {
+            animation: slideInFromTop 0.8s ease-out;
+        }
+
         .neon-bottom,
         .neon-bottom::before {
             justify-content: end;
+        }
+
+        .neon-bottom {
+            animation: slideInFromBottom 0.8s ease-out;
         }
         
         .rotating-text {
@@ -146,6 +154,30 @@
 
             100% {
                 transform: translate(0px, 0px);
+            }
+        }
+
+        @keyframes slideInFromTop {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            0% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
             }
         }
     </style>
