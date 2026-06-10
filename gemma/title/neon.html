@@ -243,7 +243,7 @@
             span.className = 'letter letter-' + ((i % 5) + 1);
             span.textContent = line[i];
             span.style.color = letterColor;
-            //span.style.textShadow = `0 0 2rem ${shadowColor}`;
+            span.style.textShadow = `2px 2px 1px ${shadowColor}`;
             h1.appendChild(span);
           }
           if (lineIdx < lines.length - 1) {
