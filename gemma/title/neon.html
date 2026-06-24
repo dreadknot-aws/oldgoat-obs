@@ -234,7 +234,10 @@
         h1.innerHTML = '';
         // Pick a single random color for all letters and one for the drop shadow
         const letterColor = getRandomColor();
-        const shadowColor = getRandomColor();
+        let shadowColor = getRandomColor();
+        while (shadowColor === letterColor) {
+          shadowColor = getRandomColor();
+        }
         // Split text into lines on \n
         const lines = dynamicText.split('\n');
         lines.forEach((line, lineIdx) => {
