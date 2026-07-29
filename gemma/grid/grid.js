@@ -18,8 +18,8 @@ const camera = {
     focalLength: 1500 // Affects perspective intensity (higher = less perspective)
 };
 
-let angleX = 0.5; // Initial rotation around X-axis (tilt)
-let angleY = 0.5; // Initial rotation around Y-axis
+let angleX = (Math.random() * 1.2) - 0.6; // Random initial rotation around X-axis (tilt)
+let angleY = (Math.random() * 1.2) - 0.6; // Random initial rotation around Y-axis
 
 // Mouse Interaction State
 let isDragging = false;
