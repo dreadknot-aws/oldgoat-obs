@@ -25,6 +25,9 @@
     <div id="my-background" class="my-background" style="height: 100%; width: 100%;"></div>
 </body>
 <script>
+    function randomColor() {
+    return `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`;
+}
 VANTA.WAVES({
     el: '#my-background',
     mouseControls: true,
@@ -32,6 +35,7 @@ VANTA.WAVES({
     gyroControls: false,
     minHeight: 200.00,
     minWidth: 200.00,
+    color: randomColor()
 });
 </script>
 </html>
