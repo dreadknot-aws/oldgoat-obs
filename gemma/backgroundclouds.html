@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Count Up Timer</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.clouds.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Count Up Timer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.clouds.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.fog.min.js"></script>
     <style>
-        html, body {
+        html,
+        body {
             margin: 0;
             width: 100%;
             height: 100%;
@@ -20,23 +23,44 @@
             justify-content: center;
             align-items: center;
         }
-</style>
+    </style>
+
 <body>
     <div id="my-background" class="my-background" style="height: 100%; width: 100%;"></div>
 </body>
 <script>
     function randomColor() {
-    return `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`;
-}
-VANTA.CLOUDS({
-  el: "#my-background",
-  mouseControls: true,
-  touchControls: true,
-  gyroControls: false,
-  minHeight: 200.00,
-  minWidth: 200.00
-});
+        return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+    }
+
+
+    VANTA.FOG({
+        el: "#my-background",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        highlightColor: randomColor(),
+        midtoneColor: randomColor(),
+        lowlightColor: randomColor(),
+        baseColor: randomColor(),
+        blurFactor: Math.random(),
+        speed: Math.random() * 5,
+        zoom: Math.random() * 3
+    });
+
+
+    // VANTA.CLOUDS({
+    //   el: "#my-background",
+    //   mouseControls: true,
+    //   touchControls: true,
+    //   gyroControls: false,
+    //   minHeight: 200.00,
+    //   minWidth: 200.00
+    // });
 </script>
+
 </html>
 
 
