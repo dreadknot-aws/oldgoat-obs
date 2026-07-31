@@ -6,6 +6,7 @@
 <title>Count Up Timer</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.waves.min.js"></script>
+    <script src="../js/opensimplexnoise.js"></script>
     <style>
         html, body {
             margin: 0;
@@ -25,17 +26,59 @@
     <div id="my-background" class="my-background" style="height: 100%; width: 100%;"></div>
 </body>
 <script>
-    function randomColor() {
-    return `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`;
-}
-VANTA.WAVES({
-    el: '#my-background',
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    color: randomColor()
-});
+    // Use OpenSimplexNoise to generate smooth color changes in HSV
+    const noise = new OpenSimplexNoise(Math.random() * 65536);
+
+    function hsvToHex(h, s, v) {
+        h = h % 360;
+        const c = v * s;
+        const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+        const m = v - c;
+        let r = 0, g = 0, b = 0;
+        if (h < 60) { r = c; g = x; b = 0; }
+        else if (h < 120) { r = x; g = c; b = 0; }
+        else if (h < 180) { r = 0; g = c; b = x; }
+        else if (h < 240) { r = 0; g = x; b = c; }
+        else if (h < 300) { r = x; g = 0; b = c; }
+        else { r = c; g = 0; b = x; }
+        const R = Math.round((r + m) * 255);
+        const G = Math.round((g + m) * 255);
+        const B = Math.round((b + m) * 255);
+        return `#${(R << 16 | G << 8 | B).toString(16).padStart(6, '0')}`;
+    }
+
+    function noiseHSV(t) {
+        // t in seconds -> sample different scales for hue/sat/val
+        const hNoise = noise.evaluate2D(t * 0.06, 0) * 0.5 + 0.5; // 0..1
+        const sNoise = noise.evaluate2D(t * 0.09, 10) * 0.5 + 0.5;
+        const vNoise = noise.evaluate2D(t * 0.12, 20) * 0.5 + 0.5;
+
+        const hue = hNoise * 360; // full color wheel
+        const sat = 0.45 + sNoise * 0.5; // 0.45..0.95
+        const val = 0.35 + vNoise * 0.6; // 0.35..0.95
+        return { hex: hsvToHex(hue, sat, val), hue, sat, val };
+    }
+
+    const effect = VANTA.WAVES({
+        el: '#my-background',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        color: hsvToHex(200, 0.6, 0.6)
+    });
+
+    // Animate the Vanta color using noise-driven HSV values
+    const start = performance.now();
+    function animateColor() {
+        const t = (performance.now() - start) / 1000;
+        const n = noiseHSV(t);
+        if (effect && typeof effect.setOptions === 'function') {
+            effect.setOptions({ color: n.hex });
+        }
+        requestAnimationFrame(animateColor);
+    }
+    requestAnimationFrame(animateColor);
 </script>
 </html>
